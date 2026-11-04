@@ -42,7 +42,7 @@ export const formatPrice = (value, { fraction = 'auto', negative = false, fallba
 
 /**
  * Amount + currency as a plain string (toasts, labels, printed invoices).
- * The amount is isolated so "-1,234.05 ريال" renders in the right visual order.
+ * The amount is isolated so "-1,234.05 دينار" renders in the right visual order.
  */
 export const formatPriceWithCurrency = (value, currency, options) => {
   const amount = isolateLtr(formatPrice(value, options));

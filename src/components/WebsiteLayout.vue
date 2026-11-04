@@ -531,8 +531,8 @@ const applySiteSettings = (rawSettings) => {
 const freeShippingAnnouncement = computed(() => {
   const threshold = freeShippingThreshold(freeDeliveryThreshold.value);
   return currentLang.value === 'ar'
-    ? `شحن مجاني للطلبات فوق ${threshold} ريال | ضمان شامل على جميع المنتجات`
-    : `Free shipping on orders over ${threshold} SAR | Comprehensive warranty on all products`;
+    ? `شحن مجاني للطلبات فوق ${threshold} دينار | ضمان شامل على جميع المنتجات`
+    : `Free shipping on orders over ${threshold} JOD | Comprehensive warranty on all products`;
 });
 
 // The page content is offset by the bar (40px). Pages read --top-bar-h so they move up when it is hidden.

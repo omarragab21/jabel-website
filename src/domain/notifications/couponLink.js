@@ -26,7 +26,7 @@ export const parseCouponLink = (link) => {
 export const couponDialogText = (coupon, lang = 'ar') => {
   const ar = lang !== 'en';
   const amount = coupon.value
-    ? `${coupon.value.toLocaleString('en-US', { maximumFractionDigits: 2 })}${coupon.type === 'fixed' ? (ar ? ' ر.س' : ' SAR') : '%'}`
+    ? `${coupon.value.toLocaleString('en-US', { maximumFractionDigits: 2 })}${coupon.type === 'fixed' ? (ar ? ' د.أ' : ' JOD') : '%'}`
     : '';
   // Dates are isolated so Arabic text does not reorder their digits.
   const iso = (value) => (ar ? `\u2066${value}\u2069` : value);

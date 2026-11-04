@@ -5,7 +5,7 @@
 const toNumber = (value) => {
   if (typeof value === 'number') return value;
   if (typeof value !== 'string') return NaN;
-  // "1,250.00", "15.00 SAR" and "٠" style strings from the API: keep the digits, the sign and the dot.
+  // "1,250.00", "15.00 JOD" and "٠" style strings from the API: keep the digits, the sign and the dot.
   const cleaned = value.replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 0x0660)).replace(/[^\d.-]/g, '');
   return cleaned === '' ? NaN : Number(cleaned);
 };

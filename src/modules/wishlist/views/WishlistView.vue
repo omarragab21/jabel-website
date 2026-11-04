@@ -60,7 +60,7 @@
               <div class="item-visual" @click="goToProduct(item)" style="cursor: pointer;">
                 <img :src="getImageUrl(item.image || item.images?.[0], item.id)" :alt="localized(item, 'name')" @error="onImageError">
                 <div class="discount-label" v-if="item.discount > 0">
-                  <template v-if="fixedDiscountAmount(item)">-<img :src="riyalIcon" alt="SAR" class="discount-riyal" />{{ fixedDiscountAmount(item) }}</template>
+                  <template v-if="fixedDiscountAmount(item)">-<span class="discount-riyal currency-text" aria-hidden="true" style="font-size: 10px">د.أ</span>{{ fixedDiscountAmount(item) }}</template>
                   <template v-else>{{ discountBadgeText(item, currentLang) }}</template>
                 </div>
               </div>
@@ -79,11 +79,11 @@
                   <div class="price-box">
                     <span class="current-price">
                       <span>{{ formatPrice(item.sale_price || (item.price * (1 - (item.discount / 100 || 0)))) }}</span>
-                      <img :src="riyalIcon" alt="" class="currency-symbol-svg" aria-hidden="true" />
+                      <span class="currency-symbol-svg currency-text" aria-hidden="true" style="font-size: 15px">د.أ</span>
                     </span>
                     <span class="old-price" v-if="item.discount > 0">
                       <span>{{ formatPrice(item.price) }}</span>
-                      <img :src="riyalIcon" alt="" class="currency-symbol-svg is-muted" aria-hidden="true" />
+                      <span class="currency-symbol-svg is-muted currency-text" aria-hidden="true" style="font-size: 15px">د.أ</span>
                     </span>
                   </div>
                   
@@ -114,7 +114,6 @@ import { cartState } from '../../../store/cart';
 import { addProductToCart } from '../../../store/optionPicker';
 import { authState, authActions } from '../../../store/auth';
 import { useLocalized } from '../../../composables/useLocalized';
-import riyalIcon from '../../../assets/riyal.svg';
 import { formatPrice } from '../../../utils/price';
 import { discountBadgeText, fixedDiscountAmount } from '../../../domain/product/productDiscount';
 

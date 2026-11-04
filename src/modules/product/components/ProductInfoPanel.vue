@@ -36,12 +36,12 @@
             <div v-if="currentPrice !== null" class="price-status-bar">
               <div class="price-group">
                 <div class="price-unit" dir="ltr">
-                  <img v-if="showRiyalIcon" :src="priceRiyalIcon" :alt="$t('common.riyal')" class="riyal-svg" />
+                  <span class="riyal-svg currency-text" v-if="showRiyalIcon" aria-hidden="true" style="font-size: 26px">د.أ</span>
                   <span class="price-amount">{{ formatPrice(shownPrice) }}</span>
                   <span class="currency-code" v-if="!showRiyalIcon">{{ currency }}</span>
                 </div>
                 <div v-if="hasDiscount" class="price-before-discount" dir="ltr">
-                  <span class="riyal-mask-sm" v-if="showRiyalIcon" :style="{ '--riyal-icon': `url(&quot;${riyalIcon}&quot;)` }" role="img" :aria-label="$t('common.riyal')"></span>
+                  <span class="riyal-mask-sm currency-text" v-if="showRiyalIcon" aria-hidden="true" style="font-size: 13px">د.أ</span>
                   <span>{{ formatPrice(product.price) }}</span>
                 </div>
                 <span class="vat-tag">{{ locale === 'ar' ? 'شامل ضريبة القيمة المضافة' : 'Includes VAT' }}</span>
@@ -94,7 +94,6 @@ import starFilledIcon from '../../../assets/pd-star-filled.svg';
 import starEmptyIcon from '../../../assets/pd-star-empty.svg';
 import checkIcon from '../../../assets/pd-check.svg';
 import bagIcon from '../../../assets/pd-bag.svg';
-import priceRiyalIcon from '../../../assets/pd-riyal.svg';
 const props = defineProps({ product: { type: Object, required: true }, locale: { type: String, required: true }, localized: { type: Function, required: true }, computedRatingCount: { type: [Number, String], default: 0 }, computedAverageRating: { type: [Number, String], default: 0 }, formatPrice: { type: Function, required: true }, currentPrice: { type: [Number, String], default: 0 }, bundleDeal: { type: Object, default: null }, currency: { type: String, default: '' }, riyalIcon: { type: String, default: '' }, productFeatures: { type: Array, default: () => [] }, colorOptions: { type: Array, default: () => [] }, selectedColorName: { type: String, default: '' }, isLightColor: { type: Function, required: true }, selectableAttributes: { type: Array, default: () => [] }, selectedAttributes: { type: Object, default: () => ({}) }, optionGroups: { type: Array, default: () => [] }, optionSelection: { type: Object, default: () => ({}) }, isProductInStock: { type: Boolean, default: false }, quantity: { type: Number, default: 1 } });
 const emit = defineEmits(['open-share', 'select-image', 'select-color', 'select-attribute', 'select-option', 'update:quantity', 'add-to-cart']);
 const { product, locale, localized, computedRatingCount, computedAverageRating, formatPrice, currentPrice, bundleDeal, currency, riyalIcon, productFeatures, isProductInStock, quantity } = toRefs(props);
@@ -107,7 +106,7 @@ const categoryLabel = computed(() => {
   }
   return '';
 });
-const showRiyalIcon = computed(() => locale.value === 'ar' || !currency.value || currency.value === 'SAR');
+const showRiyalIcon = computed(() => locale.value === 'ar' || !currency.value || currency.value === 'JOD');
 // Inside a running bundle the page shows the bundle's price for this product next to the old one.
 const shownPrice = computed(() => bundleDeal.value?.price ?? currentPrice.value);
 const hasDiscount = computed(() => Number(product.value?.price) > Number(shownPrice.value));

@@ -43,7 +43,7 @@
       <div class="product-badges">
         <span class="badge-new" v-if="isNewProduct">{{ currentLang === 'ar' ? 'جديد' : 'NEW' }}</span>
         <span class="badge-sale" dir="ltr" v-if="discountPercentage > 0" data-testid="discount-badge">
-          <template v-if="fixedAmount">-<img :src="priceRiyalIcon" alt="SAR" class="badge-riyal" data-testid="discount-riyal" />{{ fixedAmount }}</template>
+          <template v-if="fixedAmount">-<span class="badge-riyal currency-text" data-testid="discount-riyal" aria-hidden="true" style="font-size: 10px">د.أ</span>{{ fixedAmount }}</template>
           <template v-else>{{ discountLabel }}</template>
         </span>
       </div>
@@ -68,7 +68,7 @@
       <!-- Discount area keeps its height even when there is no discount -->
       <div class="discount-area">
         <div class="old-price" v-if="discountPercentage > 0" dir="ltr">
-          <img :src="oldRiyalIcon" alt="" class="old-price-riyal" aria-hidden="true" />
+          <span class="old-price-riyal currency-text" aria-hidden="true" style="font-size: 11px">د.أ</span>
           <span class="old-price-val">{{ formatPrice(product.price) }}</span>
         </div>
       </div>
@@ -76,7 +76,7 @@
       <!-- Price and Add to Cart -->
       <div class="product-bottom-row">
         <div class="current-price-row" dir="ltr">
-          <img :src="priceRiyalIcon" alt="" class="currency-symbol-svg" aria-hidden="true" />
+          <span class="currency-symbol-svg currency-text" aria-hidden="true" style="font-size: 15px">د.أ</span>
           <span class="price-val">{{ formatPrice(currentPrice) }}</span>
         </div>
 
@@ -97,9 +97,7 @@ import { useI18n } from 'vue-i18n';
 import { useOffers } from '../composables/useOffers';
 import { discountBadgeText, fixedDiscountAmount } from '../../../domain/product/productDiscount';
 import { useLocalized } from '../../../composables/useLocalized';
-import priceRiyalIcon from '../../../assets/card-riyal.svg';
 import { formatPrice } from '../../../utils/price';
-import oldRiyalIcon from '../../../assets/card-riyal-old.svg';
 import bagIcon from '../../../assets/card-bag.svg';
 
 const props = defineProps({
@@ -196,7 +194,7 @@ const discountPercentage = computed(() => {
   return Number(props.product.discount) || 0;
 });
 
-// "-20%", or the amount ("-100 SAR") when the offer is a fixed discount.
+// "-20%", or the amount ("-100 JOD") when the offer is a fixed discount.
 // A fixed-amount offer shows the amount with the riyal sign (the same icon as the price), not a percentage.
 const fixedAmount = computed(() => (bundleDeal.value || !props.product ? '' : fixedDiscountAmount(props.product)));
 const discountLabel = computed(() => (bundleDeal.value || !props.product

@@ -51,12 +51,12 @@ export const isDiscountRunning = (discount, now = Date.now()) => {
   return true;
 };
 
-/** "20% OFF" / "100 SAR off", in the visitor's language. */
+/** "20% OFF" / "100 JOD off", in the visitor's language. */
 export const discountBadge = (discount, lang = 'ar') => {
   const ar = lang !== 'en';
   const amount = Number(discount?.value) || 0;
   if (amount <= 0) return ar ? 'عرض خاص' : 'Special Offer';
   const shown = amount.toLocaleString('en-US', { maximumFractionDigits: 2 });
-  if (discount.type === 'fixed') return ar ? `خصم ${shown} ر.س` : `${shown} SAR off`;
+  if (discount.type === 'fixed') return ar ? `خصم ${shown} د.أ` : `${shown} JOD off`;
   return ar ? `خصم ${shown}%` : `${shown}% OFF`;
 };

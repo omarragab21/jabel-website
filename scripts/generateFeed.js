@@ -57,7 +57,7 @@ async function main() {
   }
 
   const storeUrl = 'https://mastergas.sa';
-  const currency = 'SAR';
+  const currency = 'JOD';
 
   const csvHeaders = [
     'id',

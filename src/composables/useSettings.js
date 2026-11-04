@@ -8,9 +8,9 @@ export const defaultSettings = {
   logo: '/brand/mastergas-logo.png',
   footer_logo: '/brand/mastergas-logo-white.png',
   favicon: '/brand/mastergas-icon.png',
-  currency: 'SAR',
-  currency_ar: 'ر.س',
-  currency_en: 'SAR',
+  currency: 'JOD',
+  currency_ar: 'د.أ',
+  currency_en: 'JOD',
   free_delivery_threshold: 500,
   shipping_cost: 25,
   tax_rate: 15,
@@ -81,8 +81,8 @@ export function useSettings() {
   };
 
   const currency = computed(() => {
-    if (!settings.value) return locale.value === 'ar' ? '﷼' : 'SAR';
-    return locale.value === 'ar' ? (settings.value.currency_ar || '﷼') : (settings.value.currency_en || 'SAR');
+    if (!settings.value) return locale.value === 'ar' ? 'د.أ' : 'JOD';
+    return locale.value === 'ar' ? (settings.value.currency_ar || 'د.أ') : (settings.value.currency_en || 'JOD');
   });
 
   const getSetting = (key, defaultValue = null) => settings.value?.[key] ?? defaultSettings[key] ?? defaultValue;

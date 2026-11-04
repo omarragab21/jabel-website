@@ -3,7 +3,7 @@
 
 const amountText = (value, lang) => {
   const shown = (Number(value) || 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
-  return lang === 'en' ? `${shown} SAR` : `${shown} ر.س`;
+  return lang === 'en' ? `${shown} JOD` : `${shown} د.أ`;
 };
 
 /** 'percentage' | 'fixed' | null (no discount). */
@@ -12,7 +12,7 @@ export const discountKind = (product) => {
   return product.discount_info?.type === 'fixed' ? 'fixed' : 'percentage';
 };
 
-/** The badge on a product: "-20%" for a percentage, "-100 ر.س" / "-100 SAR" for a fixed amount; '' without one. */
+/** The badge on a product: "-20%" for a percentage, "-100 د.أ" / "-100 JOD" for a fixed amount; '' without one. */
 export const discountBadgeText = (product, lang = 'ar') => {
   const kind = discountKind(product);
   if (!kind) return '';

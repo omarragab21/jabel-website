@@ -2,7 +2,7 @@ import { createI18n } from 'vue-i18n';
 
 const messages = {
   ar: {
-    currency: '﷼',
+    currency: 'د.أ',
     use_code: 'استخدم كود',
     top_bar_welcome: 'أهلاً بك في Mastergas',
     free_delivery_over: 'شحن مجاني للطلبات فوق',
@@ -17,7 +17,7 @@ const messages = {
       search: 'بحث',
     },
     topbar: {
-      free_shipping: 'شحن مجاني للطلبات فوق 500 ريال | ضمان شامل على جميع المنتجات'
+      free_shipping: 'شحن مجاني للطلبات فوق 500 دينار | ضمان شامل على جميع المنتجات'
     },
     home: {
       shop_by_category: 'تسوق حسب التصنيف',
@@ -632,7 +632,7 @@ const messages = {
       customer: 'العميل',
     },
     common: {
-      riyal: 'ريال',
+      riyal: 'دينار',
       breadcrumb: 'مسار التنقل',
       required: 'ضرورية',
       home_aria: 'الصفحة الرئيسية لماسترجاز',
@@ -718,7 +718,7 @@ const messages = {
     },
   },
   en: {
-    currency: 'SAR',
+    currency: 'JOD',
     top_bar_welcome: 'Welcome to Mastergas',
     use_code: 'Use code',
     free_delivery_over: 'Free Delivery on orders over',
@@ -733,7 +733,7 @@ const messages = {
       search: 'Search',
     },
     topbar: {
-      free_shipping: 'Free shipping on orders over 500 SAR | Comprehensive warranty on all products'
+      free_shipping: 'Free shipping on orders over 500 JOD | Comprehensive warranty on all products'
     },
     home: {
       shop_by_category: 'Shop by Category',
@@ -1348,7 +1348,7 @@ const messages = {
       customer: 'Customer',
     },
     common: {
-      riyal: 'Saudi Riyal',
+      riyal: 'Jordanian Dinar',
       breadcrumb: 'Breadcrumb',
       required: 'Required',
       home_aria: 'Mastergas Home',
