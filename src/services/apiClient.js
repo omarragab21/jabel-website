@@ -1,4 +1,4 @@
-import { HOME_CACHE_TTL_MS } from '../config/cache';
+import { PUBLIC_CACHE_TTL_MS } from '../config/cache';
 import api, {
   classifyApiError,
   isCancelledRequest,
@@ -163,19 +163,18 @@ const recordCacheMetric = (endpoint, params, cache) => {
 };
 
 // ─── Persistent (cross-reload) cache ──────────────────────────────────────────
-// Home page data is also kept in localStorage so a reload, a new tab or a
-// return visit renders the home page instantly from the last good response
-// while a fresh copy is fetched in the background. Only an allow-list of
-// public endpoints is ever persisted: customer data (orders, returns, wallet,
+// Public data is also kept in localStorage so a reload, a new tab or a return
+// visit inside the cache window renders instantly. Only an allow-list of
+// public endpoints is ever cached: customer data (orders, returns, wallet,
 // profile) never is.
-const PERSIST_PREFIX = 'mg:api:v2:';
-// Entries written before caching was limited to the home page.
-const LEGACY_PERSIST_PREFIXES = ['mg:api:v1:'];
+const PERSIST_PREFIX = 'jb:api:v3:';
+// Entries written by earlier versions of the site (they may hold old content).
+const LEGACY_PERSIST_PREFIXES = ['mg:api:v1:', 'mg:api:v2:'];
 const PERSIST_MAX_AGE = 7 * 24 * 60 * 60 * 1000;   // never serve data older than a week
 const PERSIST_MAX_ENTRY_CHARS = 700 * 1000;         // skip pathological payloads
 const PERSIST_MAX_TOTAL_CHARS = 3 * 1000 * 1000;    // ~3M chars of the ~5M quota
 const PERSISTABLE_ENDPOINTS = [
-  /^\/v1\/site\/(settings|sliders|site-images|categories|offers)(\/|$)/,
+  /^\/v1\/site\/(settings|sliders|site-images|categories|offers|discounts)(\/|$)/,
   /^\/v1\/site\/products(\/|$)/,
   /^\/frontend\/(countries|cities|city-shipping-rates|topics)(\/|$)/,
 ];
@@ -307,7 +306,7 @@ const lookupCache = (key) => {
 const storeEntry = (key, endpoint, value, options) => {
   if (!options.cache) return value;
   const savedAt = Date.now();
-  const entry = { value, expiresAt: savedAt + Math.max(0, Number(options.ttl ?? HOME_CACHE_TTL_MS)), savedAt };
+  const entry = { value, expiresAt: savedAt + Math.max(0, Number(options.ttl ?? PUBLIC_CACHE_TTL_MS)), savedAt };
   responseCache.set(key, entry);
   if (options.persist !== false && isPersistable(endpoint)) {
     // Serialising a large catalogue is not free; keep it off the render path.
@@ -341,18 +340,23 @@ const startCachedRequest = (key, endpoint, params, options, cache = 'miss') => {
 /**
  * GET a public endpoint.
  *
- * Without `cache: true` (every page except home) the request always goes to
- * the API; identical requests running at the same time share one response.
+ * Public endpoints (PERSISTABLE_ENDPOINTS) are cached by default for
+ * PUBLIC_CACHE_TTL_MS: a fresh copy is served with no request; an expired copy
+ * is NOT shown, a new one is fetched instead (the page shows its skeleton), and
+ * the expired copy is only used if that request fails. `refresh: true` skips
+ * the cached copy (the home page's periodic refresh), `cache: false` skips the
+ * cache entirely, and `staleWhileRevalidate: true` opts back into serving an
+ * expired copy while a new one loads.
  *
- * With `cache: true` (home page only) the last response is served while it is
- * fresh, an expired one is served instantly while a new copy is fetched, and
- * `refresh: true` skips the cached copy and fetches a new one (used by the
- * home page's periodic refresh).
+ * Other endpoints always go to the API; identical requests running at the same
+ * time share one response.
  */
 export const getCached = (endpoint, params = {}, options = {}) => {
   const key = cacheKeyFor(endpoint, params, options.lang);
+  const useCache = options.cache ?? isPersistable(endpoint);
+  options = { ...options, cache: useCache };
 
-  if (!options.cache) {
+  if (!useCache) {
     if (!options.signal && inflightRequests.has(key)) return joinInflight(key, endpoint, params, options);
     return startCachedRequest(key, endpoint, params, options, 'bypass');
   }
@@ -368,7 +372,7 @@ export const getCached = (endpoint, params = {}, options = {}) => {
   // Public catalog data can be rendered from the last successful response
   // while a refresh runs in the background. This removes a blank/loading
   // state after the TTL expires without serving stale data forever.
-  if (cached && !options.refresh && options.staleWhileRevalidate !== false) {
+  if (cached && !options.refresh && options.staleWhileRevalidate === true) {
     if (!inflightRequests.has(key)) {
       startCachedRequest(key, endpoint, params, options, 'revalidate').catch(() => {
         // The previous successful value remains available until the next
@@ -395,6 +399,16 @@ export const getCached = (endpoint, params = {}, options = {}) => {
 };
 
 export const getStaleCached = (endpoint, params = {}) => lookupCache(cacheKeyFor(endpoint, params))?.value;
+
+/**
+ * The cached response for a public endpoint if it is still fresh, else undefined.
+ * Synchronous, so a component can render cached data on its very first paint
+ * (no default content, no skeleton) before any request is made.
+ */
+export const peekFresh = (endpoint, params = {}) => {
+  const entry = lookupCache(cacheKeyFor(endpoint, params));
+  return entry && entry.expiresAt > Date.now() ? entry.value : undefined;
+};
 
 export const invalidateCache = (endpoint, params) => {
   const matches = params
@@ -426,6 +440,7 @@ export const getCacheState = () => ({
 export default {
   getCached,
   getStaleCached,
+  peekFresh,
   invalidateCache,
   clearApiCache,
   parseCollectionResponse,

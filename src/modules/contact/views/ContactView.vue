@@ -1,5 +1,7 @@
 <template>
   <div class="contact-page" :dir="currentLang === 'ar' ? 'rtl' : 'ltr'">
+    <PageSkeleton v-if="!contentReady" hero :lines="4" :cards="2" />
+    <template v-else>
     <!-- 1. Hero Banner -->
     <section class="support-hero-banner">
       <div class="hero-bg" :style="{ backgroundImage: `url('${contactHeroImage}')` }"></div>
@@ -228,6 +230,7 @@
         </div>
       </div>
     </section>
+    </template>
   </div>
 </template>
 
@@ -239,11 +242,16 @@ import { escapeHtml } from '../../../utils/sanitize';
 import { settingsService } from '../../../services/settingsService';
 import { firstSetting, settingsToObject } from '../../../utils/siteSettings';
 import { workingHoursFor } from '../../../domain/site/siteIdentity.js';
+import PageSkeleton from '../../../components/skeleton/PageSkeleton.vue';
 
 const { currentLang } = useLocalized();
 
-const contactSettings = ref({});
-const siteImages = ref([]);
+// Fresh cached settings render the page at once; otherwise a skeleton shows until they arrive.
+const cachedSettings = settingsService.peekSettings();
+const cachedImages = settingsService.peekSiteImages();
+const contactSettings = ref(cachedSettings ? settingsToObject(cachedSettings) : {});
+const siteImages = ref(cachedImages || []);
+const contentReady = ref(Boolean(cachedSettings && cachedImages));
 
 const localizedSetting = (arKey, enKey, fallback = '') => {
   const key = currentLang.value === 'ar' ? arKey : enKey;
@@ -285,7 +293,7 @@ const contactHeroImage = computed(() => {
       .filter(Boolean).join(' ').toLowerCase();
     return searchable.includes('contact') || searchable.includes('support');
   });
-  return imageValue(match) || '/images/support/hero_banner.jpg';
+  return imageValue(match) || '/images/support/hero_banner_v2.jpg';
 });
 
 const fetchContactContent = async () => {
@@ -299,6 +307,7 @@ const fetchContactContent = async () => {
   if (imagesResult.status === 'fulfilled') {
     siteImages.value = Array.isArray(imagesResult.value) ? imagesResult.value : [];
   }
+  contentReady.value = true;
 };
 
 onMounted(fetchContactContent);
@@ -478,7 +487,7 @@ const handleSubmit = async () => {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .hero-container {

@@ -1,10 +1,22 @@
 import api from '../config/axios';
-import { getCached, parseCollectionResponse, parseDataResponse } from './apiClient';
+import { getCached, parseCollectionResponse, parseDataResponse, peekFresh } from './apiClient';
 import { normalizeSiteSlider } from './siteDataMappers';
 
 const clean = (params = {}) => Object.fromEntries(Object.entries(params).filter(([, value]) => value !== undefined && value !== null && value !== ''));
 
 export const settingsService = {
+  /** The site settings if a fresh copy is cached (logo, colours, texts), else null. Synchronous. */
+  peekSettings() {
+    const body = peekFresh('/v1/site/settings');
+    return body === undefined ? null : parseDataResponse(body);
+  },
+
+  /** The site images if a fresh copy is cached, else null. Synchronous. */
+  peekSiteImages() {
+    const body = peekFresh('/v1/site/site-images');
+    return body === undefined ? null : parseCollectionResponse(body).items;
+  },
+
   async getSettings(options = {}) {
     const body = await getCached('/v1/site/settings', {}, {
       cache: options.cache,

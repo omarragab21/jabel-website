@@ -1,23 +1,26 @@
-// Cache policy for public storefront data.
+// Cache policy for public storefront data (settings, logo, colours, sliders,
+// categories, offers, products, cities, pages).
 //
-// Only the home page caches API data. Every other page asks the API on each
-// visit, so prices, stock and content are always current there.
+// Every public response is kept (in memory and in localStorage) for
+// PUBLIC_CACHE_TTL_MS. Inside that window a page renders straight from the
+// cache, with no request and no loading state. Once it is older the page asks
+// the API again and shows skeletons until the answer arrives: an expired copy
+// is never shown, except when the API cannot be reached at all.
 //
-// On the home page the last response is kept (in memory and in localStorage)
-// so it renders instantly, and the page asks the API again every
-// HOME_REFRESH_INTERVAL_MS while it is open and visible.
-const DEFAULT_HOME_REFRESH_SECONDS = 10;
-const MIN_HOME_REFRESH_SECONDS = 5;
-const MAX_HOME_REFRESH_SECONDS = 5 * 60;
+// Customer data (cart checks, orders, profile, wallet) is never cached.
+const DEFAULT_CACHE_SECONDS = 60;
+const MIN_CACHE_SECONDS = 5;
+const MAX_CACHE_SECONDS = 10 * 60;
 
 const readSeconds = () => {
-  const raw = Number(import.meta.env?.VITE_HOME_REFRESH_SECONDS);
-  const seconds = Number.isFinite(raw) && raw > 0 ? raw : DEFAULT_HOME_REFRESH_SECONDS;
-  return Math.min(MAX_HOME_REFRESH_SECONDS, Math.max(MIN_HOME_REFRESH_SECONDS, seconds));
+  const raw = Number(import.meta.env?.VITE_CACHE_SECONDS ?? import.meta.env?.VITE_HOME_REFRESH_SECONDS);
+  const seconds = Number.isFinite(raw) && raw > 0 ? raw : DEFAULT_CACHE_SECONDS;
+  return Math.min(MAX_CACHE_SECONDS, Math.max(MIN_CACHE_SECONDS, seconds));
 };
 
-export const HOME_REFRESH_SECONDS = readSeconds();
-export const HOME_REFRESH_INTERVAL_MS = HOME_REFRESH_SECONDS * 1000;
+export const CACHE_SECONDS = readSeconds();
+export const PUBLIC_CACHE_TTL_MS = CACHE_SECONDS * 1000;
 
-// A cached home response counts as fresh for one refresh interval.
-export const HOME_CACHE_TTL_MS = HOME_REFRESH_INTERVAL_MS;
+// While the home page is open it fetches a fresh copy once per cache window,
+// so it never shows data older than the window either.
+export const HOME_REFRESH_INTERVAL_MS = PUBLIC_CACHE_TTL_MS;

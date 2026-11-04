@@ -10,6 +10,10 @@ import { createPinia } from 'pinia';
 import { useTheme } from './composables/useTheme.js';
 import { installLinkPrefetch } from './services/cacheWarmup.js';
 import { registerServiceWorker } from './pwa/registerServiceWorker.js';
+import { restoreBrandColors } from './utils/brandColors.js';
+
+// Brand colours from the last visit, before anything renders (no flash of the default colours).
+restoreBrandColors();
 
 const { initTheme } = useTheme();
 initTheme();

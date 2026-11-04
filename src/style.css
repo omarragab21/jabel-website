@@ -75,8 +75,8 @@
   --color-product-rating: #f59e1f;
   --color-product-whatsapp: #25d366;
 
-  /* Button hover (text/secondary) */
-  --color-button-hover: var(--color-text-secondary);
+  /* Button hover */
+  --color-button-hover: #206106;
 }
 
 .dark {

@@ -117,7 +117,8 @@ export function useCheckoutData({
 
   const fetchSettings = async () => {
     try {
-      const response = await settingsService.getSettings({ retries: 1 });
+      // VAT and shipping decide the total: always the current values, never the cache.
+      const response = await settingsService.getSettings({ retries: 1, cache: false });
       const siteSettings = settingsToObject(response);
       const threshold = firstSetting(siteSettings, 'free_delivery_threshold');
       const shipping = firstSetting(siteSettings, 'default_shipping_cost', 'shipping_cost');

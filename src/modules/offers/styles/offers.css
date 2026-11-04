@@ -101,7 +101,9 @@
   margin-bottom: 26px;
 }
 
-.bar-inner-content {
+/* Two classes so a global `.container { padding: 0 64px }` (product detail CSS, loaded later)
+   cannot wipe the vertical padding after visiting a product and coming back. */
+.mockup-results-bar-fullwidth .bar-inner-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -111,6 +113,7 @@
 
 .mockup-results-count {
   font-size: 13px;
+  line-height: 19.5px;
   color: #64748b;
   font-weight: 400;
 }
@@ -134,7 +137,9 @@
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
-  padding: 5px 12px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  height: 30.5px; /* fixed so the grey bar never changes height while fonts/products load */
   transition: border-color 0.2s;
 }
 
@@ -150,6 +155,8 @@
   outline: none;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
   font-size: 12.5px;
+  line-height: 18px;
+  height: 100%;
   font-weight: 500;
   color: #111827;
   cursor: pointer;

@@ -33,8 +33,8 @@ const messages = {
       best_sellers_subtitle: 'المنتجات المفضلة لعملائنا',
       new_arrivals: 'وصل حديثاً',
       new_arrivals_subtitle: 'أحدث التقنيات والموديلات في عالم المطابخ العصرية',
-      why_jabel: 'لماذا Jabel؟',
-      why_jabel_subtitle: 'نجمع بين إرث الصناعة الإيطالية واحتياجات المنزل السعودي المعاصر',
+      why_jabel: 'لماذا نحن الخيار الأول؟',
+      why_jabel_subtitle: 'نجمع بين الخبرة الصيدلانية والتقنية لنقدم لك تجربة تسوق صحية موثوقة',
       brands: 'العلامات التجارية',
     },
     products: {
@@ -749,8 +749,8 @@ const messages = {
       best_sellers_subtitle: 'Our customers favorite products',
       new_arrivals: 'New Arrivals',
       new_arrivals_subtitle: 'Latest cutting-edge models in modern kitchens',
-      why_jabel: 'Why Jabel?',
-      why_jabel_subtitle: 'Combining the heritage of Italian craftsmanship with the contemporary needs of Saudi homes',
+      why_jabel: 'Why Are We the First Choice?',
+      why_jabel_subtitle: 'We combine pharmaceutical expertise and technology to give you a trusted health shopping experience',
       brands: 'Brands',
     },
     products: {

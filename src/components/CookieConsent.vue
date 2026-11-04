@@ -371,7 +371,7 @@ defineExpose({
 }
 
 .btn-manage:hover {
-  color: #111827;
+  color: var(--color-brand-primary, #111827);
 }
 
 /* btn-reject */
@@ -385,7 +385,7 @@ defineExpose({
   min-width: 78px;
   height: 45px;
   background: #FFFFFF;
-  border: 1px solid #000000;
+  border: 1px solid var(--color-brand-primary, #000000);
   border-radius: 6px;
   cursor: pointer;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
@@ -393,13 +393,13 @@ defineExpose({
   font-weight: 700;
   font-size: 14px;
   line-height: 21px;
-  color: #000000;
+  color: var(--color-brand-primary, #000000);
   transition: all 0.2s;
   white-space: nowrap;
 }
 
 .btn-reject:hover {
-  background: #F8FAFC;
+  background: color-mix(in srgb, var(--color-brand-primary, #000000) 8%, #FFFFFF);
 }
 
 /* btn-accept-all */
@@ -412,7 +412,7 @@ defineExpose({
   padding: 12px 24px;
   min-width: 89px;
   height: 45px;
-  background: var(--color-brand-secondary, #111827);
+  background: var(--color-brand-primary, #111827);
   border-radius: 6px;
   border: none;
   cursor: pointer;
@@ -459,7 +459,7 @@ defineExpose({
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: #111827;
+  color: var(--color-brand-primary, #111827);
 }
 
 .cookie-svg {
@@ -598,7 +598,7 @@ defineExpose({
 }
 
 .cookie-toggle.active {
-  background: var(--color-brand-secondary, #111827);
+  background: var(--color-brand-primary, #111827);
 }
 
 .cookie-toggle.disabled {
@@ -708,7 +708,7 @@ defineExpose({
   min-width: 132px;
   height: 45px;
   background: transparent;
-  border: 1.5px solid #000000;
+  border: 1.5px solid var(--color-brand-primary, #000000);
   border-radius: 8px;
   cursor: pointer;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
@@ -716,13 +716,13 @@ defineExpose({
   font-weight: 700;
   font-size: 14px;
   line-height: 21px;
-  color: #000000;
+  color: var(--color-brand-primary, #000000);
   transition: all 0.2s;
   white-space: nowrap;
 }
 
 .btn-allow-all:hover {
-  background: #F8FAFC;
+  background: color-mix(in srgb, var(--color-brand-primary, #000000) 8%, #FFFFFF);
 }
 
 /* btn-save-preferences */
@@ -735,7 +735,7 @@ defineExpose({
   padding: 12px 24px;
   min-width: 137px;
   height: 45px;
-  background: var(--color-brand-secondary, #111827);
+  background: var(--color-brand-primary, #111827);
   border-radius: 8px;
   border: none;
   cursor: pointer;

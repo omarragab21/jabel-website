@@ -13,10 +13,7 @@
     </div>
   </div>
 
-  <div class="loading-state-fullscreen" v-else-if="loading">
-     <div class="spinner"></div>
-     <p>{{ t('common.loading') }}</p>
-  </div>
+  <PageSkeleton v-else-if="loading" :label="t('common.loading')" :lines="10" />
 
   <NotFoundView v-else />
 </template>
@@ -30,6 +27,7 @@ import NotFoundView from '../../../views/NotFoundView.vue';
 import { settingsService } from '../../../services/settingsService';
 import { useLocalized } from '../../../composables/useLocalized';
 import { escapeHtml, sanitizeHtml } from '../../../utils/sanitize';
+import PageSkeleton from '../../../components/skeleton/PageSkeleton.vue';
 
 const route = useRoute();
 const { t } = useI18n();

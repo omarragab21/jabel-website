@@ -172,7 +172,8 @@ export const cartState = reactive({
       const latestProducts = await Promise.all(
         snapshotItems.map(async (item) => {
           try {
-            const product = await productService.getProductById(item.id);
+            // Prices and stock decide what the customer pays: always ask the API.
+            const product = await productService.getProductById(item.id, { cache: false });
             // A successful response with no product is not proof that the
             // product was deleted. Only an explicit 404 should mark it
             // unavailable so transient/odd API payloads do not block checkout.

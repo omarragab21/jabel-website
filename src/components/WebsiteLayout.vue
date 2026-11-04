@@ -14,7 +14,8 @@
           <!-- Logo (Right in RTL) -->
           <router-link to="/" class="logo" :aria-label="$t('common.home_aria')">
             <div class="logo-icon">
-              <img :src="siteLogo || '/brand/jabel-logo.png'" :alt="siteName || 'Jabel'" class="site-logo-img">
+              <img v-if="settingsReady" :src="siteLogo || '/brand/jabel-logo.png'" :alt="siteName || 'Jabel'" class="site-logo-img">
+              <span v-else class="sk-shimmer logo-skeleton" aria-hidden="true"></span>
             </div>
           </router-link>
 
@@ -255,7 +256,8 @@
           <!-- Col 4: Brand Info & Payment (Far Left in RTL) -->
           <div class="footer-col brand-info footer-col-brand">
             <router-link to="/" class="footer-logo">
-              <img :src="footerLogo" alt="Jabel" class="footer-brand-logo-img" />
+              <img v-if="settingsReady" :src="footerLogo" :alt="siteName || 'Jabel'" class="footer-brand-logo-img" />
+              <span v-else class="sk-shimmer footer-logo-skeleton" aria-hidden="true"></span>
             </router-link>
             <p v-if="localizedSiteDescription" class="footer-desc">{{ localizedSiteDescription }}</p>
 
@@ -307,6 +309,7 @@
 
 <script setup>
 import { ref, reactive, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
+import { applyBrandColors } from '../utils/brandColors';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import api from '../config/axios';
@@ -467,20 +470,6 @@ const resolveAssetUrl = (value, fallback) => {
   return `${api.defaults.baseURL.replace('/api', '')}/storage/${cleaned.replace(/^[\\/]+/, '')}`;
 };
 
-// Brand colours chosen in the dashboard (Settings > Visual identity; primary_color / secondary_color in the site settings API). An empty or invalid value keeps the built-in colour.
-const HEX_COLOR = /^#[0-9a-f]{6}$/i;
-const brandColor = (value) => (HEX_COLOR.test(String(value || '').trim()) ? String(value).trim() : '');
-const setBrandVars = (names, value) => {
-  const style = document.documentElement.style;
-  names.forEach((name) => (value ? style.setProperty(name, value) : style.removeProperty(name)));
-};
-const applyBrandColors = (primaryValue, secondaryValue) => {
-  const primary = brandColor(primaryValue);
-  setBrandVars(['--primary', '--primary-dark', '--color-brand-primary'], primary);
-  setBrandVars(['--primary-hover'], primary && `color-mix(in srgb, ${primary} 85%, black)`);
-  setBrandVars(['--secondary', '--color-brand-secondary'], brandColor(secondaryValue));
-};
-
 const applySiteSettings = (rawSettings) => {
   const normalized = settingsToObject(rawSettings);
   if (!Object.keys(normalized).length) return;
@@ -608,6 +597,16 @@ const handleScroll = () => {
   isScrolled.value = window.scrollY > 50;
 };
 
+// Until the real settings are known the logos show a skeleton, never the built-in
+// defaults. Fresh cached settings (under a minute old) are applied before the
+// first paint, so a reload shows the right logo and colours straight away.
+const settingsReady = ref(false);
+const cachedLayoutSettings = settingsService.peekSettings();
+if (cachedLayoutSettings) {
+  applySiteSettings(cachedLayoutSettings);
+  settingsReady.value = true;
+}
+
 const fetchData = async () => {
   const [settingsResult, offersResult] = await Promise.allSettled([
     settingsService.getSettings(),
@@ -621,6 +620,7 @@ const fetchData = async () => {
     // Get settings
     const settings = settingsRes;
     applySiteSettings(settings);
+    settingsReady.value = true;
     if (Array.isArray(settings)) {
       const getVal = (key) => settings.find(s => s.key === key)?.value;
       const socialSetting = getVal('social_links');
@@ -725,6 +725,9 @@ const fetchData = async () => {
     latestCoupon.value = validOffers.length > 0 ? validOffers[0] : null;
   } catch (error) {
     console.warn('Top bar promo data unavailable from API, using clean default state:', error?.message);
+  } finally {
+    // Even when the API is down the header must not stay a skeleton: fall back to the built-in logo.
+    settingsReady.value = true;
   }
 };
 
@@ -1030,6 +1033,21 @@ onUnmounted(() => {
   object-fit: contain;
 }
 
+/* Logo placeholders while the site settings load (same box as the logos). */
+.logo-skeleton {
+  width: 120px;
+  height: 35px;
+  border-radius: 6px;
+}
+
+.footer-logo-skeleton {
+  width: 140px;
+  height: 35px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.08) 25%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0.08) 75%);
+  background-size: 200% 100%;
+}
+
 /* Center Navigation Links */
 .nav-links {
   display: flex;
@@ -1241,6 +1259,10 @@ onUnmounted(() => {
   .site-logo-img {
     height: 24px;
     max-width: 120px;
+  }
+  .logo-skeleton {
+    width: 90px;
+    height: 24px;
   }
 }
 

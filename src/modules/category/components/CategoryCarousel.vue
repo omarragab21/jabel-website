@@ -2,7 +2,9 @@
     <section class="home-section categories-section container" :dir="currentLang === 'ar' ? 'rtl' : 'ltr'">
       <div class="section-header-flex">
         <div class="section-title-wrap">
-          <h2 class="section-title">{{ title || t('home.shop_by_category') }}</h2>
+          <!-- title null = the page is still loading its settings: a skeleton, not the default title -->
+          <span v-if="title === null" class="sk-shimmer sk-line category-title-skeleton" aria-hidden="true"></span>
+          <h2 v-else class="section-title">{{ title || t('home.shop_by_category') }}</h2>
         </div>
         <div class="section-nav-actions">
           <button class="nav-circle-btn" :class="{ 'is-hidden': !canPrev, 'is-active': activeDirection === 'prev' }" :disabled="!canPrev" @click="scrollCategoriesSlider('prev')" :aria-label="currentLang === 'ar' ? 'السابق' : 'Previous'">

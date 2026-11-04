@@ -47,9 +47,8 @@ const asObject = (value) => {
   return value && typeof value === 'object' ? value : {};
 };
 
-/** The page `id` ("privacy" | "terms") from the site settings; empty while the API has none. */
-export const loadLegalPage = async (id) => {
-  const settings = settingsToObject(await settingsService.getSettings());
+// The page `id` ("privacy" | "terms") out of the site settings object.
+const legalPageFrom = (settings, id) => {
   const data = asObject(asObject(settings.legal_pages)[id]);
   const sections = (Array.isArray(data.sections) ? data.sections : [])
     .map((section, index) => ({ position: Number(section?.position) || index + 1, ...cleanSection(section) }))
@@ -62,6 +61,15 @@ export const loadLegalPage = async (id) => {
     banner: data.banner === undefined ? { ...DEFAULT_BANNERS[id] } : cleanBanner(asObject(data.banner)),
     sections,
   };
+};
+
+/** The page `id` ("privacy" | "terms") from the site settings; empty while the API has none. */
+export const loadLegalPage = async (id) => legalPageFrom(settingsToObject(await settingsService.getSettings()), id);
+
+/** The page from fresh cached settings (renders at once, no skeleton), or null. */
+export const peekLegalPage = (id) => {
+  const cached = settingsService.peekSettings();
+  return cached ? legalPageFrom(settingsToObject(cached), id) : null;
 };
 
 /** "2026-03" -> "مارس ٢٠٢٦" / "March 2026". */

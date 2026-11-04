@@ -1,5 +1,7 @@
 <template>
   <div class="about-page" :dir="currentLang === 'ar' ? 'rtl' : 'ltr'">
+    <PageSkeleton v-if="!contentReady" hero :cards="3" />
+    <template v-else>
     
     <!-- 1. Hero Banner Section -->
     <section class="about-hero-section">
@@ -220,6 +222,7 @@
       </div>
     </section>
 
+    </template>
   </div>
 </template>
 
@@ -231,11 +234,16 @@ import { settingsService } from '../../../services/settingsService';
 import { settingsToObject } from '../../../utils/siteSettings';
 import { visibleAboutSections } from '../../../domain/about/aboutSections';
 import { aboutText } from '../../../domain/about/aboutPageContent';
+import PageSkeleton from '../../../components/skeleton/PageSkeleton.vue';
 
 const { currentLang } = useLocalized();
 
-const aboutSettings = ref({});
-const siteImages = ref([]);
+// Fresh cached settings render the page at once; otherwise a skeleton shows until they arrive.
+const cachedSettings = settingsService.peekSettings();
+const cachedImages = settingsService.peekSiteImages();
+const aboutSettings = ref(cachedSettings ? settingsToObject(cachedSettings) : {});
+const siteImages = ref(cachedImages || []);
+const contentReady = ref(Boolean(cachedSettings && cachedImages));
 // Every fixed text of the page comes from the dashboard settings (with the built-in text as the fallback).
 const t = (key) => aboutText(aboutSettings.value, key, currentLang.value);
 
@@ -296,6 +304,7 @@ const fetchAboutContent = async () => {
   if (imagesResult.status === 'fulfilled') {
     siteImages.value = Array.isArray(imagesResult.value) ? imagesResult.value : [];
   }
+  contentReady.value = true;
 };
 
 onMounted(fetchAboutContent);
@@ -672,7 +681,7 @@ useSEO({
 
 .stat-label-text {
   font-size: 15px;
-  color: #94A3B8;
+  color: #FFFFFF;
   font-weight: 500;
 }
 

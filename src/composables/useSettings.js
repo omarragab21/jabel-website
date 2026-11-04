@@ -58,6 +58,11 @@ const normalizeSettings = (data) => {
   return settingsObj;
 };
 
+// Start from the cached settings when they are fresh, so the logo, name and
+// texts are right on the first paint instead of switching from the defaults.
+const cachedSettings = settingsService.peekSettings();
+if (cachedSettings) settings.value = normalizeSettings(cachedSettings);
+
 export function useSettings() {
   const { locale } = useI18n();
 
@@ -87,5 +92,8 @@ export function useSettings() {
 
   const getSetting = (key, defaultValue = null) => settings.value?.[key] ?? defaultSettings[key] ?? defaultValue;
 
-  return { settings, loading, fetchSettings, currency, getSetting };
+  // True once real settings are known (cached or fetched): until then show skeletons, not defaults.
+  const settingsReady = computed(() => settings.value !== null);
+
+  return { settings, settingsReady, loading, fetchSettings, currency, getSetting };
 }

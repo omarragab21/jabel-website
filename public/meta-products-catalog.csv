@@ -1,2 +1,6 @@
 id,title,description,availability,condition,price,link,image_link,brand,google_product_category
+"5","غسول وجه منقي للبشرة الدهنية","نظرة عامة","in stock","new","200.00 JOD","https://jabel-website.vercel.app/product/5","https://backend-jabal.be-kite.com/public/storage/products/85d893eb-d82d-4659-ad8e-2a1ab668d10d.png","Jabel","العناية بالبشرة"
+"4","مرطب البشرة اليومي  ترطيب عميق ومكثف يدوم طويلاً","نظرة عامة","in stock","new","200.00 JOD","https://jabel-website.vercel.app/product/4","https://backend-jabal.be-kite.com/public/storage/products/8de55c42-af0a-4c41-99aa-fe70f1e6c4cf.png","Jabel","العناية بالبشرة"
+"3","جهاز قياس ضغط الدم","نظرة عامة","in stock","new","100.00 JOD","https://jabel-website.vercel.app/product/3","https://backend-jabal.be-kite.com/public/storage/products/78fd870f-49e6-44f9-a832-b4116f9a3af6.png","Jabel","العناية الشخصية"
+"2","كريم واقي شمسي SPF 50","نظرة عامة","in stock","new","119.00 JOD","https://jabel-website.vercel.app/product/2","https://backend-jabal.be-kite.com/public/storage/products/b4e3cb27-0dba-48ef-8842-5f3e0024ca7a.png","Jabel","الفيتامينات"
 "1","مزيل عرق طبيعي خالي من الألمنيوم","نظرة عامة","in stock","new","59.00 JOD","https://jabel-website.vercel.app/product/1","https://backend-jabal.be-kite.com/public/storage/products/5c582858-e1e2-4946-aab8-a0e2c832ff56.png","Jabel","العناية الشخصية"

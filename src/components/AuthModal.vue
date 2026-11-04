@@ -922,8 +922,8 @@ defineExpose({
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-top: -4px;
-  margin-bottom: 4px;
+  margin-top: -12px; /* cancels the form-group's 20px gap down to 8px, same as margin-bottom */
+  margin-bottom: 8px;
 }
 
 .remember-me-label {

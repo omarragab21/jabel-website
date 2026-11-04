@@ -18,7 +18,10 @@
 
     <!-- 2. Legal Content Container -->
     <main class="legal-content-container">
-      <article class="legal-sheet">
+      <article v-if="!pageReady" class="legal-sheet legal-sheet-loading" aria-busy="true">
+        <span v-for="n in 8" :key="n" class="sk-shimmer sk-line" :style="{ width: `${100 - (n % 3) * 14}%` }"></span>
+      </article>
+      <article v-else class="legal-sheet">
 
         <!-- cookie-notice-banner (edited from the dashboard; removed when it has no text) -->
         <LegalNoticeBanner
@@ -80,7 +83,7 @@ import cookieIcon from '../../../assets/legal/cookie.svg';
 import { isAnalyticsAllowed, setCookiesAllowed } from '../../../utils/cookieConsent';
 import { useLocalized } from '../../../composables/useLocalized';
 import { useSEO } from '../../../composables/useSEO';
-import { emptyLegalPage, formatLegalMonth, formatSectionNumber, loadLegalPage } from '../../../services/legalPages';
+import { emptyLegalPage, formatLegalMonth, formatSectionNumber, loadLegalPage, peekLegalPage } from '../../../services/legalPages';
 
 const { currentLang } = useLocalized();
 const isRtl = computed(() => currentLang.value === 'ar');
@@ -96,7 +99,10 @@ useSEO({
   keywords: 'سياسة الخصوصية, حماية البيانات, جبل, Jabel privacy policy, شروط الاستخدام'
 });
 
-const page = ref(emptyLegalPage());
+// Fresh cached settings render the text at once; otherwise skeleton lines show until it arrives.
+const cachedPage = peekLegalPage('privacy');
+const page = ref(cachedPage || emptyLegalPage());
+const pageReady = ref(Boolean(cachedPage));
 const sections = computed(() => page.value.sections);
 const subtitle = computed(() => {
   const updated = formatLegalMonth(page.value.updated_at, currentLang.value);
@@ -142,11 +148,19 @@ onMounted(async () => {
     page.value = await loadLegalPage('privacy');
   } catch (error) {
     console.warn('Legal page could not be loaded from the settings API:', error?.message);
+  } finally {
+    pageReady.value = true;
   }
 });
 </script>
 
 <style scoped>
+.legal-sheet-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
 /* ============================================================
    Page Base: jabel-privacy-policy
    ============================================================ */
