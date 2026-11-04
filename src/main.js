@@ -1,0 +1,44 @@
+import { createApp } from 'vue';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import './style.css';
+import './components/skeleton/skeleton.css';
+import './styles/mobile-typography.css';
+import App from './App.vue';
+import router from './router/index.js';
+import i18n from './i18n/index.js';
+import { createPinia } from 'pinia';
+import { useTheme } from './composables/useTheme.js';
+import { installLinkPrefetch } from './services/cacheWarmup.js';
+import { registerServiceWorker } from './pwa/registerServiceWorker.js';
+
+const { initTheme } = useTheme();
+initTheme();
+
+let lang = localStorage.getItem('lang');
+if (!lang || (lang !== 'ar' && lang !== 'en')) {
+  lang = 'ar';
+  localStorage.setItem('lang', 'ar');
+}
+document.documentElement.lang = lang;
+document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+const app = createApp(App);
+app.use(createPinia());
+app.use(i18n);
+app.use(router);
+app.mount('#app');
+
+// Speed-ups that must never block or break the first render.
+installLinkPrefetch(router);
+registerServiceWorker();
+
+// Google Analytics through Firebase: live site only, and only after the visitor allows analytics cookies.
+if (import.meta.env.PROD) {
+  const analyticsModule = () => import('./firebase/analytics.js');
+  const startAnalytics = () => analyticsModule().then((module) => module.startAnalytics()).catch(() => {});
+  const stopAnalytics = () => analyticsModule().then((module) => module.stopAnalytics()).catch(() => {});
+  let consent = {};
+  try { consent = JSON.parse(localStorage.getItem('mastergas_cookie_consent') || '{}') || {}; } catch { /* no consent yet */ }
+  if (consent.analytics) window.addEventListener('load', startAnalytics);
+  window.addEventListener('cookie-consent', (event) => { if (event.detail?.analytics) startAnalytics(); else stopAnalytics(); });
+}

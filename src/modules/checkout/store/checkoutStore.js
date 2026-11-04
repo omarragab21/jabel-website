@@ -1,0 +1,45 @@
+import { defineStore } from 'pinia';
+import {
+  createCheckoutSettings,
+  createCustomerInfo,
+  createNewAddressForm,
+} from './checkoutDefaults';
+
+export const useCheckoutStore = defineStore('checkout', {
+  state: () => ({
+    currentStep: 2,
+    addressTab: 'saved',
+    // true until the saved addresses have been fetched: the address step shows a shimmer, never a half-loaded state
+    addressesLoading: true,
+    saveToMyAddresses: false,
+    loading: false,
+    orderSubmitting: false,
+    confirmedOrder: null,
+    activeCardAttempt: null,
+    customerInfo: createCustomerInfo(),
+    newAddrForm: createNewAddressForm(),
+    savedAddresses: [],
+    selectedAddressId: null,
+    selectedPayment: 'cod',
+    countries: [],
+    cities: [],
+    cityShippingRate: 0,
+    settings: createCheckoutSettings(),
+    useWallet: false,
+    walletBalance: 0,
+    isGift: false,
+    giftMessage: '',
+    freeDeliveryThreshold: 500,
+    shippingCost: 15,
+    taxRate: 0,
+    couponCode: '',
+    appliedCoupon: null,
+    discountAmount: 0,
+    couponMessage: '',
+    couponMessageType: '',
+    showCouponInput: false,
+    lastPurchasedItems: [],
+    lastPurchasedTotal: 0,
+    lastPurchasedDate: '',
+  }),
+});

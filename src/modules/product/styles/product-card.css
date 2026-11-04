@@ -1,0 +1,446 @@
+.product-card {
+  width: 100%;
+  max-width: 310px;
+  height: 446px;
+  flex: none;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  gap: 16px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  border-color: #cbd5e1;
+}
+
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  background: #f8fafc;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  display: block;
+}
+
+.product-image.secondary-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.03);
+}
+
+.product-card:hover .product-image.secondary-img {
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+.card-colors-row {
+  margin-bottom: 12px;
+}
+
+.card-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-color-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 22px;
+  padding: 2px 7px 2px 4px;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 10px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.card-swatch-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 0 0 1px #d1d5db;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.card-color-label {
+  max-width: 94px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-color-hex {
+  color: #64748b;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  direction: ltr;
+}
+
+.card-swatch-more {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.product-badges {
+  position: absolute;
+  top: 12px;
+  inset-inline-start: 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  z-index: 2;
+}
+
+.badge-new {
+  background: #10b981;
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.badge-riyal {
+  display: inline-block;
+  width: 9px;
+  height: 10px;
+  margin-inline: 1px 2px;
+  vertical-align: -1px;
+  /* the riyal sign is black: draw it white on the red badge */
+  filter: brightness(0) invert(1);
+}
+
+.badge-sale {
+  background: #e53333;
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.product-overlay {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  background: rgba(239, 68, 68, 0.9);
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Out of stock (Figma node 2:295): white 60% veil over the photo... */
+.oos-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+}
+
+/* ...and a grey pill in place of the cart button. */
+.oos-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: #e2e8f0;
+  color: #64748b;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: normal;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+  text-align: start;
+}
+
+.origin-tag {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #000000;
+  display: block;
+  line-height: normal;
+  min-height: 1.3em;
+}
+
+.product-card[dir="rtl"] .product-name {
+  text-align: right;
+}
+
+.product-card[dir="ltr"] .product-name {
+  text-align: left;
+}
+
+.product-name {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #000000;
+  margin: 0;
+  line-height: 27px;
+  min-height: 54px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-divider {
+  width: 100%;
+  height: 1px;
+  background: #e2e8f0;
+  flex-shrink: 0;
+}
+
+.discount-area {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.old-price {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #64748b;
+  line-height: normal;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.bundle-tag {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #660033;
+}
+
+.old-price-riyal {
+  display: block;
+  width: 10px;
+  height: 11px;
+  flex-shrink: 0;
+}
+
+.old-price-val {
+  text-decoration: line-through;
+  white-space: nowrap;
+}
+
+.product-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  width: 100%;
+}
+
+.current-price-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.price-val {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #000000;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.currency-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+}
+
+.currency-symbol-svg {
+  width: 13.689px;
+  height: 15.3px;
+  display: block;
+  flex: 0 0 13.689px;
+}
+
+.add-to-cart-btn {
+  background: var(--color-brand-primary, #000000);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.add-to-cart-btn:hover {
+  background: var(--color-button-hover);
+  transform: translateY(-1px);
+}
+
+.add-to-cart-btn:active {
+  transform: scale(0.97);
+}
+
+.cart-icon-box {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.cart-icon-inset {
+  position: absolute;
+  inset: 4.16% 6.89% 1.58% 5.39%;
+}
+
+.cart-icon {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+.btn-text {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  line-height: normal;
+  letter-spacing: 0;
+  white-space: nowrap;
+  color: #ffffff;
+}
+
+/* List View Styles */
+.product-card.list-view {
+  flex-direction: row;
+  height: auto;
+  min-height: 200px;
+}
+
+.product-card.list-view .product-image-wrapper {
+  width: 220px;
+  height: auto;
+  min-height: 180px;
+  margin-bottom: 0;
+  margin-inline-end: 18px;
+}
+
+.product-card.list-view .product-info {
+  justify-content: space-between;
+}
+
+@media (max-width: 640px) {
+  .product-card {
+    padding: 12px;
+    border-radius: 14px;
+    width: 100%;
+    height: auto;
+    flex-basis: 100%;
+  }
+  .product-card {
+    gap: 12px;
+  }
+  .product-image-wrapper {
+    height: 180px;
+    border-radius: 10px;
+  }
+  .product-name {
+    font-size: 15px;
+  }
+  .price-val {
+    font-size: 18px;
+  }
+  .add-to-cart-btn {
+    padding: 7px 11px;
+    border-radius: 7px;
+  }
+}
+
+/* Tablet/mobile: grid cards fill their column so side gutters stay equal */
+@media (max-width: 1024px) {
+  .mockup-products-grid > .product-card,
+  .mockup-products-grid > .sk-product-card,
+  .related-products-grid > .product-card,
+  .products-grid-four > .product-card,
+  .products-grid-four > .sk-product-card {
+    max-width: none;
+  }
+}

@@ -1,0 +1,120 @@
+.home-section {
+  padding-top: 36px;
+  padding-bottom: 28px;
+}
+
+.home-section.categories-section {
+  padding-top: 24px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-left: 64px !important;
+  padding-right: 64px !important;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+.section-header-flex {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.3px;
+}
+
+.section-subtitle {
+  font-size: 13.5px;
+  color: #6b7280;
+  margin: 0;
+  font-weight: 400;
+}
+
+.section-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-circle-btn {
+  box-sizing: border-box;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #E2E8F0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-circle-btn.is-active {
+  background: var(--color-brand-primary, #000000);
+  color: #ffffff;
+  border-color: #000000;
+}
+
+.nav-circle-btn:hover {
+  transform: scale(1.06);
+}
+
+.nav-circle-btn.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.category-cards-slider {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  /* room above/below for the card shadow (0 4px 16px) so the scroller does not clip it */
+  padding: 4px 0 24px;
+}
+
+.category-cards-slider::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .category-cards-slider {
+    gap: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-cards-slider {
+    gap: 12px;
+  }
+
+
+}
+
