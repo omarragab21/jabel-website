@@ -6,7 +6,7 @@ const MARGIN_MM = 10
 
 export const invoiceFileName = (invoiceNumber) => {
   const safe = String(invoiceNumber || '').replace(/[^\w؀-ۿ-]+/g, '-').replace(/^-+|-+$/g, '')
-  return `invoice-${safe || 'mastergas'}.pdf`
+  return `invoice-${safe || 'jabel'}.pdf`
 }
 
 export const downloadElementAsPdf = async (element, fileName) => {

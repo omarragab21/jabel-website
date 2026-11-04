@@ -2,7 +2,7 @@
 // The visitor sees the Arabic text on the Arabic site and the English text on the English site; a language
 // that was left empty falls back to the other one instead of showing nothing.
 
-export const DEFAULT_SITE_NAME = { ar: 'ماسترجاز | Mastergas', en: 'Mastergas' };
+export const DEFAULT_SITE_NAME = { ar: 'جبل | Jabel', en: 'Jabel' };
 
 const ARABIC = /[؀-ۿ]/;
 const LEGACY_BRAND = /iris/i; // the old demo brand some databases still carry

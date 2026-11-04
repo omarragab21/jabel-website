@@ -1,5 +1,5 @@
 <template>
-  <div class="mastergas-privacy-policy" :class="{ 'is-en': !isRtl }" :dir="isRtl ? 'rtl' : 'ltr'">
+  <div class="jabel-privacy-policy" :class="{ 'is-en': !isRtl }" :dir="isRtl ? 'rtl' : 'ltr'">
     
     <!-- 1. Hero Banner matching Figma hero-banner -->
     <section class="hero-banner">
@@ -88,12 +88,12 @@ const isRtl = computed(() => currentLang.value === 'ar');
 // Dynamic SEO tags
 useSEO({
   title: isRtl.value
-    ? 'سياسة الخصوصية | Mastergas الأجهزة الإيطالية الفاخرة'
-    : 'Privacy Policy | Mastergas Luxury Italian Appliances',
+    ? 'سياسة الخصوصية | Jabel الأجهزة الإيطالية الفاخرة'
+    : 'Privacy Policy | Jabel Luxury Italian Appliances',
   description: isRtl.value
-    ? 'تعرف على سياسة الخصوصية وحماية البيانات الشخصية في متجر Mastergas للأجهزة المنزلية الإيطالية الفاخرة في المملكة العربية السعودية.'
-    : 'Learn about the privacy policy and personal data protection at Mastergas luxury Italian home appliances in Saudi Arabia.',
-  keywords: 'سياسة الخصوصية, حماية البيانات, ماستر غاز, Mastergas privacy policy, شروط الاستخدام'
+    ? 'تعرف على سياسة الخصوصية وحماية البيانات الشخصية في متجر Jabel للأجهزة المنزلية الإيطالية الفاخرة في المملكة العربية السعودية.'
+    : 'Learn about the privacy policy and personal data protection at Jabel luxury Italian home appliances in Saudi Arabia.',
+  keywords: 'سياسة الخصوصية, حماية البيانات, جبل, Jabel privacy policy, شروط الاستخدام'
 });
 
 const page = ref(emptyLegalPage());
@@ -148,9 +148,9 @@ onMounted(async () => {
 
 <style scoped>
 /* ============================================================
-   Page Base: mastergas-privacy-policy
+   Page Base: jabel-privacy-policy
    ============================================================ */
-.mastergas-privacy-policy {
+.jabel-privacy-policy {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -320,7 +320,7 @@ onMounted(async () => {
    Responsive Media Queries
    ============================================================ */
 @media (max-width: 1024px) {
-  .mastergas-privacy-policy {
+  .jabel-privacy-policy {
     margin-top: 0px;
   }
 

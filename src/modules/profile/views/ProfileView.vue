@@ -635,7 +635,7 @@
                   <!-- Product Details (Right in RTL) -->
                   <div class="col-prod-details">
                     <img
-                      :src="item.image || '/brand/mastergas-icon.png'"
+                      :src="item.image || '/brand/jabel-icon.png'"
                       :alt="item.name"
                       class="prod-thumb-img"
                     />
@@ -804,7 +804,7 @@
                   <!-- Left in RTL: Logo & Legal info -->
                   <div class="invoice-company-block">
                     <div class="invoice-logo-wrapper">
-                      <img src="/brand/mastergas-logo.png" alt="MASTERgas" class="invoice-logo-img" />
+                      <img src="/brand/jabel-logo.png" alt="Jabel" class="invoice-logo-img" />
                     </div>
                     <span class="invoice-company-name">{{ t('profile.company_name') }}</span>
                     <span class="invoice-vat-number">{{ t('profile.tax_number') }}: 301204567800003</span>
@@ -1002,7 +1002,7 @@
                             @click.stop
                             @change="toggleReturnItem(item)"
                           />
-                          <img :src="getImageUrl(item.image)" class="p-mini-img" alt="" @error="$event.target.src = '/brand/mastergas-icon.png'" />
+                          <img :src="getImageUrl(item.image)" class="p-mini-img" alt="" @error="$event.target.src = '/brand/jabel-icon.png'" />
                           <div class="p-mini-info">
                             <span class="p-mini-name">{{ item.name || '—' }}</span>
                             <span class="p-mini-price"><PriceText :value="item.unit_price || item.price || 0" :currency="currency" /></span>
@@ -2403,12 +2403,12 @@ const printInvoice = async (order) => {
       ? (logoVal.value.startsWith('http') 
         ? logoVal.value 
         : `/storage/${logoVal.value}`)
-      : '/brand/mastergas-logo.png'
+      : '/brand/jabel-logo.png'
 
     const nameVal = settings.find(s => s.key === 'site_name')
     const siteName = (nameVal && nameVal.value && !isIrisAsset(nameVal.value)) 
       ? nameVal.value 
-      : 'ماسترجاز | Mastergas'
+      : 'جبل | Jabel'
     const isRtl = locale.value === 'ar'
     const dir = isRtl ? 'rtl' : 'ltr'
     const textAlign = isRtl ? 'right' : 'left'
@@ -2434,7 +2434,7 @@ const printInvoice = async (order) => {
     const safeCurrency = escapeHtml(t('currency'))
     const safeDate = escapeHtml(order.date || '')
     const safeSiteName = escapeHtml(siteName)
-    const safeSiteLogo = sanitizeUrl(siteLogo, '/brand/mastergas-logo.png')
+    const safeSiteLogo = sanitizeUrl(siteLogo, '/brand/jabel-logo.png')
     const safeCustomerName = escapeHtml(order.customerName || order.customer?.name || '')
     const safeCustomerPhone = escapeHtml(order.customerPhone || order.customer?.phone || '')
     const safeCustomerEmail = escapeHtml(order.customerEmail || order.customer?.email || '')
@@ -2598,9 +2598,9 @@ const submitRating = async () => {
 }
 
 const getImageUrl = (i) => {
-  if (!i) return '/brand/mastergas-icon.png';
+  if (!i) return '/brand/jabel-icon.png';
   const p = typeof i === 'object' ? (i.image_path || i.image || i.url || '') : i;
-  if (!p) return '/brand/mastergas-icon.png';
+  if (!p) return '/brand/jabel-icon.png';
   if (typeof p === 'string' && (p.startsWith('http') || p.startsWith('/'))) return p;
   const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://backend-jabal.be-kite.com/api';
   return `${baseUrl.replace('/api', '')}/storage/${p}`;

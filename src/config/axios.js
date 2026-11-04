@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { clearCustomerToken, getCustomerToken } from '../utils/customerSession.js';
+import { replaceBrandNameDeep } from '../utils/brandName.js';
 
 const serverUrl = 'https://backend-jabal.be-kite.com/api';
 const envUrl = import.meta.env.VITE_API_BASE_URL;
@@ -56,7 +57,7 @@ export const recordApiMetric = (metric) => {
   apiMetrics.push(entry);
   if (apiMetrics.length > MAX_METRICS) apiMetrics.shift();
   if (typeof window !== 'undefined') {
-    window.__mastergasApiMetrics = apiMetrics;
+    window.__jabelApiMetrics = apiMetrics;
   }
   return entry;
 };
@@ -93,17 +94,17 @@ api.interceptors.request.use(config => {
   config.headers['X-Request-ID'] = requestId;
   config.timeout = config.timeout ?? getRequestTimeout(config.url);
   const cleanPath = getRequestPath(config);
-  config.__mastergasRequest = {
+  config.__jabelRequest = {
     requestId,
     startedAt: performanceNow(),
     endpoint: cleanPath,
     retryCount: config.__retryCount || 0,
   };
-  if (!globalThis.__mastergasFirstApiRequest) {
-    globalThis.__mastergasFirstApiRequest = true;
-    performanceMark('mastergas:first-api-request');
+  if (!globalThis.__jabelFirstApiRequest) {
+    globalThis.__jabelFirstApiRequest = true;
+    performanceMark('jabel:first-api-request');
   }
-  performanceMark(`mastergas:api:start:${requestId}`);
+  performanceMark(`jabel:api:start:${requestId}`);
 
   const isAdminOnlyPath = cleanPath.startsWith('/dashboard') || cleanPath.startsWith('/admin') || cleanPath.startsWith('/v1/admin');
   const token = isAdminOnlyPath ? null : getCustomerToken();
@@ -125,11 +126,11 @@ const performanceNow = () => {
 };
 
 const finalizeMetric = (config, overrides = {}) => {
-  const request = config?.__mastergasRequest || {};
+  const request = config?.__jabelRequest || {};
   const start = request.startedAt || performanceNow();
   const duration = Math.max(0, performanceNow() - start);
   const requestId = request.requestId || config?.headers?.['X-Request-ID'];
-  performanceMark(`mastergas:api:end:${requestId || 'unknown'}`);
+  performanceMark(`jabel:api:end:${requestId || 'unknown'}`);
   return recordApiMetric({
     endpoint: request.endpoint || getRequestPath(config),
     parameters: sanitizeParameters(config?.params || {}),
@@ -148,8 +149,9 @@ api.interceptors.response.use(
   response => {
     finalizeMetric(response.config, { status: response.status });
     if (getRequestPath(response.config).startsWith('/v1/site/products')) {
-      performanceMark('mastergas:products-api-complete');
+      performanceMark('jabel:products-api-complete');
     }
+    response.data = replaceBrandNameDeep(response.data);
     return response;
   },
   error => {

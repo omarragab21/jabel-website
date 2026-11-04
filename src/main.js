@@ -38,7 +38,7 @@ if (import.meta.env.PROD) {
   const startAnalytics = () => analyticsModule().then((module) => module.startAnalytics()).catch(() => {});
   const stopAnalytics = () => analyticsModule().then((module) => module.stopAnalytics()).catch(() => {});
   let consent = {};
-  try { consent = JSON.parse(localStorage.getItem('mastergas_cookie_consent') || '{}') || {}; } catch { /* no consent yet */ }
+  try { consent = JSON.parse(localStorage.getItem('jabel_cookie_consent') || '{}') || {}; } catch { /* no consent yet */ }
   if (consent.analytics) window.addEventListener('load', startAnalytics);
   window.addEventListener('cookie-consent', (event) => { if (event.detail?.analytics) startAnalytics(); else stopAnalytics(); });
 }

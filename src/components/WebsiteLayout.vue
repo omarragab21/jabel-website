@@ -14,7 +14,7 @@
           <!-- Logo (Right in RTL) -->
           <router-link to="/" class="logo" :aria-label="$t('common.home_aria')">
             <div class="logo-icon">
-              <img :src="siteLogo || '/brand/mastergas-logo.png'" :alt="siteName || 'Mastergas'" class="site-logo-img">
+              <img :src="siteLogo || '/brand/jabel-logo.png'" :alt="siteName || 'Jabel'" class="site-logo-img">
             </div>
           </router-link>
 
@@ -255,7 +255,7 @@
           <!-- Col 4: Brand Info & Payment (Far Left in RTL) -->
           <div class="footer-col brand-info footer-col-brand">
             <router-link to="/" class="footer-logo">
-              <img :src="footerLogo" alt="MASTERgas" class="footer-brand-logo-img" />
+              <img :src="footerLogo" alt="Jabel" class="footer-brand-logo-img" />
             </router-link>
             <p v-if="localizedSiteDescription" class="footer-desc">{{ localizedSiteDescription }}</p>
 
@@ -283,7 +283,7 @@
         <!-- Bottom Bar: Copyright on Right, Developer Tag on Left -->
         <div class="footer-bottom">
           <p class="copyright" dir="auto">
-            {{ currentLang === 'ar' ? '© 2026 Mastergas. جميع الحقوق محفوظة' : '© 2026 Mastergas. All rights reserved' }}
+            {{ currentLang === 'ar' ? '© 2026 Jabel. جميع الحقوق محفوظة' : '© 2026 Jabel. All rights reserved' }}
           </p>
           <p class="developer-tag" dir="auto">
             {{ currentLang === 'ar' ? 'تم التصميم والتطوير بواسطة' : 'Designed & Developed by' }}
@@ -354,8 +354,8 @@ const showTopBar = computed(() => showFreeShippingBanner(freeDeliveryThreshold.v
 // The name, description and opening hours come from the dashboard, in the language being shown.
 const siteName = siteNameText;
 const siteHours = siteHoursLines;
-const siteLogo = ref('/brand/mastergas-logo.png');
-const footerLogo = ref('/brand/mastergas-logo-white.png');
+const siteLogo = ref('/brand/jabel-logo.png');
+const footerLogo = ref('/brand/jabel-logo-white.png');
 const footerSocialIcons = { facebook: footerFacebookIcon, youtube: footerYoutubeIcon };
 const sitePhone = ref('');
 const siteEmail = ref('');
@@ -515,15 +515,15 @@ const applySiteSettings = (rawSettings) => {
 
   const logo = getVal('logo');
   const footerLogoSetting = getVal('footer_logo');
-  siteLogo.value = logo && !isIrisAsset(logo) ? resolveAssetUrl(logo, '/brand/mastergas-logo.png') : siteLogo.value;
+  siteLogo.value = logo && !isIrisAsset(logo) ? resolveAssetUrl(logo, '/brand/jabel-logo.png') : siteLogo.value;
   footerLogo.value = footerLogoSetting && !isIrisAsset(footerLogoSetting)
-    ? resolveAssetUrl(footerLogoSetting, '/brand/mastergas-logo-white.png')
+    ? resolveAssetUrl(footerLogoSetting, '/brand/jabel-logo-white.png')
     : footerLogo.value;
 
   const favicon = getVal('favicon');
   const faviconLink = document.querySelector("link[rel~='icon']");
   if (faviconLink && favicon && !isIrisAsset(favicon)) {
-    faviconLink.href = resolveAssetUrl(favicon, '/brand/mastergas-icon.png');
+    faviconLink.href = resolveAssetUrl(favicon, '/brand/jabel-icon.png');
   }
 
 };
@@ -675,21 +675,21 @@ const fetchData = async () => {
       };
       
       if (logoVal && !isIrisAsset(logoVal)) {
-        siteLogo.value = resolveAssetUrl(logoVal, '/brand/mastergas-logo.png');
+        siteLogo.value = resolveAssetUrl(logoVal, '/brand/jabel-logo.png');
       } else {
-        siteLogo.value = '/brand/mastergas-logo.png';
+        siteLogo.value = '/brand/jabel-logo.png';
       }
 
       if (footerLogoVal && !isIrisAsset(footerLogoVal)) {
-        footerLogo.value = resolveAssetUrl(footerLogoVal, '/brand/mastergas-logo-white.png');
+        footerLogo.value = resolveAssetUrl(footerLogoVal, '/brand/jabel-logo-white.png');
       } else {
-        footerLogo.value = '/brand/mastergas-logo-white.png';
+        footerLogo.value = '/brand/jabel-logo-white.png';
       }
 
-      // Update Favicon (Mastergas favicon, ignore legacy Iris)
+      // Update Favicon (Jabel favicon, ignore legacy Iris)
       const finalFavicon = (faviconVal && !isIrisAsset(faviconVal))
-        ? resolveAssetUrl(faviconVal, '/brand/mastergas-icon.png')
-        : '/brand/mastergas-icon.png';
+        ? resolveAssetUrl(faviconVal, '/brand/jabel-icon.png')
+        : '/brand/jabel-icon.png';
 
       const faviconLink = document.querySelector("link[rel~='icon']");
       if (faviconLink) {
@@ -773,20 +773,20 @@ onUnmounted(() => {
   overflow-x: hidden;
 }
 
-.mastergas-text-logo {
+.jabel-text-logo {
   display: flex;
   flex-direction: column;
   line-height: 1;
 }
 
-.mastergas-text-logo .brand-name {
+.jabel-text-logo .brand-name {
   font-size: 1.45rem;
   font-weight: 900;
   letter-spacing: 1.5px;
   color: #000000;
 }
 
-.mastergas-text-logo .brand-sub {
+.jabel-text-logo .brand-sub {
   font-size: 0.58rem;
   letter-spacing: 2px;
   color: #6b7280;

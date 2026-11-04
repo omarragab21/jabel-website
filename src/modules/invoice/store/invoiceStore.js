@@ -14,8 +14,8 @@ export const useInvoiceStore = defineStore('invoiceFeature', {
   state: () => ({
     order: null,
     loading: true,
-    siteLogo: '/brand/mastergas-logo.png',
-    siteName: 'ماسترجاز | Mastergas',
+    siteLogo: '/brand/jabel-logo.png',
+    siteName: 'جبل | Jabel',
   }),
 
   actions: {

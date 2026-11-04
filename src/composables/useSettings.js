@@ -4,10 +4,10 @@ import settingsService from '../services/settingsService';
 import { settingsToObject, vatPercentage } from '../utils/siteSettings';
 
 export const defaultSettings = {
-  site_name: 'ماسترجاز | Mastergas',
-  logo: '/brand/mastergas-logo.png',
-  footer_logo: '/brand/mastergas-logo-white.png',
-  favicon: '/brand/mastergas-icon.png',
+  site_name: 'جبل | Jabel',
+  logo: '/brand/jabel-logo.png',
+  footer_logo: '/brand/jabel-logo-white.png',
+  favicon: '/brand/jabel-icon.png',
   currency: 'JOD',
   currency_ar: 'د.أ',
   currency_en: 'JOD',
@@ -15,7 +15,7 @@ export const defaultSettings = {
   shipping_cost: 25,
   tax_rate: 15,
   support_phone: '+966500000000',
-  support_email: 'info@mastergas.com.sa',
+  support_email: '',
   address_ar: 'المملكة العربية السعودية',
   address_en: 'Saudi Arabia',
 };

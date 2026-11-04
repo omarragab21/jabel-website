@@ -6,7 +6,7 @@
       <div class="hero-bg-wrapper">
         <img 
           :src="aboutImage('hero', '/images/about/hero_banner.jpg')"
-          alt="Mastergas Luxury Kitchen" 
+          alt="Jabel Luxury Kitchen" 
           class="hero-bg-image"
           loading="eager"
         />
@@ -199,7 +199,7 @@
       </div>
     </section>
 
-    <!-- 5. CTA Section: Mastergas — مصممة للحياة الواقعية -->
+    <!-- 5. CTA Section: Jabel — مصممة للحياة الواقعية -->
     <section v-if="showCta" class="cta-banner-section">
       <div class="container text-center">
         
@@ -302,14 +302,14 @@ onMounted(fetchAboutContent);
 
 // Dynamic SEO Tags
 useSEO({
-  title: 'لماذا Mastergas؟ - من نحن | عراقة الطهي الإيطالي الفاخر',
-  description: 'تعرف على قصة Mastergas، الرائدة في تقديم أحدث تقنيات أجهزة ومطابخ الطهي الإيطالية المدمجة والفاخرة في المملكة العربية السعودية بمعايير SASO.',
-  keywords: 'من نحن ماستر غاز, Mastergas, أجهزة مطبخ إيطالية, أفران بلت إن إيطالية, مسطحات غاز بالسعودية'
+  title: 'لماذا Jabel؟ - من نحن | عراقة الطهي الإيطالي الفاخر',
+  description: 'تعرف على قصة Jabel، الرائدة في تقديم أحدث تقنيات أجهزة ومطابخ الطهي الإيطالية المدمجة والفاخرة في المملكة العربية السعودية بمعايير SASO.',
+  keywords: 'من نحن جبل, Jabel, أجهزة مطبخ إيطالية, أفران بلت إن إيطالية, مسطحات غاز بالسعودية'
 });
 </script>
 
 <style scoped>
-/* Base View Styles matching Figma mastergas-about-us */
+/* Base View Styles matching Figma jabel-about-us */
 .about-page {
   display: flex;
   flex-direction: column;

@@ -164,7 +164,7 @@ const allImages = computed(() => {
     images.push(getImageUrl(product.value.image, pId));
   }
 
-  return images.length ? images : ['/brand/mastergas-icon.png'];
+  return images.length ? images : ['/brand/jabel-icon.png'];
 });
 
 const getImageUrl = (path, id) => {
@@ -172,7 +172,7 @@ const getImageUrl = (path, id) => {
     path = path.image_url || path.url || path.image || path.path || '';
   }
   if (!path) {
-    return '/brand/mastergas-icon.png';
+    return '/brand/jabel-icon.png';
   }
   if (typeof path === 'string' && (path.startsWith('http') || path.startsWith('/'))) return path;
   const baseUrl = api.defaults.baseURL || 'https://backend-jabal.be-kite.com/api';
@@ -180,7 +180,7 @@ const getImageUrl = (path, id) => {
 };
 
 const handleImageError = (event) => {
-  const fallback = '/brand/mastergas-icon.png';
+  const fallback = '/brand/jabel-icon.png';
   if (event?.target?.getAttribute('src') !== fallback) {
     event.target.src = fallback;
   }
@@ -340,8 +340,8 @@ const fetchProduct = async (id) => {
 
       useSEO({
         title: localized(product.value, 'name'),
-        description: localized(product.value, 'description') || (locale.value === 'ar' ? `اشتري ${localized(product.value, 'name')} الإيطالي الفاخر من ماسترجاز.` : `Buy the premium Italian ${localized(product.value, 'name')} from Mastergas.`),
-        keywords: locale.value === 'ar' ? `${localized(product.value, 'name')}, ماسترجاز, أجهزة غاز إيطالية, Mastergas` : `${localized(product.value, 'name')}, Mastergas, Italian gas appliances`,
+        description: localized(product.value, 'description') || (locale.value === 'ar' ? `اشتري ${localized(product.value, 'name')} الإيطالي الفاخر من جبل.` : `Buy the premium Italian ${localized(product.value, 'name')} from Jabel.`),
+        keywords: locale.value === 'ar' ? `${localized(product.value, 'name')}, جبل, أجهزة غاز إيطالية, Jabel` : `${localized(product.value, 'name')}, Jabel, Italian gas appliances`,
         image: getImageUrl(product.value.image, product.value.id)
       });
 

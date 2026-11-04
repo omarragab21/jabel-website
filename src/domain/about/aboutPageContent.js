@@ -4,13 +4,13 @@
 // The dashboard (admin/src/domain/aboutPageContent.js) keeps the same keys and defaults.
 export const ABOUT_PAGE_DEFAULTS = Object.freeze({
   about_hero_tagline: { ar: 'الجودة والابتكار في الطهي الحديث', en: 'Quality & Innovation in Modern Cooking' },
-  about_hero_title: { ar: 'لماذا Mastergas؟', en: 'Why Mastergas?' },
+  about_hero_title: { ar: 'لماذا Jabel؟', en: 'Why Jabel?' },
   about_hero_subtitle: {
     ar: 'رحلة شغف بالتميز، نجمع بين عراقة الطهي الإيطالي وجودة لا تضاهى في منزلك',
     en: 'A passionate journey of excellence, combining authentic Italian culinary heritage with unmatched quality in your home.',
   },
 
-  about_section_1_tag: { ar: 'عن ماستر غاز', en: 'About Mastergas' },
+  about_section_1_tag: { ar: 'عن جبل', en: 'About Jabel' },
   about_section_2_tag: { ar: 'ريادة هندسية إيطالية', en: 'Italian Engineering Leadership' },
   about_section_3_tag: { ar: 'التزامنا تجاه البيوت السعودية', en: 'Our Commitment to Saudi Homes' },
 
@@ -47,7 +47,7 @@ export const ABOUT_PAGE_DEFAULTS = Object.freeze({
   about_stat_3_value: { ar: 'إيطالي', en: 'Italian' },
   about_stat_3_label: { ar: 'تصميم وهندسة أصلية', en: 'Authentic Italian Engineering' },
 
-  about_cta_title: { ar: 'Mastergas — مصممة للحياة الواقعية', en: 'Mastergas — Engineered for Real Life' },
+  about_cta_title: { ar: 'Jabel — مصممة للحياة الواقعية', en: 'Jabel — Engineered for Real Life' },
   about_cta_subtitle: {
     ar: 'ابدأ الآن في تصفح منتجاتنا واكتشف الحلول الإيطالية التي تناسب ذوق منزلك',
     en: 'Explore our collection now and discover Italian culinary solutions tailored to your home',

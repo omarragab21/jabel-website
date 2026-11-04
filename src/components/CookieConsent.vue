@@ -4,7 +4,7 @@
     <transition name="slide-up">
       <div
         v-if="showBanner && !showModal"
-        class="mastergas-cookie-consent"
+        class="jabel-cookie-consent"
         :class="{ 'is-en': !isRtl }"
       >
         <!-- consent-actions (Left side) -->
@@ -57,7 +57,7 @@
         @click.self="showModal = false"
       >
         <div
-          class="mastergas-cookie-preferences"
+          class="jabel-cookie-preferences"
           :class="{ 'is-en': !isRtl }"
         >
           <!-- modal-header -->
@@ -233,7 +233,7 @@ const preferences = reactive({
   marketing: false
 });
 
-const COOKIE_STORAGE_KEY = 'mastergas_cookie_consent';
+const COOKIE_STORAGE_KEY = 'jabel_cookie_consent';
 
 onMounted(() => {
   const saved = localStorage.getItem(COOKIE_STORAGE_KEY);
@@ -313,9 +313,9 @@ defineExpose({
 
 <style scoped>
 /* ============================================================
-   Part 1: mastergas-cookie-consent (Bottom Banner)
+   Part 1: jabel-cookie-consent (Bottom Banner)
    ============================================================ */
-.mastergas-cookie-consent {
+.jabel-cookie-consent {
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -468,7 +468,7 @@ defineExpose({
 }
 
 /* ============================================================
-   Part 2: mastergas-cookie-preferences (Modal)
+   Part 2: jabel-cookie-preferences (Modal)
    ============================================================ */
 .cookie-modal-backdrop {
   position: fixed;
@@ -483,7 +483,7 @@ defineExpose({
   padding: 16px;
 }
 
-.mastergas-cookie-preferences {
+.jabel-cookie-preferences {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -757,7 +757,7 @@ defineExpose({
    Mobile Responsiveness
    ============================================================ */
 @media (max-width: 900px) {
-  .mastergas-cookie-consent {
+  .jabel-cookie-consent {
     padding: 16px 24px;
     flex-direction: column-reverse;
     align-items: stretch;
@@ -776,7 +776,7 @@ defineExpose({
 }
 
 @media (max-width: 640px) {
-  .mastergas-cookie-consent {
+  .jabel-cookie-consent {
     padding: 16px 16px;
     gap: 14px;
   }
@@ -805,7 +805,7 @@ defineExpose({
     font-size: 13px;
   }
 
-  .mastergas-cookie-preferences {
+  .jabel-cookie-preferences {
     padding: 20px 16px;
     gap: 16px;
     border-radius: 12px;

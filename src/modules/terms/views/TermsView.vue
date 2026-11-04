@@ -1,5 +1,5 @@
 <template>
-  <div class="mastergas-terms" :class="{ 'is-en': !isRtl }" :dir="isRtl ? 'rtl' : 'ltr'">
+  <div class="jabel-terms" :class="{ 'is-en': !isRtl }" :dir="isRtl ? 'rtl' : 'ltr'">
     
     <!-- 1. Hero Banner matching Figma hero-banner -->
     <section class="hero-banner">
@@ -73,12 +73,12 @@ const isRtl = computed(() => currentLang.value === 'ar');
 // Dynamic SEO tags
 useSEO({
   title: isRtl.value
-    ? 'الشروط والأحكام | Mastergas الأجهزة الإيطالية الفاخرة'
-    : 'Terms & Conditions | Mastergas Luxury Italian Appliances',
+    ? 'الشروط والأحكام | Jabel الأجهزة الإيطالية الفاخرة'
+    : 'Terms & Conditions | Jabel Luxury Italian Appliances',
   description: isRtl.value
-    ? 'تعرف على الشروط والأحكام التنظيمية لمتجر Mastergas للأجهزة المنزلية الإيطالية الفاخرة في المملكة العربية السعودية.'
-    : 'Read the regulatory terms and conditions for Mastergas luxury Italian home appliances in Saudi Arabia.',
-  keywords: 'الشروط والأحكام, شروط الاستخدام, ماستر غاز, Mastergas terms and conditions, سياسة المتجر'
+    ? 'تعرف على الشروط والأحكام التنظيمية لمتجر Jabel للأجهزة المنزلية الإيطالية الفاخرة في المملكة العربية السعودية.'
+    : 'Read the regulatory terms and conditions for Jabel luxury Italian home appliances in Saudi Arabia.',
+  keywords: 'الشروط والأحكام, شروط الاستخدام, جبل, Jabel terms and conditions, سياسة المتجر'
 });
 
 const page = ref(emptyLegalPage());
@@ -106,9 +106,9 @@ onMounted(async () => {
 
 <style scoped>
 /* ============================================================
-   Page Base: mastergas-terms
+   Page Base: jabel-terms
    ============================================================ */
-.mastergas-terms {
+.jabel-terms {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -278,7 +278,7 @@ onMounted(async () => {
    Responsive Media Queries
    ============================================================ */
 @media (max-width: 1024px) {
-  .mastergas-terms {
+  .jabel-terms {
     margin-top: 0px;
   }
 

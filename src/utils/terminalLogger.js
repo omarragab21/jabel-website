@@ -10,7 +10,7 @@ export const logPayment = (tag, message, data = null) => {
   }
 
   const endpoint = import.meta.env.VITE_TERMINAL_LOG_ENDPOINT
-    || (typeof window !== 'undefined' ? window.__MASTERGAS_TERMINAL_LOG_ENDPOINT__ : '');
+    || (typeof window !== 'undefined' ? window.__JABEL_TERMINAL_LOG_ENDPOINT__ : '');
 
   if (endpoint && typeof fetch === 'function') {
     try {

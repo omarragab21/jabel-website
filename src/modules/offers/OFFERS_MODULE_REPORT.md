@@ -44,4 +44,4 @@ offers/
 - `npm run lint` — passed with warnings only and no errors.
 - `npm run build` — passed.
 - Browser QA — passed for page identity, filters, product results, sorting interaction, and zero console/page errors.
-- Screenshot evidence: `/tmp/mastergas-modules-offers.png`.
+- Screenshot evidence: `/tmp/jabel-modules-offers.png`.

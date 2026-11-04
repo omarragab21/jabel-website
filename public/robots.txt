@@ -1,4 +1,4 @@
-# User-agent rules for Mastergas Saudi Arabia Search Optimization
+# User-agent rules for Jabel Saudi Arabia Search Optimization
 User-agent: *
 Allow: /
 Allow: /products
@@ -17,4 +17,4 @@ Disallow: /profile
 Disallow: /payment/
 
 # Sitemap Location
-Sitemap: https://mastergas.sa/sitemap.xml
+Sitemap: https://jabel-website.vercel.app/sitemap.xml

@@ -1,6 +1,6 @@
 // The visitor's cookie choices, kept in localStorage (the same record the cookie banner writes) and announced
 // with a "cookie-consent" event so analytics can start or stop right away.
-export const COOKIE_STORAGE_KEY = 'mastergas_cookie_consent';
+export const COOKIE_STORAGE_KEY = 'jabel_cookie_consent';
 
 export const readConsent = () => {
   try {

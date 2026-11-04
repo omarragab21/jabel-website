@@ -398,7 +398,7 @@
                   </svg>
                 </div>
                 <h2 class="receipt-title">{{ currentLocale === 'ar' ? 'تم تأكيد طلبك بنجاح' : (t('checkout.order_confirmed') || 'Order Confirmed Successfully') }}</h2>
-                <p class="receipt-subtitle">{{ currentLocale === 'ar' ? 'شكراً لتسوقك من Mastergas' : 'Thank you for shopping with Mastergas' }}</p>
+                <p class="receipt-subtitle">{{ currentLocale === 'ar' ? 'شكراً لتسوقك من Jabel' : 'Thank you for shopping with Jabel' }}</p>
               </div>
 
               <!-- order-meta -->
@@ -1314,7 +1314,7 @@ const getImageUrl = (path, id) => {
   if (rawPath && (String(rawPath).startsWith('/') || String(rawPath).startsWith('http'))) {
     return rawPath;
   }
-  if (!rawPath) return '/brand/mastergas-icon.png';
+  if (!rawPath) return '/brand/jabel-icon.png';
   const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://backend-jabal.be-kite.com/api';
   return `${baseUrl.replace('/api', '')}/storage/${rawPath}`;
 };
@@ -1322,7 +1322,7 @@ const getImageUrl = (path, id) => {
 const onImageError = (event, item) => {
   const target = event.target;
   if (!target) return;
-  target.src = '/brand/mastergas-icon.png';
+  target.src = '/brand/jabel-icon.png';
 };
 
 const formatPrice = (price) => formatPriceBase(price, { fraction: 'fixed' });

@@ -21,7 +21,7 @@
 
         <div class="logo-and-qr">
           <div class="brand-logo-area">
-            <h3 class="logo-text">MASTERGAS</h3>
+            <h3 class="logo-text">JABEL</h3>
             <span class="logo-sub">ITALIAN LUXURY</span>
           </div>
           <!-- ZATCA QR Code Representation -->
@@ -306,7 +306,7 @@ export default {
               </div>
             </div>
             <div class="logo-area">
-              <div class="logo-title">MASTERGAS</div>
+              <div class="logo-title">JABEL</div>
               <div style="font-size: 11px; color: #6b7280; letter-spacing: 1px;">ITALIAN LUXURY APPLIANCES</div>
               <div style="margin-top: 10px; font-size: 11px; font-weight: 700; color: #059669;">${t('invoice.zatca_authority_approved')}</div>
             </div>

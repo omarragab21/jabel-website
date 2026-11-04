@@ -161,9 +161,9 @@ const displayCategory = computed(() => {
 });
 
 onMounted(() => {
-  if (typeof performance !== 'undefined' && typeof performance.mark === 'function' && !globalThis.__mastergasFirstCardRendered) {
-    globalThis.__mastergasFirstCardRendered = true;
-    performance.mark('mastergas:first-product-card-rendered');
+  if (typeof performance !== 'undefined' && typeof performance.mark === 'function' && !globalThis.__jabelFirstCardRendered) {
+    globalThis.__jabelFirstCardRendered = true;
+    performance.mark('jabel:first-product-card-rendered');
   }
 });
 
@@ -216,12 +216,12 @@ const currentPrice = computed(() => {
 });
 
 const handleImageError = (event) => {
-  event.target.src = '/brand/mastergas-icon.png';
+  event.target.src = '/brand/jabel-icon.png';
 };
 
 // Keep the shimmer until the image (or its broken-image placeholder) has settled.
 const handleImageSettledError = (event, productRef) => {
-  if (String(event.target.src).endsWith('/brand/mastergas-icon.png')) {
+  if (String(event.target.src).endsWith('/brand/jabel-icon.png')) {
     imageSettled.value = true;
     return;
   }
@@ -234,9 +234,9 @@ const handleSecondaryImageError = (event) => {
 
 const handleImageLoad = () => {
   imageSettled.value = true;
-  if (typeof performance !== 'undefined' && typeof performance.mark === 'function' && !globalThis.__mastergasImagesLoaded) {
-    globalThis.__mastergasImagesLoaded = true;
-    performance.mark('mastergas:images-loaded');
+  if (typeof performance !== 'undefined' && typeof performance.mark === 'function' && !globalThis.__jabelImagesLoaded) {
+    globalThis.__jabelImagesLoaded = true;
+    performance.mark('jabel:images-loaded');
   }
 };
 
@@ -247,7 +247,7 @@ const getImageUrl = (path, id) => {
   if (rawPath && (String(rawPath).startsWith('/') || String(rawPath).startsWith('http'))) {
     return rawPath;
   }
-  if (!rawPath) return '/brand/mastergas-icon.png';
+  if (!rawPath) return '/brand/jabel-icon.png';
   const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://backend-jabal.be-kite.com/api';
   return `${baseUrl.replace('/api', '')}/storage/${rawPath}`;
 };

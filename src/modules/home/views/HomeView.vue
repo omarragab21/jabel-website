@@ -259,12 +259,12 @@
       </div>
     </section>
 
-    <!-- 7. Why Mastergas (لماذا Mastergas؟) -->
-    <section class="why-mastergas-section">
+    <!-- 7. Why Jabel (لماذا Jabel؟) -->
+    <section class="why-jabel-section">
       <div class="container">
         <div class="why-header-center">
-          <h2 class="section-title">{{ t('home.why_mastergas') }}</h2>
-          <p class="section-subtitle">{{ t('home.why_mastergas_subtitle') }}</p>
+          <h2 class="section-title">{{ t('home.why_jabel') }}</h2>
+          <p class="section-subtitle">{{ t('home.why_jabel_subtitle') }}</p>
         </div>
 
         <div class="why-cards-row">
@@ -339,9 +339,9 @@ const homeOffersTitle = computed(() => currentLang.value === 'ar'
   : homepageSettings.value.home_section_offers_title_en || t('home.featured_offers'));
 
 useSEO({
-  title: 'ماسترجاز (Mastergas) - أجهزة مطبخ بمعايير إيطالية فاخرة',
+  title: 'جبل (Jabel) - أجهزة مطبخ بمعايير إيطالية فاخرة',
   description: 'تسوق أفضل مواقد الغاز الإيطالية، أفران البلت إن، وشفاطات المطابخ الفاخرة بأعلى معايير الأمان والجودة وضمان شامل معتمد.',
-  keywords: 'ماسترجاز, أجهزة مطبخ, مواقد غاز, أفران بلت إن, شفاطات إيطالية, ميكروويف بلت إن, Mastergas, أجهزة إيطالية'
+  keywords: 'جبل, أجهزة مطبخ, مواقد غاز, أفران بلت إن, شفاطات إيطالية, ميكروويف بلت إن, Jabel, أجهزة إيطالية'
 });
 
 const offersSliderRef = ref(null);
@@ -496,7 +496,7 @@ const displayOffers = computed(() => {
   });
 });
 
-// 4. Why Mastergas items matching the mockup exactly
+// 4. Why Jabel items matching the mockup exactly
 const whyItems = computed(() => {
   if (currentLang.value === 'en') {
     return [
@@ -1186,8 +1186,8 @@ onUnmounted(() => {
   gap: 20px;
 }
 
-/* 7. Why Mastergas Section */
-.why-mastergas-section {
+/* 7. Why Jabel Section */
+.why-jabel-section {
   background-color: #f8fafc;
   padding: 64px 0 80px;
 }

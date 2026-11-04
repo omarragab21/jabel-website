@@ -2,25 +2,25 @@ import { watchEffect } from 'vue';
 import { siteNameText } from '../store/siteIdentity.js';
 
 const DEFAULT_SEO = {
-  title: 'ماسترجاز | Mastergas - أجهزة وأفران غاز إيطالية فاخرة في السعودية',
-  description: 'المتجر الرسمي لأجهزة وأفران ومواقد الغاز الإيطالية ماسترجاز في المملكة العربية السعودية. صناعة إيطالية فاخرة 100%، أمان تام، ضمان سنتين شامل، وتوصيل لكافة مدن المملكة.',
+  title: 'جبل | Jabel - أجهزة وأفران غاز إيطالية فاخرة في السعودية',
+  description: 'المتجر الرسمي لأجهزة وأفران ومواقد الغاز الإيطالية جبل في المملكة العربية السعودية. صناعة إيطالية فاخرة 100%، أمان تام، ضمان سنتين شامل، وتوصيل لكافة مدن المملكة.',
   keywords: [
-    'ماسترجاز', 'Mastergas', 'أفران غاز إيطالية', 'مواقد غاز بلت إن', 'سطح غاز إيطالي',
-    'أجهزة مطابخ إيطالية', 'مواقد بلت إن', 'ماسترجاز السعودية', 'Mastergas Saudi',
+    'جبل', 'Jabel', 'أفران غاز إيطالية', 'مواقد غاز بلت إن', 'سطح غاز إيطالي',
+    'أجهزة مطابخ إيطالية', 'مواقد بلت إن', 'جبل السعودية', 'Jabel Saudi',
     'أفران بلت إن', 'موقد غاز أمان كامل', 'شفاطات مطابخ', 'أجهزة غاز إيطالية',
-    'توصيل أفران الرياض', 'أجهزة مطابخ جدة', 'مواقد غاز الدمام', 'وكيل ماسترجاز السعودية'
+    'توصيل أفران الرياض', 'أجهزة مطابخ جدة', 'مواقد غاز الدمام', 'وكيل جبل السعودية'
   ].join(', '),
-  image: 'https://mastergas.sa/og-image.png',
-  url: 'https://mastergas.sa'
+  image: 'https://jabel-website.vercel.app/og-image.png',
+  url: 'https://jabel-website.vercel.app'
 };
 
 export function useSEO(options = {}) {
   watchEffect(() => {
-    const seoTitle = options.seoTitle || (options.title ? `${options.title} | ماسترجاز Mastergas` : DEFAULT_SEO.title);
+    const seoTitle = options.seoTitle || (options.title ? `${options.title} | جبل Jabel` : DEFAULT_SEO.title);
     const description = options.description || DEFAULT_SEO.description;
     const keywords = options.keywords || DEFAULT_SEO.keywords;
     const rawImage = options.image || DEFAULT_SEO.image;
-    const image = rawImage.startsWith('http') ? rawImage : `https://mastergas.sa${rawImage.startsWith('/') ? '' : '/'}${rawImage}`;
+    const image = rawImage.startsWith('http') ? rawImage : `https://jabel-website.vercel.app${rawImage.startsWith('/') ? '' : '/'}${rawImage}`;
     const url = options.url || DEFAULT_SEO.url;
 
     // Browser tab title: the site name from the dashboard, in the language being shown
@@ -103,10 +103,10 @@ export function getStoreSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'HomeGoodsStore',
-    'name': 'ماسترجاز Mastergas - أجهزة وأفران طهي إيطالية',
-    'image': 'https://mastergas.sa/logo.png',
-    '@id': 'https://mastergas.sa',
-    'url': 'https://mastergas.sa',
+    'name': 'جبل Jabel - أجهزة وأفران طهي إيطالية',
+    'image': 'https://jabel-website.vercel.app/logo.png',
+    '@id': 'https://jabel-website.vercel.app',
+    'url': 'https://jabel-website.vercel.app',
     'telephone': '+966-920000000',
     'priceRange': '$$$',
     'address': {
@@ -128,10 +128,7 @@ export function getStoreSchema() {
       'opens': '09:00',
       'closes': '22:00'
     },
-    'sameAs': [
-      'https://instagram.com/mastergas',
-      'https://x.com/mastergas'
-    ],
-    'description': 'المتجر الرسمي لأجهزة وأفران ومواقد الغاز الإيطالية ماسترجاز في المملكة العربية السعودية. جودة إيطالية، أمان كامل، وضمان شامل سنتين.'
+    'sameAs': [],
+    'description': 'المتجر الرسمي لأجهزة وأفران ومواقد الغاز الإيطالية جبل في المملكة العربية السعودية. جودة إيطالية، أمان كامل، وضمان شامل سنتين.'
   };
 }

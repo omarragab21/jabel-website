@@ -1,5 +1,5 @@
 <template>
-  <div class="product-detail-page mastergas-product-detail" :class="{ 'is-not-found': !loading && !product }" :dir="locale === 'ar' ? 'rtl' : 'ltr'">
+  <div class="product-detail-page jabel-product-detail" :class="{ 'is-not-found': !loading && !product }" :dir="locale === 'ar' ? 'rtl' : 'ltr'">
     
     <!-- 1. Breadcrumbs Section -->
     <div class="breadcrumb-section" v-if="product">

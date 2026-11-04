@@ -351,7 +351,7 @@ const getImageUrl = (path, id) => {
   if (rawPath && (String(rawPath).startsWith('/') || String(rawPath).startsWith('http'))) {
     return rawPath;
   }
-  if (!rawPath) return '/brand/mastergas-icon.png';
+  if (!rawPath) return '/brand/jabel-icon.png';
   const baseUrl = (api.defaults?.baseURL || import.meta.env.VITE_API_BASE_URL || 'https://backend-jabal.be-kite.com/api');
   return `${baseUrl.replace('/api', '')}/storage/${rawPath}`;
 };
@@ -359,7 +359,7 @@ const getImageUrl = (path, id) => {
 const onImageError = (event, item) => {
   const target = event.target;
   if (!target) return;
-  target.src = '/brand/mastergas-icon.png';
+  target.src = '/brand/jabel-icon.png';
 };
 
 const goToProduct = (product) => {
@@ -1394,7 +1394,7 @@ onMounted(async () => {
   }
 }
 
-/* Empty cart — follows the Figma frame "mastergas-cart-empty":
+/* Empty cart — follows the Figma frame "jabel-cart-empty":
    breadcrumb-section  padding 24px 64px 8px, aligned to the right (start in RTL)
    main-content-layout padding 40px 64px, one card (1312 wide, 331 tall) */
 .cart-page.is-empty {

@@ -39,7 +39,7 @@ The old `src/views/website` directory is no longer used and has been removed.
 - Catalog and order data now come from the authenticated Tijara Site API; the old local snapshot was removed.
 - The Product Details view now handles an unknown product ID safely instead of reading `category_id` from `null`.
 - Home category rendering is now composed through `src/modules/category`, including its carousel, service, composable, and styles.
-- Development payment logging no longer sends requests to a missing `__terminal_log` endpoint by default. A custom endpoint can be enabled with `VITE_TERMINAL_LOG_ENDPOINT` or `window.__MASTERGAS_TERMINAL_LOG_ENDPOINT__`.
+- Development payment logging no longer sends requests to a missing `__terminal_log` endpoint by default. A custom endpoint can be enabled with `VITE_TERMINAL_LOG_ENDPOINT` or `window.__JABEL_TERMINAL_LOG_ENDPOINT__`.
 
 ## Verification
 
@@ -51,7 +51,7 @@ The old `src/views/website` directory is no longer used and has been removed.
 - Browser smoke test — passed: 11 checks covering Home, About, Contact, Privacy, Terms, Dynamic not-found handling, Cart, Profile, Wishlist, Invoice, and the unauthenticated Wishlist guard.
 - Browser checks covered HTTP 200 responses, rendered body content, no page errors, no console errors, and no 5xx responses for the tested flows.
 - Mobile viewport smoke test — passed: Home, About, Contact, Cart, and Wishlist rendered without runtime errors or horizontal overflow at 390×844.
-- Desktop screenshots were captured for the Home and Profile routes under `/tmp/mastergas-feature-modules-home.png` and `/tmp/mastergas-feature-modules-profile.png`.
+- Desktop screenshots were captured for the Home and Profile routes under `/tmp/jabel-feature-modules-home.png` and `/tmp/jabel-feature-modules-profile.png`.
 
 ## Legacy test note
 

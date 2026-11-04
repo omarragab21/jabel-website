@@ -41,7 +41,7 @@ Pinia is used for checkout state because it is the standard Vue 3 state-manageme
 - Desktop viewport: checkout opened, required-field validation blocked incomplete address, address advanced to payment, payment advanced to review.
 - Mobile viewport: same flow passed.
 - Console errors: none observed.
-- Page identity: `http://127.0.0.1:5173/checkout`, title `ماسترجاز | Mastergas`.
+- Page identity: `http://127.0.0.1:5173/checkout`, title `جبل | Jabel`.
 - Local catalog mode was removed; checkout now submits the Tijara Site order contract.
 
 ## Final verification
@@ -68,4 +68,4 @@ The store is reset when the checkout route is unmounted, preserving the original
 - `npm run lint` — passed with warnings only and no errors.
 - `npm run build` — passed.
 - Browser QA opened the authenticated Checkout flow with a test cart and observed zero console/page errors.
-- Screenshot evidence: `/tmp/mastergas-modules-checkout.png`.
+- Screenshot evidence: `/tmp/jabel-modules-checkout.png`.

@@ -82,7 +82,7 @@ const goToProduct = (productId) => {
   router.push(`/product/${productId}`);
 };
 
-const FALLBACK_IMAGE = '/brand/mastergas-icon.png';
+const FALLBACK_IMAGE = '/brand/jabel-icon.png';
 const onImageError = (event) => {
   if (!String(event.target.src).endsWith(FALLBACK_IMAGE)) event.target.src = FALLBACK_IMAGE;
 };

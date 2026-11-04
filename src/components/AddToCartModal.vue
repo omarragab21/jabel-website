@@ -104,11 +104,11 @@ const productName = computed(() => {
 });
 
 const getImageUrl = (path, id) => {
-  if (!path) return '/brand/mastergas-icon.png';
+  if (!path) return '/brand/jabel-icon.png';
   const rawPath = typeof path === 'object' && path !== null
     ? (path.image_url || path.url || path.image || path.path || '')
     : path;
-  if (!rawPath) return '/brand/mastergas-icon.png';
+  if (!rawPath) return '/brand/jabel-icon.png';
   if (String(rawPath).startsWith('/') || String(rawPath).startsWith('http')) {
     return rawPath;
   }
@@ -117,14 +117,14 @@ const getImageUrl = (path, id) => {
 };
 
 const productImage = computed(() => {
-  if (!product.value) return '/brand/mastergas-icon.png';
+  if (!product.value) return '/brand/jabel-icon.png';
   const img = product.value.image || product.value.images?.[0] || product.value.thumbnail;
   return getImageUrl(img, product.value.id);
 });
 
 const handleImageError = (e) => {
   if (e?.target) {
-    e.target.src = '/brand/mastergas-icon.png';
+    e.target.src = '/brand/jabel-icon.png';
   }
 };
 

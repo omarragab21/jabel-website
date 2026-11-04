@@ -130,7 +130,7 @@ const getImageUrl = (path, id) => {
   if (rawPath && (String(rawPath).startsWith('/') || String(rawPath).startsWith('http'))) {
     return rawPath;
   }
-  if (!rawPath) return '/brand/mastergas-icon.png';
+  if (!rawPath) return '/brand/jabel-icon.png';
   const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://backend-jabal.be-kite.com/api';
   return `${baseUrl.replace('/api', '')}/storage/${rawPath}`;
 };
@@ -141,8 +141,8 @@ const goToProduct = (product) => {
 };
 
 const onImageError = (event) => {
-  if (!String(event.target.src).endsWith('/brand/mastergas-icon.png')) {
-    event.target.src = '/brand/mastergas-icon.png';
+  if (!String(event.target.src).endsWith('/brand/jabel-icon.png')) {
+    event.target.src = '/brand/jabel-icon.png';
   }
 };
 

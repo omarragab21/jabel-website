@@ -1,6 +1,6 @@
-# Mastergas Website
+# Jabel Website
 
-The customer-facing e-commerce storefront for **Mastergas**, built with Vue 3, Vite, and Tailwind CSS.
+The customer-facing e-commerce storefront for **Jabel**, built with Vue 3, Vite, and Tailwind CSS.
 
 ## Features
 - Complete product catalog, category navigation, and attribute filtering

@@ -1,4 +1,4 @@
-/* Mastergas static-asset cache. API requests are never intercepted. */
+/* Jabel static-asset cache. API requests are never intercepted. */
 const VERSION = 'v1';
 const STATIC_CACHE = `mg-static-${VERSION}`;
 const IMAGE_CACHE = `mg-images-${VERSION}`;

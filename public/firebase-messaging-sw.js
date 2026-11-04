@@ -24,7 +24,7 @@ self.addEventListener('push', (event) => {
   }
   const notification = payload.notification || {};
   const data = payload.data || {};
-  const title = notification.title || data.title || 'Master Gas';
+  const title = notification.title || data.title || 'Jabel';
   const body = notification.body || data.body || '';
   const link = sameOriginPath((payload.fcmOptions && payload.fcmOptions.link) || notification.click_action || data.link);
 

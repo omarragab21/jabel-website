@@ -10,7 +10,7 @@ const getOwnerKey = () => {
   }
 };
 
-const getStorageKey = () => `mastergas_active_coupon_${getOwnerKey()}`;
+const getStorageKey = () => `jabel_active_coupon_${getOwnerKey()}`;
 
 export const readActiveCoupon = () => {
   try {

@@ -92,7 +92,7 @@ const optionLabel = (option) => inLang(option.name_i18n, option.name);
 const isChosen = (group, option) => Number(optionPicker.selection[group.key]) === option.id;
 const chosenLabel = (group) => optionLabel(group.options.find((option) => isChosen(group, option)) || group.options[0]);
 
-const FALLBACK_IMAGE = '/brand/mastergas-icon.png';
+const FALLBACK_IMAGE = '/brand/jabel-icon.png';
 const productImage = computed(() => {
   const product = optionPicker.product;
   const image = product?.image || product?.images?.[0];

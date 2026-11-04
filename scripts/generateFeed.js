@@ -56,7 +56,7 @@ async function main() {
     fs.mkdirSync(FEEDS_DIR, { recursive: true });
   }
 
-  const storeUrl = 'https://mastergas.sa';
+  const storeUrl = 'https://jabel-website.vercel.app';
   const currency = 'JOD';
 
   const csvHeaders = [
@@ -89,7 +89,7 @@ async function main() {
       imageLink = `${storeUrl}${imageLink.startsWith('/') ? '' : '/'}${imageLink}`;
     }
 
-    const brand = product.brand_name || product.brand?.name || 'Mastergas';
+    const brand = product.brand_name || product.brand?.name || 'Jabel';
     const category = product.category_name || product.category?.name || 'Shopping';
 
     return [
