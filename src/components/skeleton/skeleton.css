@@ -77,6 +77,15 @@
   animation: sk-shimmer-sweep 1.4s linear infinite;
 }
 .product-image-wrapper.img-loading .product-image { opacity: 0; }
+/* The Jabel mark sits in the middle of the shimmer until the picture is there. */
+.product-image-wrapper.img-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/brand/jabel-icon.png') center / 64px 64px no-repeat;
+  opacity: 0.45;
+  pointer-events: none;
+}
 @media (prefers-reduced-motion: reduce) {
   .product-image-wrapper.img-loading { animation: none; }
 }

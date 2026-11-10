@@ -310,7 +310,7 @@ export const cartState = reactive({
   },
 
   isInWishlist(productId) {
-    return this.wishlist.some(item => item.id === productId);
+    return this.wishlist.some(item => String(item.id) === String(productId));
   },
 
   save() {

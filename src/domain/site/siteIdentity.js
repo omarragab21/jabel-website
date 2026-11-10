@@ -1,8 +1,9 @@
 // The site's name, description and opening hours as the dashboard sets them (Settings > General), per language.
 // The visitor sees the Arabic text on the Arabic site and the English text on the English site; a language
-// that was left empty falls back to the other one instead of showing nothing.
+// that was left empty falls back to the other one; with neither, nothing is shown.
 
-export const DEFAULT_SITE_NAME = { ar: 'جبل | Jabel', en: 'Jabel' };
+// No made-up name: when the dashboard has none, the site shows none.
+export const DEFAULT_SITE_NAME = { ar: '', en: '' };
 
 const ARABIC = /[؀-ۿ]/;
 const LEGACY_BRAND = /iris/i; // the old demo brand some databases still carry

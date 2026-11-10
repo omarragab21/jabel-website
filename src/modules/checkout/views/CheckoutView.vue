@@ -321,7 +321,7 @@
                         <!-- Price display (far left in RTL) -->
                         <div class="review-item-price">
                           <span class="review-riyal-symbol">
-                            <span class="currency-text" aria-hidden="true" style="font-size: 14px; color: #111827">د.أ</span>
+                            <CurrencyText class="currency-text" aria-hidden="true" style="font-size: 14px; color: #111827" />
                           </span>
                           <span class="review-price-num">{{ formatPrice(prod.price) }}</span>
                         </div>
@@ -431,7 +431,7 @@
                     <SelectedOptionsChips v-if="item.options?.length" :options="item.options" compact />
                   </div>
                   <div class="price-unit receipt-price-unit">
-                    <span class="riyal-icon receipt-riyal currency-text" aria-hidden="true" style="font-size: 14px">د.أ</span>
+                    <CurrencyText class="riyal-icon receipt-riyal currency-text" aria-hidden="true" style="font-size: 14px" />
                     <span class="price-val">{{ formatPrice(item.lineTotal ?? item.price * (item.quantity || 1)) }}</span>
                   </div>
                 </div>
@@ -462,7 +462,7 @@
               <div class="receipt-total-row">
                 <span class="receipt-total-label">{{ currentLocale === 'ar' ? 'إجمالي المبلغ المدفوع' : 'Total Amount Paid' }}</span>
                 <div class="price-unit receipt-total-unit">
-                  <span class="riyal-icon receipt-total-riyal currency-text" aria-hidden="true" style="font-size: 19px">د.أ</span>
+                  <CurrencyText class="riyal-icon receipt-total-riyal currency-text" aria-hidden="true" style="font-size: 19px" />
                   <span class="receipt-total-val">{{ formatPrice(receiptTotal) }}</span>
                 </div>
               </div>
@@ -497,7 +497,7 @@
             <div class="summary-card-row row-subtotal">
               <span class="summary-card-label">{{ t('checkout.subtotal') || 'المجموع الفرعي' }}</span>
               <div class="price-unit">
-                <span class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px">د.أ</span>
+                <CurrencyText class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px" />
                 <span class="price-val">{{ formatPrice(subtotalWithDiscount) }}</span>
               </div>
             </div>
@@ -507,7 +507,7 @@
               <span class="summary-card-label">{{ t('offers.discount') || 'الخصم' }}</span>
               <div class="price-unit discount-unit">
                 <span class="minus-sign">-</span>
-                <span class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px">د.أ</span>
+                <CurrencyText class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px" />
                 <span class="price-val">{{ formatPrice(discountAmount) }}</span>
               </div>
             </div>
@@ -516,7 +516,7 @@
             <div class="summary-card-row row-vat" v-if="summaryRowFlags.vat">
               <span class="summary-card-label">{{ currentLocale === 'ar' ? `ضريبة القيمة المضافة (${taxRate}٪)` : `VAT (${taxRate}%)` }}</span>
               <div class="price-unit">
-                <span class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px">د.أ</span>
+                <CurrencyText class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px" />
                 <span class="price-val">{{ formatPrice(taxAmount) }}</span>
               </div>
             </div>
@@ -525,7 +525,7 @@
             <div class="summary-card-row row-shipping" v-if="summaryRowFlags.shipping">
               <span class="summary-card-label">{{ t('checkout.shipping_fees') || 'رسوم الشحن والتوصيل' }}</span>
               <div class="price-unit">
-                <span class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px">د.أ</span>
+                <CurrencyText class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px" />
                 <span class="price-val">{{ formatPrice(shippingAmount) }}</span>
               </div>
             </div>
@@ -538,7 +538,7 @@
           <div class="summary-card-row-total">
             <span class="total-label">{{ t('checkout.total') || 'الإجمالي' }}</span>
             <div class="price-unit total-price-unit">
-              <span class="riyal-icon total-riyal currency-text" aria-hidden="true" style="font-size: 19px">د.أ</span>
+              <CurrencyText class="riyal-icon total-riyal currency-text" aria-hidden="true" style="font-size: 19px" />
               <span class="total-price-val">{{ formatPrice(grandTotal) }}</span>
             </div>
           </div>
@@ -591,7 +591,7 @@ import { useSettings } from '../../../composables/useSettings';
 import { useCheckoutPricing } from '../../../composables/useCheckoutPricing';
 import CheckoutProgress from '../components/CheckoutProgress.vue';
 import { useCheckoutStore } from '../store/checkoutStore';
-import { defaultCityOptions, defaultRegionOptions, regionForCity, joinCityRegion } from '../../../data/saPlaces';
+import { defaultCityOptions, regionsForCity, joinCityRegion } from '../../../data/jordanPlaces';
 import AddressModal from '../../../components/AddressModal.vue';
 import { profileService } from '../../profile/services/profileService';
 import { placeLabel as placeLabelFor } from '../../../utils/placeLabels';
@@ -718,13 +718,13 @@ const {
 });
 
 
-// "Other recipient": the city and region lists are the ones of the profile address dialog, and picking a
-// city brings its region.
+// "Other recipient": the city and area lists are the ones of the profile address dialog (Jordan); the areas
+// offered are those of the chosen city.
 const cityChoices = computed(() => [...new Set([...defaultCityOptions, customerInfo.value.city].filter(Boolean))]);
-const regionChoices = computed(() => [...new Set([...defaultRegionOptions, customerInfo.value.region].filter(Boolean))]);
+const regionChoices = computed(() => [...new Set([...regionsForCity(customerInfo.value.city), customerInfo.value.region].filter(Boolean))]);
+// Another city has other areas: the chosen area is cleared.
 const onOtherCityChange = () => {
-  const region = regionForCity(customerInfo.value.city);
-  if (region) customerInfo.value.region = region;
+  customerInfo.value.region = '';
 };
 // The city with its region, the way a saved address stores it ("الدمام، الشرقية").
 const customerCityLabel = computed(() => {

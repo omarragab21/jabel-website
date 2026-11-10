@@ -327,6 +327,9 @@
   transition: opacity 0.2s;
 }
 
+.image-actions-bar .detail-wishlist { margin-inline-start: auto; }
+.image-actions-bar .detail-wishlist + .share-action-btn { margin-inline-start: 20px; }
+
 .share-action-btn:hover {
   opacity: 0.7;
 }
@@ -445,6 +448,12 @@
   flex-direction: row;
   align-items: center;
   gap: 4px;
+}
+
+/* English: the amount first (left) and «JOD» after it (right). */
+.price-unit.is-en,
+.price-before-discount.is-en {
+  flex-direction: row-reverse;
 }
 
 .riyal-symbol {

@@ -1,7 +1,7 @@
 <template>
   <div class="website-layout" :class="currentLang === 'ar' ? 'lang-ar' : 'lang-en'" :dir="currentLang === 'ar' ? 'rtl' : 'ltr'">
     <header class="fixed-header">
-      <!-- Top Bar / Announcement Bar -->
+      <!-- Free-shipping announcement: only while the store has a free-shipping amount above zero -->
       <div v-if="showTopBar" class="top-bar" data-testid="top-bar">
         <div class="top-bar-container">
           <span class="announcement-text">{{ freeShippingAnnouncement }}</span>
@@ -10,96 +10,70 @@
 
       <!-- Navigation -->
       <nav class="navbar" :class="{ 'navbar-scrolled': isScrolled }">
-        <div class="container nav-container">
-          <!-- Logo (Right in RTL) -->
-          <router-link to="/" class="logo" :aria-label="$t('common.home_aria')">
-            <div class="logo-icon">
-              <img v-if="settingsReady" :src="siteLogo || '/brand/jabel-logo.png'" :alt="siteName || 'Jabel'" class="site-logo-img">
-              <span v-else class="sk-shimmer logo-skeleton" aria-hidden="true"></span>
-            </div>
-          </router-link>
+        <div class="nav-container">
+          <div class="header-main-row">
+            <!-- Logo -->
+            <router-link to="/" class="logo" :aria-label="$t('common.home_aria')">
+              <div class="logo-icon">
+                <img v-if="settingsReady" :src="siteLogo || '/brand/jabel-logo.png'" :alt="siteName || 'Jabel'" class="site-logo-img">
+                <span v-else class="sk-shimmer logo-skeleton" aria-hidden="true"></span>
+              </div>
+            </router-link>
 
-          <!-- Main Links (Center in Desktop) -->
-          <div class="nav-links desktop-only">
-            <router-link to="/" active-class="active" exact-active-class="active">
-              <span>{{ $t('nav.home') }}</span>
-              <span class="active-underline"></span>
-            </router-link>
-            <router-link to="/products" active-class="active" exact-active-class="active">
-              <span>{{ $t('nav.products') }}</span>
-              <span class="active-underline"></span>
-            </router-link>
-            <router-link to="/offers" active-class="active" exact-active-class="active">
-              <span>{{ $t('nav.offers') }}</span>
-              <span class="active-underline"></span>
-            </router-link>
-            <router-link to="/about" active-class="active" exact-active-class="active">
-              <span>{{ $t('nav.about') }}</span>
-              <span class="active-underline"></span>
-            </router-link>
-            <router-link to="/contact" active-class="active" exact-active-class="active">
-              <span>{{ $t('nav.contact') }}</span>
-              <span class="active-underline"></span>
-            </router-link>
-          </div>
+            <!-- Delivery method selector (desktop) -->
+            <DeliveryAddressDropdown class="desktop-only" />
 
-          <!-- Desktop specific Icons & Controls (Left in RTL) -->
-          <div class="header-left desktop-only">
-            <!-- Language Toggle Button -->
-            <button class="lang-toggle-btn" @click="toggleLanguage" :title="currentLang === 'ar' ? 'English' : 'العربية'">
-              <span>{{ currentLang === 'ar' ? 'English' : 'العربية' }}</span>
+            <!-- Search field (desktop) -->
+            <button type="button" class="search-field desktop-only" @click="showSearchModal = true">
+              <span class="search-field-placeholder">{{ currentLang === 'ar' ? 'ابحث في المنتجات...' : 'Search products...' }}</span>
             </button>
 
-            <!-- Line Divider -->
-            <span class="nav-divider-line"></span>
+            <!-- Icons & language (desktop) -->
+            <div class="header-left desktop-only">
+              <div class="header-nav-icons">
+                <router-link to="/wishlist" class="header-icon-link wishlist-link" :title="currentLang === 'ar' ? 'المفضلة' : 'Wishlist'">
+                  <img :src="heartAddIcon" alt="" class="nav-heart-icon" />
+                  <span v-if="wishlistCount > 0" class="wishlist-count-badge" data-testid="wishlist-count">{{ wishlistCount }}</span>
+                </router-link>
 
-            <!-- Nav Icons (Cart, User, Search) -->
-            <div class="header-nav-icons">
-              <!-- Cart -->
-              <a href="/cart" class="header-icon-link cart-link" :title="$t('cart.title') || 'سلة المشتريات'" @click.prevent="handleCartClick">
-                <div class="cart-wrapper">
-                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M1.60387 1.83326C1.60387 1.45357 1.91167 1.14576 2.29137 1.14576L3.15161 1.14576C4.30834 1.14576 5.31663 1.93301 5.59718 3.0552L5.60035 3.06789L6.06285 5.27077L17.8269 5.27077C18.2887 5.2707 18.7138 5.27064 19.0533 5.32454C19.4335 5.38491 19.8298 5.53039 20.1102 5.91625C20.3802 6.28767 20.4146 6.70764 20.3882 7.09216C20.3632 7.4544 20.2736 7.8993 20.1716 8.40606L20.163 8.44894C19.7912 10.2953 19.4254 12.0364 18.5652 13.2919C18.1195 13.9425 17.5396 14.4696 16.7682 14.8276C16.0046 15.1819 15.0891 15.3541 13.991 15.3541L7.75722 15.3541C7.00538 15.3568 6.34388 15.9315 6.21132 16.7291L16.0414 16.7291C17.1805 16.7291 18.1039 17.6525 18.1039 18.7916C18.1039 19.9307 17.1805 20.8541 16.0414 20.8541C14.9023 20.8541 13.9789 19.9307 13.9789 18.7916C13.9789 18.5505 14.0202 18.3191 14.0962 18.1041L11.5698 18.1041C11.6458 18.3191 11.6872 18.5505 11.6872 18.7916C11.6872 19.9307 10.7638 20.8541 9.6247 20.8541C8.48561 20.8541 7.5622 19.9307 7.5622 18.7916C7.5622 18.5505 7.60356 18.3191 7.67956 18.1041L5.87685 18.1041C5.26268 18.1041 4.8122 17.5937 4.8122 17.0237C4.8122 15.8062 5.51311 14.7321 6.54297 14.2495L4.84881 6.1802C4.83123 6.12863 4.81961 6.07431 4.81477 6.01804L4.26037 3.37749C4.12898 2.87337 3.67354 2.52076 3.15161 2.52076L2.29137 2.52076C1.91167 2.52076 1.60387 2.21296 1.60387 1.83326ZM16.0414 18.1041C15.6617 18.1041 15.3539 18.4119 15.3539 18.7916C15.3539 19.1713 15.6617 19.4791 16.0414 19.4791C16.4211 19.4791 16.7289 19.1713 16.7289 18.7916C16.7289 18.4119 16.4211 18.1041 16.0414 18.1041ZM8.9372 18.7916C8.9372 18.4119 9.24501 18.1041 9.6247 18.1041C10.0044 18.1041 10.3122 18.4119 10.3122 18.7916C10.3122 19.1713 10.0044 19.4791 9.6247 19.4791C9.24501 19.4791 8.9372 19.1713 8.9372 18.7916ZM8.14338 13.9791L8.1397 13.9791L7.89118 13.9791L6.35153 6.64577L17.7776 6.64577C18.3056 6.64577 18.619 6.64782 18.8377 6.68253C18.9373 6.69835 18.9808 6.71626 18.9955 6.72376L18.9986 6.72537C19.0004 6.72787 19.0057 6.73681 19.0111 6.7641C19.0188 6.80346 19.0249 6.8743 19.0164 6.99777C18.9984 7.25944 18.9283 7.615 18.815 8.17757C18.4279 10.1003 18.1016 11.5359 17.4309 12.5148C17.1111 12.9814 16.7159 13.336 16.1894 13.5803C15.655 13.8283 14.9497 13.9791 13.991 13.9791L8.14338 13.9791Z" fill="currentColor"/>
-                  </svg>
-                  <span class="cart-badge-black" v-if="cartCount > 0">{{ cartCount }}</span>
+                <div class="user-dropdown-container" @mouseenter="isLoggedIn && (showUserDropdown = true)" @mouseleave="showUserDropdown = false">
+                  <button class="header-icon-btn user-btn" :title="isLoggedIn ? $t('profile.title') : $t('nav.login')" @click="handleUserClick">
+                    <span class="nav-user-icon" aria-hidden="true"><img :src="userIcon" alt="" /></span>
+                  </button>
+                  <transition name="fade">
+                    <div v-if="isLoggedIn && showUserDropdown" class="user-dropdown-menu" @click.stop>
+                      <div class="user-dropdown-header">
+                        <p class="user-name">{{ authState.user?.name || authState.user?.full_name || $t('auth.customer') }}</p>
+                        <p class="user-phone" dir="ltr" v-if="authState.user?.email || authState.user?.phone || currentUser?.phone">
+                          {{ authState.user?.email || authState.user?.phone || currentUser?.phone || '' }}
+                        </p>
+                      </div>
+                      <div class="user-dropdown-body">
+                        <router-link to="/profile" class="user-dropdown-item" @click="showUserDropdown = false">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                          {{ $t('profile.title') }}
+                        </router-link>
+                        <button class="user-dropdown-item logout" @click="handleLogout(); showUserDropdown = false">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                          {{ $t('profile.logout') }}
+                        </button>
+                      </div>
+                    </div>
+                  </transition>
                 </div>
-              </a>
 
-              <!-- Profile / Login -->
-              <div class="user-dropdown-container" @mouseenter="isLoggedIn && (showUserDropdown = true)" @mouseleave="showUserDropdown = false">
-                <button class="header-icon-btn user-btn" :title="isLoggedIn ? $t('profile.title') : $t('nav.login')" @click="handleUserClick">
-                  <span class="nav-user-icon" aria-hidden="true"><img :src="userIcon" alt="" /></span>
-                </button>
-                <transition name="fade">
-                  <div v-if="isLoggedIn && showUserDropdown" class="user-dropdown-menu" @click.stop>
-                    <div class="user-dropdown-header">
-                      <p class="user-name">{{ authState.user?.name || authState.user?.full_name || $t('auth.customer') }}</p>
-                      <p class="user-phone" dir="ltr" v-if="authState.user?.email || authState.user?.phone || currentUser?.phone">
-                        {{ authState.user?.email || authState.user?.phone || currentUser?.phone || '' }}
-                      </p>
-                    </div>
-                    <div class="user-dropdown-body">
-                      <router-link to="/profile" class="user-dropdown-item" @click="showUserDropdown = false">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        {{ $t('profile.title') }}
-                      </router-link>
-                      <button class="user-dropdown-item logout" @click="handleLogout(); showUserDropdown = false">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                        {{ $t('profile.logout') }}
-                      </button>
-                    </div>
+                <a href="/cart" class="header-icon-link cart-link" :title="$t('cart.title') || 'سلة المشتريات'" @click.prevent="handleCartClick">
+                  <div class="cart-wrapper">
+                    <img :src="cartIcon" alt="" class="nav-cart-icon" />
+                    <span class="cart-badge-black" v-if="cartCount > 0">{{ cartCount }}</span>
                   </div>
-                </transition>
+                </a>
               </div>
 
-              <!-- Search -->
-              <button class="header-icon-btn search-btn" @click="showSearchModal = true" :title="$t('nav.search') || 'بحث'">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M10.084 1.14575C5.14794 1.14575 1.14648 5.14721 1.14648 10.0833C1.14648 15.0193 5.14794 19.0208 10.084 19.0208C12.3045 19.0208 14.3359 18.2109 15.899 16.8705L19.6812 20.6527C19.9497 20.9212 20.385 20.9212 20.6535 20.6527C20.9219 20.3842 20.9219 19.9489 20.6535 19.6804L16.8713 15.8983C18.2117 14.3352 19.0215 12.3038 19.0215 10.0833C19.0215 5.14721 15.02 1.14575 10.084 1.14575ZM2.52148 10.0833C2.52148 5.9066 5.90733 2.52075 10.084 2.52075C14.2606 2.52075 17.6465 5.9066 17.6465 10.0833C17.6465 14.2599 14.2606 17.6458 10.084 17.6458C5.90733 17.6458 2.52148 14.2599 2.52148 10.0833Z" fill="currentColor"/>
-                </svg>
+              <button class="lang-toggle-btn" @click="toggleLanguage" :title="currentLang === 'ar' ? 'English' : 'العربية'">
+                <span>{{ currentLang === 'ar' ? 'English' : 'العربية' }}</span>
               </button>
             </div>
-          </div>
 
         <!-- Mobile Side Actions (Left in RTL Mobile) -->
         <div class="nav-actions-left mobile-only">
@@ -154,6 +128,33 @@
             </svg>
           </button>
         </div>
+          </div>
+
+          <!-- Navigation row (desktop) -->
+          <div class="header-navigation-row desktop-only">
+            <div class="nav-links">
+              <router-link to="/" active-class="active" exact-active-class="active">
+                <span>{{ $t('nav.home') }}</span>
+                <span class="active-underline"></span>
+              </router-link>
+              <router-link to="/products" active-class="active" exact-active-class="active">
+                <span>{{ $t('nav.products') }}</span>
+                <span class="active-underline"></span>
+              </router-link>
+              <router-link to="/offers" active-class="active" exact-active-class="active">
+                <span>{{ $t('nav.offers') }}</span>
+                <span class="active-underline"></span>
+              </router-link>
+              <router-link to="/about" active-class="active" exact-active-class="active">
+                <span>{{ $t('nav.about') }}</span>
+                <span class="active-underline"></span>
+              </router-link>
+              <router-link to="/contact" active-class="active" exact-active-class="active">
+                <span>{{ $t('nav.contact') }}</span>
+                <span class="active-underline"></span>
+              </router-link>
+            </div>
+          </div>
 
         <!-- Mobile Menu Overlay -->
         <transition name="slide-down">
@@ -186,6 +187,15 @@
         </transition>
       </div>
     </nav>
+
+      <!-- News bar -->
+      <div v-if="newsItems.length" ref="newsBarEl" class="news-bar" :class="{ 'news-bar-hidden': isScrolled, 'news-bar-marquee': newsMarquee }" :style="{ '--news-duration': `${newsDuration}s` }" data-testid="news-bar">
+        <div class="news-bar-track">
+          <ul v-for="n in 2" :key="n" class="news-bar-list" :aria-hidden="n === 2 ? 'true' : null">
+            <li v-for="(item, i) in newsItems" :key="i">{{ item }}</li>
+          </ul>
+        </div>
+      </div>
     </header>
 
     <main class="main-content">
@@ -259,9 +269,17 @@
               <img v-if="settingsReady" :src="footerLogo" :alt="siteName || 'Jabel'" class="footer-brand-logo-img" />
               <span v-else class="sk-shimmer footer-logo-skeleton" aria-hidden="true"></span>
             </router-link>
-            <p v-if="localizedSiteDescription" class="footer-desc">{{ localizedSiteDescription }}</p>
+            <!-- Shimmer until the settings are known: no made-up description or contact details -->
+            <div v-if="!settingsReady" class="footer-info-skeleton" role="status" aria-busy="true" data-testid="footer-skeleton">
+              <span class="sk-shimmer footer-line-skeleton" style="width: 92%"></span>
+              <span class="sk-shimmer footer-line-skeleton" style="width: 70%"></span>
+              <span class="sk-shimmer footer-line-skeleton" style="width: 48%; margin-top: 14px"></span>
+              <span class="sk-shimmer footer-line-skeleton" style="width: 62%"></span>
+              <span class="sk-shimmer footer-line-skeleton" style="width: 80%"></span>
+            </div>
+            <p v-if="settingsReady && localizedSiteDescription" class="footer-desc">{{ localizedSiteDescription }}</p>
 
-            <div v-if="sitePhone || siteEmail || localizedSiteAddress || siteHours.length" class="footer-contact-info">
+            <div v-if="settingsReady && (sitePhone || siteEmail || localizedSiteAddress || siteHours.length)" class="footer-contact-info">
               <a v-if="sitePhone" :href="`tel:${sitePhone}`" class="footer-contact-link footer-phone-link" dir="ltr">{{ sitePhone }}</a>
               <a v-if="siteEmail" :href="`mailto:${siteEmail}`" class="footer-contact-link">{{ siteEmail }}</a>
               <span v-if="localizedSiteAddress" class="footer-contact-link">{{ localizedSiteAddress }}</span>
@@ -271,7 +289,7 @@
               </div>
             </div>
             
-            <div v-if="visibleSocials.length" class="footer-social-wrap">
+            <div v-if="settingsReady && visibleSocials.length" class="footer-social-wrap">
               <a v-for="social in visibleSocials" :key="social.key" :href="social.url" target="_blank" rel="noopener noreferrer" class="social-circle-btn" :aria-label="social.label">
                 <img v-if="footerSocialIcons[social.key]" :src="footerSocialIcons[social.key]" alt="" class="social-circle-img" />
                 <i v-else :class="['fab', social.icon]" aria-hidden="true"></i>
@@ -316,6 +334,7 @@ import api from '../config/axios';
 import { cartState } from '../store/cart';
 import { authState, authActions } from '../store/auth';
 import AddToCartModal from './AddToCartModal.vue';
+import DeliveryAddressDropdown from './DeliveryAddressDropdown.vue';
 import OptionPickerModal from './OptionPickerModal.vue';
 import AuthModal from './AuthModal.vue';
 import CookieConsent from './CookieConsent.vue';
@@ -330,6 +349,10 @@ import { settingsService } from '../services/settingsService';
 import { productService } from '../modules/product/services/productService';
 import { firstSetting, settingsToObject } from '../utils/siteSettings';
 import userIcon from '../assets/icons/user.svg';
+import heartAddIcon from '../assets/icons/header/heart-add.svg';
+import cartIcon from '../assets/icons/header/shopping-cart.svg';
+import { NEWS_BAR_KEY, newsBarTexts } from '../domain/site/newsBar.js';
+import { currencyLabel } from '../utils/currency';
 import { freeShippingThreshold, showFreeShippingBanner } from '../domain/cart/summaryRows.js';
 import { setSiteLang, setSiteSettings, siteDescriptionText, siteHoursLines, siteNameText } from '../store/siteIdentity.js';
 
@@ -337,6 +360,7 @@ const { locale } = useI18n();
 const router = useRouter();
 const route = useRoute();
 const isScrolled = ref(false);
+const wishlistCount = computed(() => cartState.wishlist.length);
 const categories = ref([]);
 // Every category of the store, in the visitor's language, for the footer's Store column.
 const footerCategories = computed(() => categories.value
@@ -352,8 +376,14 @@ const rememberedThreshold = () => {
 };
 // Remembered from the last visit so the bar does not jump in (or out) when the settings arrive.
 const freeDeliveryThreshold = ref(rememberedThreshold());
-// The announcement bar is the free-shipping offer: with no threshold (0 or missing) there is nothing to announce.
+// The announcement bar is the free-shipping offer: with no amount (0 or missing) there is nothing to announce.
 const showTopBar = computed(() => showFreeShippingBanner(freeDeliveryThreshold.value));
+const freeShippingAnnouncement = computed(() => {
+  const threshold = freeShippingThreshold(freeDeliveryThreshold.value);
+  return currentLang.value === 'ar'
+    ? `شحن مجاني للطلبات فوق ${threshold} ${currencyLabel('ar')} | ضمان شامل على جميع المنتجات`
+    : `Free shipping on orders over ${threshold} ${currencyLabel('en')} | Comprehensive warranty on all products`;
+});
 // The name, description and opening hours come from the dashboard, in the language being shown.
 const siteName = siteNameText;
 const siteHours = siteHoursLines;
@@ -490,6 +520,7 @@ const applySiteSettings = (rawSettings) => {
     en: getVal('address_en') || getVal('address'),
   };
   freeDeliveryThreshold.value = getVal('free_delivery_threshold') ?? 0;
+  newsBarSetting.value = getVal(NEWS_BAR_KEY) ?? null;
 
   socials.facebook = getSocialVal('facebook');
   socials.instagram = getSocialVal('instagram');
@@ -517,17 +548,50 @@ const applySiteSettings = (rawSettings) => {
 
 };
 
-const freeShippingAnnouncement = computed(() => {
-  const threshold = freeShippingThreshold(freeDeliveryThreshold.value);
-  return currentLang.value === 'ar'
-    ? `شحن مجاني للطلبات فوق ${threshold} دينار | ضمان شامل على جميع المنتجات`
-    : `Free shipping on orders over ${threshold} JOD | Comprehensive warranty on all products`;
-});
+// News bar under the navbar: the items saved in Settings > News bar, in the language being shown.
+const newsBarSetting = ref(null);
+const newsItems = computed(() => newsBarTexts(newsBarSetting.value, currentLang.value));
 
-// The page content is offset by the bar (40px). Pages read --top-bar-h so they move up when it is hidden.
-watch(showTopBar, (visible) => {
-  document.documentElement.style.setProperty('--top-bar-h', visible ? '40px' : '0px');
-}, { immediate: true });
+// The bar stands still while every item fits; as soon as they do not (many or long items, a narrow screen)
+// it scrolls without a break, at the same speed whatever the length.
+const NEWS_SPEED_PX_PER_SEC = 60;
+const newsBarEl = ref(null);
+const newsMarquee = ref(false);
+const newsDuration = ref(30);
+let newsResizeObserver = null;
+const measureNewsBar = () => {
+  const bar = newsBarEl.value;
+  const list = bar?.querySelector('.news-bar-list');
+  if (!bar || !list) { newsMarquee.value = false; return; }
+  const gutter = window.innerWidth <= 768 ? 0 : 128; // the bar's side padding when it stands still
+  const listWidth = list.scrollWidth;
+  newsMarquee.value = listWidth > bar.clientWidth - gutter;
+  newsDuration.value = Math.max(15, Math.round(listWidth / NEWS_SPEED_PX_PER_SEC));
+};
+watch([newsItems, currentLang], () => nextTick(measureNewsBar), { flush: 'post' });
+watch(newsBarEl, (el) => {
+  newsResizeObserver?.disconnect();
+  if (el && typeof ResizeObserver !== 'undefined') {
+    newsResizeObserver = new ResizeObserver(measureNewsBar);
+    newsResizeObserver.observe(el);
+  }
+  nextTick(measureNewsBar);
+}, { flush: 'post' });
+
+// Pages are laid out for a 120px header. The desktop header is taller (navbar + nav row + news bar),
+// so --top-bar-h carries the extra height that pages and floating panels must clear.
+const desktopHeaderMq = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(min-width: 769px)') : null;
+const syncHeaderOffset = () => {
+  const hasNews = newsItems.value.length > 0;
+  const desktop = desktopHeaderMq && desktopHeaderMq.matches;
+  // Pages are laid out for a 120px header (40px free-shipping bar + 80px navbar). The bars above and below the
+  // navbar are 40px each when shown, and the desktop navbar is 57px taller than the old one.
+  const height = (showTopBar.value ? 40 : 0) + (hasNews ? 40 : 0) + (desktop ? 57 : 0);
+  document.documentElement.style.setProperty('--top-bar-h', `${height}px`);
+};
+syncHeaderOffset();
+watch([() => newsItems.value.length, showTopBar], syncHeaderOffset);
+if (desktopHeaderMq) desktopHeaderMq.addEventListener('change', syncHeaderOffset);
 watch(freeDeliveryThreshold, (value) => {
   try { localStorage.setItem(THRESHOLD_KEY, String(freeShippingThreshold(value))); } catch { /* storage unavailable */ }
 });
@@ -761,6 +825,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  newsResizeObserver?.disconnect();
+  if (desktopHeaderMq) desktopHeaderMq.removeEventListener('change', syncHeaderOffset);
   window.removeEventListener('scroll', handleScroll);
   document.removeEventListener('click', closeDropdownOnOutsideClick);
 });
@@ -984,7 +1050,6 @@ onUnmounted(() => {
   box-sizing: border-box;
   background: #FFFFFF;
   border-bottom: 1px solid #E2E8F0;
-  height: 80px;
   display: flex;
   align-items: center;
   position: relative;
@@ -995,14 +1060,125 @@ onUnmounted(() => {
 .nav-container {
   box-sizing: border-box;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   width: 100%;
   max-width: 1440px;
-  height: 80px;
   margin: 0 auto;
-  padding: 0 64px !important;
+  padding: 8px 64px !important;
+}
+
+.header-main-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+  height: 80px;
+}
+
+.header-navigation-row {
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+
+
+/* Search field */
+.search-field {
+  box-sizing: border-box;
+  flex: 1 0 0;
+  min-width: 0;
+  height: 44px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  cursor: text;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+.search-field-placeholder {
+  font-size: 14px;
+  color: #94A3B8;
+}
+
+/* News bar */
+.news-bar {
+  box-sizing: border-box;
+  background: #0086B3;
+  color: #FFFFFF;
+  height: 40px;
+  padding: 0 64px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: height 0.3s ease, opacity 0.2s ease;
+}
+/* Hidden once the page is scrolled; it comes back at the top (banner). */
+.news-bar.news-bar-hidden {
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.news-bar-track {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 100%;
+}
+.news-bar-list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex-shrink: 0;
+}
+.news-bar-list:nth-child(2) { display: none; }
+.news-bar-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.news-bar-list li::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  margin-inline: 8px 0;
+}
+/* Too many items to fit: two copies side by side, shifted by exactly one copy, so the loop has no jump. */
+.news-bar-marquee { padding: 0; }
+.news-bar-marquee .news-bar-track {
+  width: max-content;
+  min-width: 0;
+  flex-shrink: 0;
+  gap: 0;
+  will-change: transform;
+  animation: news-scroll var(--news-duration, 30s) linear infinite;
+}
+.news-bar-marquee .news-bar-list:nth-child(2) { display: flex; }
+.news-bar-marquee .news-bar-list { padding-inline-end: 24px; }
+.news-bar-marquee:hover .news-bar-track { animation-play-state: paused; }
+@keyframes news-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(50%); }
+}
+.lang-en .news-bar-marquee .news-bar-track { animation-name: news-scroll-ltr; }
+@keyframes news-scroll-ltr {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .news-bar-track { animation: none !important; }
+  .news-bar-marquee { overflow-x: auto; scrollbar-width: none; }
 }
 
 /* Logo */
@@ -1010,13 +1186,14 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   text-decoration: none;
-  width: 140px;
-  height: 35px;
+  width: 160px;
+  height: 80px;
+  flex-shrink: 0;
 }
 
 .logo-icon {
-  height: 35px;
-  width: 140px;
+  height: 80px;
+  width: 160px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -1027,22 +1204,37 @@ onUnmounted(() => {
 }
 
 .site-logo-img {
-  height: 35px;
-  width: auto;
-  max-width: 140px;
+  height: 80px;
+  width: 160px;
   object-fit: contain;
 }
 
 /* Logo placeholders while the site settings load (same box as the logos). */
 .logo-skeleton {
-  width: 120px;
-  height: 35px;
+  width: 160px;
+  height: 80px;
   border-radius: 6px;
 }
 
+.footer-info-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+  max-width: 320px;
+}
+.footer-line-skeleton,
 .footer-logo-skeleton {
-  width: 140px;
-  height: 35px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.08) 25%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0.08) 75%);
+  background-size: 200% 100%;
+}
+.footer-line-skeleton {
+  height: 14px;
+  border-radius: 6px;
+}
+.footer-logo-skeleton {
+  width: 160px;
+  height: 80px;
   border-radius: 6px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.08) 25%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0.08) 75%);
   background-size: 200% 100%;
@@ -1056,6 +1248,7 @@ onUnmounted(() => {
   padding: 0px;
   gap: 32px;
   height: 32px;
+  margin-inline-end: auto;
 }
 
 .nav-links a {
@@ -1104,7 +1297,35 @@ onUnmounted(() => {
   padding: 0px;
   gap: 24px;
   height: 26px;
-  direction: ltr; /* Keeps [English] | [Cart] [User] [Search] */
+  direction: ltr; /* Keeps [Wishlist] [User] [Cart] [English] */
+  flex-shrink: 0;
+}
+
+.nav-heart-icon, .nav-cart-icon {
+  position: absolute;
+  display: block;
+  max-width: none;
+}
+.nav-heart-icon { inset: 9.38% 5.21% 9.37% 5.21%; width: 89.58%; height: 81.25%; }
+.nav-cart-icon { inset: 3.13% 5.68% 3.59% 7.21%; width: 87.11%; height: 93.28%; }
+.wishlist-link { position: relative; }
+.wishlist-count-badge {
+  position: absolute;
+  top: -8px;
+  left: 11px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  border-radius: 9999px;
+  background: var(--color-brand-primary, #000000);
+  color: #FFFFFF;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 16px;
+  text-align: center;
+  pointer-events: none;
 }
 
 /* Language Toggle Button */
@@ -1232,7 +1453,7 @@ onUnmounted(() => {
     padding-right: 32px !important;
   }
   .nav-container {
-    padding: 0 32px !important;
+    padding: 8px 32px !important;
   }
   .nav-links {
     gap: 20px;
@@ -1251,13 +1472,26 @@ onUnmounted(() => {
   .nav-container {
     height: 60px;
     padding: 0 16px !important;
+    justify-content: center;
   }
+  .header-main-row {
+    height: 60px;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .logo {
+    width: auto;
+    height: 28px;
+  }
+  .news-bar { height: 40px; }
+  .news-bar.news-bar-hidden { height: 0; }
   .logo-icon {
     height: 28px;
     width: auto;
   }
   .site-logo-img {
     height: 24px;
+    width: auto;
     max-width: 120px;
   }
   .logo-skeleton {
@@ -1826,14 +2060,16 @@ html[dir="rtl"] .whatsapp-float {
 
 .footer-logo {
   display: block;
-  width: 140px;
-  height: 35px;
+  width: 160px;
+  height: 80px;
   text-decoration: none;
 }
 
 .footer-brand-logo-img {
-  width: 140px;
-  height: 35px;
+  width: 160px;
+  height: 80px;
+  transform: rotate(0deg);
+  opacity: 1;
   object-fit: contain;
   object-position: center;
   display: block;

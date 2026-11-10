@@ -70,7 +70,7 @@
         <div class="add-address-field half-field">
           <label class="add-address-label">{{ t('checkout.region') }}</label>
           <div class="select-wrapper">
-            <select v-model="addressForm.region" class="add-address-select region-select">
+            <select v-model="addressForm.region" class="add-address-select region-select" :disabled="!addressForm.city" required>
               <option value="" disabled selected>{{ t('checkout.choose_region') }}</option>
               <option v-for="r in regionOptions" :key="r" :value="r">{{ placeLabel(r) }}</option>
             </select>
@@ -128,7 +128,7 @@
 <script setup>
 import { computed, reactive, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { defaultCityOptions, defaultRegionOptions, regionForCity, joinCityRegion, regionFromCityPart } from '../data/saPlaces'
+import { defaultCityOptions, regionsForCity, joinCityRegion, regionFromCityPart } from '../data/jordanPlaces'
 import { placeLabel as placeLabelFor } from '../utils/placeLabels'
 
 // The add / edit address dialog (Figma add-address-modal). Shared by the profile page and the checkout
@@ -184,22 +184,16 @@ const cityOptions = computed(() => {
   return [...new Set([...defaultCityOptions, ...persistedCities, currentCity].filter(Boolean))]
 })
 
+// The areas of the chosen city only. A saved area that is not in the list (an older address) stays selectable
+// so editing it never loses the value.
 const regionOptions = computed(() => {
-  const persistedRegions = props.existingAddresses
-    .flatMap((address) => {
-      const parts = String(address?.city || '').split('،').map((part) => part.trim()).filter(Boolean)
-      return [address?.region, address?.area, parts[1]]
-    })
-    .map((region) => String(region || '').trim())
-    .filter(Boolean)
   const currentRegion = String(addressForm.region || '').trim()
-  return [...new Set([...defaultRegionOptions, ...persistedRegions, currentRegion].filter(Boolean))]
+  return [...new Set([...regionsForCity(addressForm.city), currentRegion].filter(Boolean))]
 })
 
-// Choosing a city brings the region it belongs to (still editable afterwards).
+// Another city has other areas: the chosen area is cleared.
 const onCityChange = () => {
-  const region = regionForCity(addressForm.city)
-  if (region) addressForm.region = region
+  addressForm.region = ''
 }
 
 const close = () => emit('close')
@@ -214,7 +208,7 @@ const submit = () => {
     name: addressForm.full_name,
     full_name: addressForm.full_name,
     address: addressForm.address,
-    city: joinCityRegion(addressForm.city || 'الرياض', addressForm.region),
+    city: joinCityRegion(addressForm.city, addressForm.region),
     region: addressForm.region,
     notes: addressForm.notes,
     phone: formattedPhone,

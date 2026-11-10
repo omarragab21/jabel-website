@@ -1,1 +1,1 @@
-export { default as WishlistView } from './views/WishlistView.vue';
+export { default as WishlistPanel } from './components/WishlistPanel.vue';

@@ -2,22 +2,17 @@ import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import settingsService from '../services/settingsService';
 import { settingsToObject, vatPercentage } from '../utils/siteSettings';
+import { currencyLabel, CURRENCY_AR, CURRENCY_EN, CURRENCY_CODE } from '../utils/currency';
 
+// Only technical defaults. Anything the dashboard owns (name, phone, email, address, prices, rates) is never made
+// up here: a value that is not in the settings API is simply absent, and the pages hide whatever depends on it.
 export const defaultSettings = {
-  site_name: 'جبل | Jabel',
   logo: '/brand/jabel-logo.png',
   footer_logo: '/brand/jabel-logo-white.png',
   favicon: '/brand/jabel-icon.png',
-  currency: 'JOD',
-  currency_ar: 'د.أ',
-  currency_en: 'JOD',
-  free_delivery_threshold: 500,
-  shipping_cost: 25,
-  tax_rate: 15,
-  support_phone: '+966500000000',
-  support_email: '',
-  address_ar: 'المملكة العربية السعودية',
-  address_en: 'Saudi Arabia',
+  currency: CURRENCY_CODE,
+  currency_ar: CURRENCY_AR,
+  currency_en: CURRENCY_EN,
 };
 
 const settings = ref(null);
@@ -39,7 +34,7 @@ const normalizeSettings = (data) => {
     if (!setting?.key) return;
     let value = setting.value;
     if (['logo', 'footer_logo', 'favicon', 'site_name', 'site_title'].includes(setting.key) && isIrisAsset(value)) {
-      value = setting.key === 'footer_logo' ? defaultSettings.footer_logo : setting.key === 'site_name' || setting.key === 'site_title' ? defaultSettings.site_name : defaultSettings.logo;
+      value = setting.key === 'footer_logo' ? defaultSettings.footer_logo : setting.key === 'site_name' || setting.key === 'site_title' ? '' : defaultSettings.logo;
     }
     settingsObj[setting.key] = value;
   });
@@ -85,10 +80,9 @@ export function useSettings() {
     return fetchPromise;
   };
 
-  const currency = computed(() => {
-    if (!settings.value) return locale.value === 'ar' ? 'د.أ' : 'JOD';
-    return locale.value === 'ar' ? (settings.value.currency_ar || 'د.أ') : (settings.value.currency_en || 'JOD');
-  });
+  // One currency for the whole store (Jordanian dinar): «د.أ» in Arabic, «JOD» in English. The settings API's
+  // currency_ar / currency_en are not used: they still hold the old Saudi values (ر.س / SAR).
+  const currency = computed(() => currencyLabel(locale.value));
 
   const getSetting = (key, defaultValue = null) => settings.value?.[key] ?? defaultSettings[key] ?? defaultValue;
 

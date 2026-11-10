@@ -46,6 +46,10 @@
             </svg>
             <span>{{ t('profile.addresses') || 'العناوين' }}</span>
           </router-link>
+          <router-link to="/profile?tab=wishlist" class="mobile-tab-btn" :class="{ active: currentTab === 'wishlist' }">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+            <span>{{ t('profile.wishlist') || 'المفضلة' }}</span>
+          </router-link>
           <router-link to="/profile?tab=notifications" class="mobile-tab-btn" :class="{ active: currentTab === 'notifications' }">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -85,6 +89,7 @@
               <span class="menu-text">
                 {{ t(item.labelKey) || item.fallback }}
                 <span class="sidebar-badge" v-if="item.badge && notifCount > 0">{{ notifCount }}</span>
+                <span class="sidebar-badge" v-if="item.count === 'wishlist' && cartState.wishlist.length > 0" data-testid="profile-wishlist-count">{{ cartState.wishlist.length }}</span>
               </span>
             </router-link>
 
@@ -155,7 +160,7 @@
                     <span class="order-date">{{ order.date }}</span>
                     <div class="price-unit">
                       <span class="price-val price-num">{{ order.total }}</span>
-                      <span class="riyal-icon currency-text" aria-hidden="true" style="font-size: 13px">د.أ</span>
+                      <CurrencyText class="riyal-icon currency-text" aria-hidden="true" style="font-size: 13px" />
                     </div>
                     <span class="status-badge" :class="order.statusType">
                       {{ order.statusLabel }}
@@ -455,7 +460,7 @@
                       <span class="price-label">{{ t('profile.total_amount') }}</span>
                       <div class="price-unit">
                         <span class="price-amount price-num">{{ order.total }}</span>
-                        <span class="riyal-symbol currency-text" aria-hidden="true" style="font-size: 15px">د.أ</span>
+                        <CurrencyText class="riyal-symbol currency-text" aria-hidden="true" style="font-size: 15px" />
                       </div>
                     </div>
                   </div>
@@ -646,13 +651,26 @@
                         <span v-if="item.choices.length > 1" class="prod-choice-qty" dir="ltr">×{{ choice.quantity }}</span>
                         <SelectedOptionsChips :options="choice.options" compact />
                       </div>
+                      <!-- Delivered orders only: rate this product (POST /v1/site/reviews) -->
+                      <button
+                        v-if="canRateSelectedOrder"
+                        type="button"
+                        class="btn-rate-product"
+                        :class="{ done: isItemRated(item) }"
+                        :disabled="isItemRated(item)"
+                        data-testid="rate-product-btn"
+                        @click="rateOrderItem(item)"
+                      >
+                        <i :class="isItemRated(item) ? 'fas fa-check' : 'far fa-star'" aria-hidden="true"></i>
+                        <span>{{ isItemRated(item) ? t('profile.product_rated') : t('profile.rate_product') }}</span>
+                      </button>
                     </div>
                   </div>
 
                   <!-- Unit Price (Second column) -->
                   <div class="col-unit-price-cell">
                     <span class="price-num">{{ item.unitPrice || item.price }}</span>
-                    <span class="riyal-icon-muted currency-text" aria-hidden="true" style="font-size: 12px">د.أ</span>
+                    <CurrencyText class="riyal-icon-muted currency-text" aria-hidden="true" style="font-size: 12px" />
                   </div>
 
                   <!-- Quantity (Third column) -->
@@ -663,7 +681,7 @@
                   <!-- Total (Fourth column) -->
                   <div class="col-total-cell">
                     <span class="price-num">{{ item.totalPrice || item.price }}</span>
-                    <span class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 12px">د.أ</span>
+                    <CurrencyText class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 12px" />
                   </div>
                 </div>
               </div>
@@ -679,7 +697,7 @@
                     <span class="summary-item-label">{{ t('profile.products_total') }}</span>
                     <div class="summary-item-val">
                       <span class="price-num">{{ selectedOrderDetails.subtotal || '0.00' }}</span>
-                      <span class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 12px">د.أ</span>
+                      <CurrencyText class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 12px" />
                     </div>
                   </div>
 
@@ -694,7 +712,7 @@
                     <span class="summary-item-label">{{ t('profile.discount') }}</span>
                     <div class="summary-item-val discount">
                       <span class="price-num">{{ selectedOrderDetails.discount || '0.00' }}</span>
-                      <span class="riyal-icon-red currency-text" aria-hidden="true" style="font-size: 12px">د.أ</span>
+                      <CurrencyText class="riyal-icon-red currency-text" aria-hidden="true" style="font-size: 12px" />
                     </div>
                   </div>
                 </div>
@@ -706,7 +724,7 @@
                   <span class="summary-total-label">{{ t('profile.final_total') }}</span>
                   <div class="summary-total-val">
                     <span class="price-num">{{ selectedOrderDetails.total || '0.00' }}</span>
-                    <span class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 16px">د.أ</span>
+                    <CurrencyText class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 16px" />
                   </div>
                 </div>
               </div>
@@ -855,14 +873,14 @@
                     </div>
                     <div class="col-price col-price-val">
                       <span class="price-num">{{ item.unitPrice }}</span>
-                      <span class="riyal-icon-muted currency-text" aria-hidden="true" style="font-size: 12px">د.أ</span>
+                      <CurrencyText class="riyal-icon-muted currency-text" aria-hidden="true" style="font-size: 12px" />
                     </div>
                     <div class="col-qty col-qty-val">
                       {{ item.quantity }}
                     </div>
                     <div class="col-total col-total-val">
                       <span class="price-num">{{ item.totalPrice }}</span>
-                      <span class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 12px">د.أ</span>
+                      <CurrencyText class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 12px" />
                     </div>
                   </div>
                 </div>
@@ -874,7 +892,7 @@
                       <span class="breakdown-label">{{ t('profile.subtotal') }}</span>
                       <div class="breakdown-val">
                         <span class="price-num">{{ (activeModalOrder || selectedOrderDetails)?.subtotal || '0.00' }}</span>
-                        <span class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 12px">د.أ</span>
+                        <CurrencyText class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 12px" />
                       </div>
                     </div>
 
@@ -882,7 +900,7 @@
                       <span class="breakdown-label">{{ t('profile.vat_15') }}</span>
                       <div class="breakdown-val">
                         <span>{{ (activeModalOrder || selectedOrderDetails)?.tax || '0.00' }}</span>
-                        <span class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 12px">د.أ</span>
+                        <CurrencyText class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 12px" />
                       </div>
                     </div>
 
@@ -890,7 +908,7 @@
                       <span class="breakdown-label">{{ t('profile.discount') }}</span>
                       <div class="breakdown-val discount-val">
                         <span class="price-num">{{ (activeModalOrder || selectedOrderDetails)?.discount || '0.00' }}</span>
-                        <span class="riyal-icon-red currency-text" aria-hidden="true" style="font-size: 12px">د.أ</span>
+                        <CurrencyText class="riyal-icon-red currency-text" aria-hidden="true" style="font-size: 12px" />
                       </div>
                     </div>
 
@@ -905,7 +923,7 @@
                       <span class="final-total-label">{{ t('profile.net_total') }}</span>
                       <div class="final-total-val">
                         <span class="price-num">{{ (activeModalOrder || selectedOrderDetails)?.total || '0.00' }}</span>
-                        <span class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 16px">د.أ</span>
+                        <CurrencyText class="riyal-icon-dark currency-text" aria-hidden="true" style="font-size: 16px" />
                       </div>
                     </div>
                   </div>
@@ -1092,6 +1110,11 @@
                 </div>
                 <div v-if="returnsList.length === 0" class="empty-state">{{ t('profile.no_previous_returns') }}</div>
              </div>
+          </div>
+
+          <!-- Wishlist Tab -->
+          <div v-else-if="currentTab === 'wishlist'" class="content-view wishlist-view-area">
+            <WishlistPanel />
           </div>
 
           <!-- Notifications Tab (Figma left-content-area: exact pixel-perfect design) -->
@@ -1364,6 +1387,8 @@ import { escapeHtml, sanitizeUrl } from '../../../utils/sanitize'
 import { downloadElementAsPdf, invoiceFileName } from '../../../utils/invoicePdf'
 import { getCustomerToken } from '../../../utils/customerSession'
 import { useProfileStore } from '../store/profileStore'
+import WishlistPanel from '../../wishlist/components/WishlistPanel.vue'
+import { cartState } from '../../../store/cart'
 import SelectedOptionsChips from '../../../components/SelectedOptionsChips.vue'
 import { orderItemChoices, parseCancelReason, parseOrderOptions } from '../../../domain/order/orderOptions'
 import { summaryRows } from '../../../domain/cart/summaryRows.js'
@@ -1387,7 +1412,7 @@ const { currency, fetchSettings } = useSettings()
 const dialog = useDialog()
 
 // Tabs Handling
-const PROFILE_TABS = ['overview', 'orders', 'addresses', 'notifications', 'info', 'returns']
+const PROFILE_TABS = ['overview', 'orders', 'addresses', 'wishlist', 'notifications', 'info', 'returns']
 const currentTab = computed(() => (PROFILE_TABS.includes(route.query.tab) ? route.query.tab : 'overview'))
 const currentTabBreadcrumbTitle = computed(() => {
   const isAr = locale.value === 'ar'
@@ -1402,6 +1427,8 @@ const currentTabBreadcrumbTitle = computed(() => {
       return isAr ? 'معلوماتك الشخصية' : 'Personal Info'
     case 'returns':
       return isAr ? 'المرتجعات' : 'Returns'
+    case 'wishlist':
+      return isAr ? 'المفضلة' : 'Wishlist'
     default:
       return ''
   }
@@ -2566,10 +2593,25 @@ const ratingItem = ref(null)
 const ratingValue = ref(5)
 const ratingComment = ref('')
 
-const initiateRating = (order) => {
+// The rate button only exists once the order has been delivered.
+const canRateSelectedOrder = computed(() =>
+  ['delivered', 'completed'].includes(String(selectedOrderDetails.value?.status || '').toLowerCase())
+)
+
+const itemProductId = (item) => Number(item?.product?.id ?? item?.product_id ?? item?.id)
+
+// Products reviewed in this session (plus whatever flag the API sends on the item).
+const ratedProductIds = ref([])
+const isItemRated = (item) =>
+  Boolean(item?.has_reviewed || item?.is_reviewed || item?.reviewed) ||
+  ratedProductIds.value.includes(itemProductId(item))
+
+const rateOrderItem = (item) => initiateRating(selectedOrderDetails.value, item)
+
+const initiateRating = (order, item = null) => {
   ratingOrder.value = order
   showRatingModal.value = true
-  ratingItem.value = order.items?.[0] || order.products?.[0]
+  ratingItem.value = item || order.items?.[0] || order.products?.[0]
   ratingValue.value = 5
   ratingComment.value = ''
 }
@@ -2588,6 +2630,7 @@ const submitRating = async () => {
       comment: ratingComment.value,
       order_id: ratingOrder.value.id
     })
+    if (!ratedProductIds.value.includes(resolvedProductId)) ratedProductIds.value.push(resolvedProductId)
     dialog.alert(t('profile.thanks_for_rating'), { type: 'success', title: t('profile.your_rating') })
     showRatingModal.value = false
   } catch (err) {
@@ -3362,6 +3405,20 @@ html[dir="ltr"] .input-relative select {
   width: 100%;
   direction: rtl;
   box-sizing: border-box;
+}
+
+/* No saved address: the message spans the whole grid and sits in the middle (not in the first column). */
+.addresses-grid-v2 > .empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  padding: 40px 16px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #6b7280;
 }
 
 .address-card-v2 {
@@ -6360,6 +6417,42 @@ html[dir="ltr"] .country-readonly-input {
   text-align: left;
   font-size: 12px;
   color: #94a3b8;
+}
+
+/* Rate button in order details: the page's secondary button style, compact */
+.btn-rate-product {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 6px 16px;
+  height: 36px;
+  background: #FFFFFF;
+  border: 1.5px solid #000000;
+  border-radius: 6px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  color: #000000;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+.btn-rate-product:hover:not(:disabled) {
+  background: var(--color-brand-primary, #000000);
+  color: #FFFFFF;
+}
+.btn-rate-product:active:not(:disabled) { transform: scale(0.98); }
+.btn-rate-product.done,
+.btn-rate-product:disabled {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+  color: #64748b;
+  cursor: default;
 }
 
 .btn-rate-v2, .btn-return-v2 {

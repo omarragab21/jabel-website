@@ -16,7 +16,8 @@ const routes = [
       // The old name of the offers page (links in earlier notifications and bookmarks).
       { path: 'bundles', redirect: (to) => ({ path: '/offers', query: to.query }) },
       { path: 'cart', name: 'Cart', component: () => import('../modules/cart/views/CartView.vue') },
-      { path: 'wishlist', name: 'RemovedWishlist', redirect: '/' },
+      // The wishlist is a tab of the profile page.
+      { path: 'wishlist', name: 'Wishlist', redirect: { path: '/profile', query: { tab: 'wishlist' } } },
       { path: 'checkout', name: 'Checkout', component: () => import('../modules/checkout/views/CheckoutView.vue'), meta: { requiresCustomerAuth: true } },
       { path: 'payment/success', name: 'PaymentSuccess', component: () => import('../modules/payment/views/PaymentSuccessView.vue'), meta: { requiresCustomerAuth: true } },
       { path: 'payment/failure', name: 'PaymentFailure', component: () => import('../modules/payment/views/PaymentFailureView.vue'), meta: { requiresCustomerAuth: true } },

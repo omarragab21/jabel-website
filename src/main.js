@@ -11,6 +11,7 @@ import { useTheme } from './composables/useTheme.js';
 import { installLinkPrefetch } from './services/cacheWarmup.js';
 import { registerServiceWorker } from './pwa/registerServiceWorker.js';
 import { restoreBrandColors } from './utils/brandColors.js';
+import CurrencyText from './components/CurrencyText.vue';
 
 // Brand colours from the last visit, before anything renders (no flash of the default colours).
 restoreBrandColors();
@@ -30,6 +31,8 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(i18n);
 app.use(router);
+// «د.أ» / «JOD» next to an amount, by language (used in markup as <CurrencyText />).
+app.component('CurrencyText', CurrencyText);
 app.mount('#app');
 
 // Speed-ups that must never block or break the first render.

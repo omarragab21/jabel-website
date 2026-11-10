@@ -89,7 +89,7 @@
 
                   <!-- Item Line Total (Price + Riyal Symbol) -->
                   <div class="item-line-total">
-                    <span class="riyal-icon item-riyal currency-text" aria-hidden="true" style="font-size: 14px">د.أ</span>
+                    <CurrencyText class="riyal-icon item-riyal currency-text" aria-hidden="true" style="font-size: 14px" />
                     <span class="price-val">{{ formatPrice(getItemPriceWithDiscount(item)) }}</span>
                   </div>
 
@@ -162,7 +162,7 @@
             <!-- Row Subtotal -->
             <div class="summary-row row-subtotal">
               <div class="price-unit">
-                <span class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px">د.أ</span>
+                <CurrencyText class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px" />
                 <span class="price-val">{{ formatPrice(subtotalWithDiscount) }}</span>
               </div>
               <span class="summary-label">{{ tr('checkout.subtotal', 'المجموع الفرعي') }}</span>
@@ -174,7 +174,7 @@
               <div class="summary-row row-discount">
                 <div class="price-unit discount-unit">
                   <span class="minus-sign">-</span>
-                  <span class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px">د.أ</span>
+                  <CurrencyText class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px" />
                   <span class="price-val">{{ formatPrice(discountAmount) }}</span>
                 </div>
                 <span class="summary-label">{{ tr('checkout.discount', 'الخصم') }}</span>
@@ -186,7 +186,7 @@
             <div class="summary-row-divider"></div>
             <div class="summary-row row-vat">
               <div class="price-unit">
-                <span class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px">د.أ</span>
+                <CurrencyText class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px" />
                 <span class="price-val">{{ formatPrice(taxAmount) }}</span>
               </div>
               <span class="summary-label">{{ vatLabelText }}</span>
@@ -198,7 +198,7 @@
             <div class="summary-row-divider"></div>
             <div class="summary-row row-shipping">
               <div class="price-unit">
-                <span class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px">د.أ</span>
+                <CurrencyText class="riyal-icon summary-riyal currency-text" aria-hidden="true" style="font-size: 13px" />
                 <span class="price-val">{{ formatPrice(shippingAmount) }}</span>
               </div>
               <span class="summary-label">{{ tr('checkout.shipping_fees', 'رسوم الشحن والتوصيل') }}</span>
@@ -210,7 +210,7 @@
             <!-- Row Total -->
             <div class="summary-row row-total">
               <div class="price-unit total-price-unit">
-                <span class="riyal-icon total-riyal currency-text" aria-hidden="true" style="font-size: 19px">د.أ</span>
+                <CurrencyText class="riyal-icon total-riyal currency-text" aria-hidden="true" style="font-size: 19px" />
                 <span class="total-price-val">{{ formatPrice(grandTotal) }}</span>
               </div>
               <span class="total-label">{{ tr('checkout.total', 'الإجمالي') }}</span>

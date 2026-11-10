@@ -18,6 +18,7 @@
         :alt="productName" 
         ref="primaryImg"
         class="product-image primary-img" 
+        :class="{ 'is-brand-fallback': !product.image }"
         loading="lazy" 
         decoding="async"
         width="480"
@@ -39,11 +40,14 @@
         @error="handleSecondaryImageError"
       />
       
+      <WishlistHeart :product="product" />
+
       <!-- Badges -->
       <div class="product-badges">
         <span class="badge-new" v-if="isNewProduct">{{ currentLang === 'ar' ? 'جديد' : 'NEW' }}</span>
         <span class="badge-sale" dir="ltr" v-if="discountPercentage > 0" data-testid="discount-badge">
-          <template v-if="fixedAmount">-<span class="badge-riyal currency-text" data-testid="discount-riyal" aria-hidden="true" style="font-size: 10px">د.أ</span>{{ fixedAmount }}</template>
+          <template v-if="fixedAmount && currentLang === 'en'">-{{ fixedAmount }} <CurrencyText class="badge-riyal currency-text" data-testid="discount-riyal" aria-hidden="true" style="font-size: 10px" /></template>
+          <template v-else-if="fixedAmount">-<CurrencyText class="badge-riyal currency-text" data-testid="discount-riyal" aria-hidden="true" style="font-size: 10px" />{{ fixedAmount }}</template>
           <template v-else>{{ discountLabel }}</template>
         </span>
       </div>
@@ -67,16 +71,16 @@
 
       <!-- Discount area keeps its height even when there is no discount -->
       <div class="discount-area">
-        <div class="old-price" v-if="discountPercentage > 0" dir="ltr">
-          <span class="old-price-riyal currency-text" aria-hidden="true" style="font-size: 11px">د.أ</span>
+        <div class="old-price" :class="{ 'is-en': currentLang === 'en' }" v-if="discountPercentage > 0" dir="ltr">
+          <CurrencyText class="old-price-riyal currency-text" aria-hidden="true" style="font-size: 11px" />
           <span class="old-price-val">{{ formatPrice(product.price) }}</span>
         </div>
       </div>
 
       <!-- Price and Add to Cart -->
       <div class="product-bottom-row">
-        <div class="current-price-row" dir="ltr">
-          <span class="currency-symbol-svg currency-text" aria-hidden="true" style="font-size: 15px">د.أ</span>
+        <div class="current-price-row" :class="{ 'is-en': currentLang === 'en' }" dir="ltr">
+          <CurrencyText class="currency-symbol-svg currency-text" aria-hidden="true" style="font-size: 15px" />
           <span class="price-val">{{ formatPrice(currentPrice) }}</span>
         </div>
 
@@ -99,6 +103,7 @@ import { discountBadgeText, fixedDiscountAmount } from '../../../domain/product/
 import { useLocalized } from '../../../composables/useLocalized';
 import { formatPrice } from '../../../utils/price';
 import bagIcon from '../../../assets/card-bag.svg';
+import WishlistHeart from '../../../components/WishlistHeart.vue';
 
 const props = defineProps({
   product: {
@@ -215,7 +220,9 @@ const currentPrice = computed(() => {
   return price * (1 - (discount / 100));
 });
 
+// A missing or broken picture is replaced by the Jabel mark (shown whole, centred, not stretched).
 const handleImageError = (event) => {
+  event.target.classList.add('is-brand-fallback');
   event.target.src = '/brand/jabel-icon.png';
 };
 

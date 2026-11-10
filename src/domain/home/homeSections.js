@@ -9,12 +9,6 @@ export const HOME_SECTIONS_KEY = 'home_product_sections';
 
 export const SECTION_SOURCES = ['featured', 'new_arrivals', 'category'];
 
-// With nothing saved yet the homepage keeps its two original lists.
-export const DEFAULT_HOME_SECTIONS = Object.freeze([
-  { id: 'featured', title_ar: 'منتجات مميزة', title_en: 'Featured Products', source: 'featured', category_id: null, limit: 4, is_active: true },
-  { id: 'new_arrivals', title_ar: 'وصل حديثاً', title_en: 'New Arrivals', source: 'new_arrivals', category_id: null, limit: 4, is_active: true },
-]);
-
 const parseValue = (value) => {
   if (typeof value !== 'string') return value;
   try { return JSON.parse(value); } catch { return null; }
@@ -49,9 +43,8 @@ export const parseHomeSections = (value) => {
 // What the homepage renders: the saved active lists (a category list needs its category).
 export const homeSectionsToRender = (value) => {
   const saved = parseHomeSections(value);
-  // An empty or never-saved list falls back to the two original lists (the dashboard shows the same).
-  const sections = saved?.length ? saved : DEFAULT_HOME_SECTIONS.map(normalizeHomeSection);
-  return sections.filter((section) => section.is_active && (section.source !== 'category' || section.category_id));
+  // Only what the dashboard saved: with no lists saved there are no product lists on the homepage.
+  return (saved || []).filter((section) => section.is_active && (section.source !== 'category' || section.category_id));
 };
 
 export const sectionViewAllLink = (section) => {

@@ -6,6 +6,7 @@
               <!-- image-actions-bar -->
               <div class="image-actions-bar">
                 <span v-if="categoryLabel" class="category-name">{{ categoryLabel }}</span>
+                <WishlistHeart :product="product" variant="inline" show-text class="detail-wishlist" />
                 <button class="share-action-btn" @click.stop="emit('open-share')" type="button" :title="locale === 'ar' ? 'مشاركة المنتج' : 'Share product'">
                   <span class="share-icon-box"><span class="share-icon-inset"><img :src="shareIcon" alt="" class="share-icon-svg" /></span></span>
                   <span>{{ locale === 'ar' ? 'مشاركة' : 'Share' }}</span>
@@ -35,13 +36,12 @@
             <!-- Price Block + Stock status -->
             <div v-if="currentPrice !== null" class="price-status-bar">
               <div class="price-group">
-                <div class="price-unit" dir="ltr">
-                  <span class="riyal-svg currency-text" v-if="showRiyalIcon" aria-hidden="true" style="font-size: 26px">د.أ</span>
+                <div class="price-unit" :class="{ 'is-en': locale === 'en' }" dir="ltr">
+                  <CurrencyText class="riyal-svg currency-text" aria-hidden="true" style="font-size: 26px" />
                   <span class="price-amount">{{ formatPrice(shownPrice) }}</span>
-                  <span class="currency-code" v-if="!showRiyalIcon">{{ currency }}</span>
                 </div>
-                <div v-if="hasDiscount" class="price-before-discount" dir="ltr">
-                  <span class="riyal-mask-sm currency-text" v-if="showRiyalIcon" aria-hidden="true" style="font-size: 13px">د.أ</span>
+                <div v-if="hasDiscount" class="price-before-discount" :class="{ 'is-en': locale === 'en' }" dir="ltr">
+                  <CurrencyText class="riyal-mask-sm currency-text" aria-hidden="true" style="font-size: 13px" />
                   <span>{{ formatPrice(product.price) }}</span>
                 </div>
                 <span class="vat-tag">{{ locale === 'ar' ? 'شامل ضريبة القيمة المضافة' : 'Includes VAT' }}</span>
@@ -89,6 +89,7 @@
 </template>
 <script setup>
 import { computed, toRefs } from 'vue';
+import WishlistHeart from '../../../components/WishlistHeart.vue';
 import shareIcon from '../../../assets/pd-share.svg';
 import starFilledIcon from '../../../assets/pd-star-filled.svg';
 import starEmptyIcon from '../../../assets/pd-star-empty.svg';
@@ -106,7 +107,6 @@ const categoryLabel = computed(() => {
   }
   return '';
 });
-const showRiyalIcon = computed(() => locale.value === 'ar' || !currency.value || currency.value === 'JOD');
 // Inside a running bundle the page shows the bundle's price for this product next to the old one.
 const shownPrice = computed(() => bundleDeal.value?.price ?? currentPrice.value);
 const hasDiscount = computed(() => Number(product.value?.price) > Number(shownPrice.value));

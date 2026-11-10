@@ -47,7 +47,7 @@
             <!-- price-unit -->
             <div class="price-unit">
               <!-- riyal symbol -->
-              <span class="riyal-symbol currency-text" aria-hidden="true" style="font-size: 15px">د.أ</span>
+              <CurrencyText class="riyal-symbol currency-text" aria-hidden="true" style="font-size: 15px" />
               <!-- price -->
               <span class="price-value">{{ displayPrice }}</span>
             </div>

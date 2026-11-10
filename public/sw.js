@@ -1,8 +1,8 @@
 /* Jabel static-asset cache. API requests are never intercepted. */
-const VERSION = 'v1';
-const STATIC_CACHE = `mg-static-${VERSION}`;
-const IMAGE_CACHE = `mg-images-${VERSION}`;
-const PAGE_CACHE = `mg-pages-${VERSION}`;
+const VERSION = 'v2';
+const STATIC_CACHE = `jb-static-${VERSION}`;
+const IMAGE_CACHE = `jb-images-${VERSION}`;
+const PAGE_CACHE = `jb-pages-${VERSION}`;
 const KNOWN_CACHES = [STATIC_CACHE, IMAGE_CACHE, PAGE_CACHE];
 
 const MAX_IMAGES = 250;

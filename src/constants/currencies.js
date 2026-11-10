@@ -2,8 +2,10 @@
  * Shared currency and pricing configuration constants.
  */
 
+// The label itself lives in utils/currency.js (Arabic «د.أ», English «JOD»).
 export const DEFAULT_CURRENCY = 'JOD';
 export const DEFAULT_CURRENCY_AR = 'د.أ';
+export const DEFAULT_CURRENCY_EN = 'JOD';
 export const DEFAULT_CURRENCY_SYMBOL = 'د.أ';
 export const DEFAULT_FREE_DELIVERY_THRESHOLD = 500;
 export const DEFAULT_SHIPPING_COST = 25;

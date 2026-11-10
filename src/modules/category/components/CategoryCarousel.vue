@@ -4,7 +4,7 @@
         <div class="section-title-wrap">
           <!-- title null = the page is still loading its settings: a skeleton, not the default title -->
           <span v-if="title === null" class="sk-shimmer sk-line category-title-skeleton" aria-hidden="true"></span>
-          <h2 v-else class="section-title">{{ title || t('home.shop_by_category') }}</h2>
+          <h2 v-else-if="title" class="section-title">{{ title }}</h2>
         </div>
         <div class="section-nav-actions">
           <button class="nav-circle-btn" :class="{ 'is-hidden': !canPrev, 'is-active': activeDirection === 'prev' }" :disabled="!canPrev" @click="scrollCategoriesSlider('prev')" :aria-label="currentLang === 'ar' ? 'السابق' : 'Previous'">

@@ -444,3 +444,17 @@
     max-width: none;
   }
 }
+
+/* Fallback picture (no image / failed to load): the Jabel mark, centred and contained */
+.product-image.is-brand-fallback {
+  object-fit: contain;
+  padding: 56px;
+  box-sizing: border-box;
+  background: #f8fafc;
+}
+
+/* English: the amount first (left) and «JOD» after it (right). */
+.current-price-row.is-en,
+.old-price.is-en {
+  flex-direction: row-reverse;
+}

@@ -9,7 +9,7 @@ export function useCartSummary({ items, getItemPrice, getSetting, discountAmount
       : fallback;
   };
 
-  const taxRate = computed(() => readNumericSetting('tax_rate', 15));
+  const taxRate = computed(() => readNumericSetting('tax_rate', 0));
   const shippingCost = computed(() => readNumericSetting('shipping_cost', 0));
   const freeDeliveryThreshold = computed(() => freeShippingThreshold(readNumericSetting('free_delivery_threshold', 0)));
 
