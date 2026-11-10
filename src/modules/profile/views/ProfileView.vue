@@ -621,7 +621,22 @@
 
               <!-- 3) products-card -->
               <div class="products-card">
-                <h3 class="products-card-title">{{ t('profile.ordered_products') }}</h3>
+                <div class="products-card-head">
+                  <h3 class="products-card-title">{{ t('profile.ordered_products') }}</h3>
+                  <!-- Delivered orders only: one rating + comment for every product -->
+                  <button
+                    v-if="canRateSelectedOrder && (selectedOrderDetails.items || []).length > 1"
+                    type="button"
+                    class="btn-rate-product btn-rate-all"
+                    :class="{ done: allItemsRated }"
+                    :disabled="allItemsRated"
+                    data-testid="rate-all-products-btn"
+                    @click="rateAllOrderItems"
+                  >
+                    <i :class="allItemsRated ? 'fas fa-check' : 'far fa-star'" aria-hidden="true"></i>
+                    <span>{{ allItemsRated ? t('profile.all_products_rated') : t('profile.rate_all_products') }}</span>
+                  </button>
+                </div>
 
                 <!-- Table Header (RTL: Product, Price, Qty, Total) -->
                 <div class="products-table-header">
@@ -1333,7 +1348,11 @@
         <h3 class="modal-title">{{ t('profile.rate_products') }}</h3>
         <p class="modal-desc">{{ t('profile.rating_desc') }}</p>
 
-        <div class="rating-item-select" v-if="ratingOrder">
+        <p v-if="ratingAll" class="rating-all-note" data-testid="rating-all-note">
+          {{ t('profile.rate_all_note', { count: ratingAllItems.length }) }}
+        </p>
+
+        <div class="rating-item-select" v-else-if="ratingOrder">
            <label>{{ t('profile.choose_product_to_rate') }}:</label>
            <div class="rating-prods-scroll">
               <div v-for="item in (ratingOrder.items || ratingOrder.products)" 
@@ -2608,7 +2627,60 @@ const isItemRated = (item) =>
 
 const rateOrderItem = (item) => initiateRating(selectedOrderDetails.value, item)
 
+// "Rate all": the same stars + comment are sent once per product not yet rated.
+const ratingAll = ref(false)
+const ratingAllItems = computed(() =>
+  (ratingOrder.value?.items || ratingOrder.value?.products || []).filter((item) => !isItemRated(item))
+)
+const allItemsRated = computed(() => {
+  const items = selectedOrderDetails.value?.items || []
+  return items.length > 0 && items.every(isItemRated)
+})
+const rateAllOrderItems = () => {
+  initiateRating(selectedOrderDetails.value)
+  ratingAll.value = true
+}
+
+const submitRatingForAll = async () => {
+  const items = ratingAllItems.value
+  if (!items.length) return
+  loadingData.value = true
+  try {
+    // One product can appear on several lines; review it once.
+    const productIds = [...new Set(items.map(itemProductId))]
+    const results = await Promise.allSettled(
+      productIds.map((productId) =>
+        profileStore.submitReview({
+          product_id: productId,
+          rating: ratingValue.value,
+          comment: ratingComment.value,
+          order_id: ratingOrder.value.id
+        })
+      )
+    )
+    let firstError = null
+    results.forEach((result, index) => {
+      if (result.status === 'fulfilled') {
+        if (!ratedProductIds.value.includes(productIds[index])) ratedProductIds.value.push(productIds[index])
+      } else if (!firstError) {
+        firstError = result.reason
+      }
+    })
+    if (!firstError) {
+      dialog.alert(t('profile.thanks_for_rating'), { type: 'success', title: t('profile.your_rating') })
+      showRatingModal.value = false
+    } else {
+      // Keep the modal open: the products that failed are still listed as unrated.
+      dialog.alert(firstError.response?.data?.message || t('profile.rating_failed'), { type: 'error', title: t('profile.your_rating') })
+      if (!ratingAllItems.value.length) showRatingModal.value = false
+    }
+  } finally {
+    loadingData.value = false
+  }
+}
+
 const initiateRating = (order, item = null) => {
+  ratingAll.value = false
   ratingOrder.value = order
   showRatingModal.value = true
   ratingItem.value = item || order.items?.[0] || order.products?.[0]
@@ -2617,6 +2689,7 @@ const initiateRating = (order, item = null) => {
 }
 
 const submitRating = async () => {
+  if (ratingAll.value) return submitRatingForAll()
   if (!ratingItem.value) return
   loadingData.value = true
   try {
@@ -6453,6 +6526,32 @@ html[dir="ltr"] .country-readonly-input {
   border-color: #E2E8F0;
   color: #64748b;
   cursor: default;
+}
+
+/* Products card header: title at the start, "rate all" at the end (flips with dir) */
+.products-card-head {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+.products-card-head .products-card-title { text-align: start; flex: 1 1 auto; min-width: 0; }
+.btn-rate-all { margin-top: 0; height: 40px; padding: 8px 20px; flex: none; white-space: nowrap; }
+
+.rating-all-note {
+  margin: 0 0 20px;
+  padding: 10px 14px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #1e293b;
+  text-align: center;
 }
 
 .btn-rate-v2, .btn-return-v2 {
