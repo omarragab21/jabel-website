@@ -825,12 +825,12 @@ onUnmounted(() => {
 
 /* Carousel Indicators (Dots) */
 .hero-indicators {
+  display: flex; /* shown on desktop; hidden on phones (see the max-width: 768px block) */
   position: absolute;
   bottom: 22px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  display: flex;
   align-items: center;
   gap: 8px;
   padding: 6px 14px;
@@ -1129,7 +1129,9 @@ onUnmounted(() => {
   border-radius: 9999px;
   background: #ffffff;
   color: #000000;
-  border: 1px solid #E2E8F0;
+  /* No outline: a soft grey shadow lifts the button instead. */
+  border: none;
+  box-shadow: 0 2px 8px rgba(100, 116, 139, 0.28);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1140,16 +1142,17 @@ onUnmounted(() => {
 .nav-circle-btn.is-active {
   background: var(--color-brand-primary, #000000);
   color: #ffffff;
-  border-color: #000000;
 }
 
 .nav-circle-btn:hover {
   transform: scale(1.06);
 }
 
+/* Both arrows always show; the one that cannot go any further is dimmed. */
 .nav-circle-btn.is-hidden {
-  opacity: 0;
-  visibility: hidden;
+  opacity: 0.4;
+  box-shadow: 0 1px 4px rgba(100, 116, 139, 0.18);
+  cursor: default;
   pointer-events: none;
 }
 
@@ -1337,9 +1340,18 @@ onUnmounted(() => {
     width: 100%;
   }
 
-  /* Phones swipe-free but arrow-free: only the dots show */
-  .hero-nav-arrow {
+  /* Phones: no dots (they stay in the markup, shown on desktop only). The arrows sit at the bottom corners,
+     inside the 76px bottom padding of the hero, so they never overlap the title, text or button. */
+  .hero-indicators {
     display: none;
+  }
+
+  .hero-nav-arrow {
+    top: auto;
+    bottom: 16px;
+    transform: none;
+    width: 40px;
+    height: 40px;
   }
 
   .hero-nav-arrow:hover {

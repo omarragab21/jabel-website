@@ -34,14 +34,21 @@
         <label class="add-address-label">{{ t('profile.mobile') }}</label>
         <div class="phone-input-container">
           <div class="phone-country-code">
-            <span class="phone-prefix" dir="ltr">&lrm;+966</span>
+            <span class="phone-prefix" dir="ltr">&lrm;{{ phoneCountryObj.dialCode }}</span>
+            <span class="phone-flag" aria-hidden="true">{{ phoneCountryObj.flag }}</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="phone-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            <select v-model="addressForm.phoneCountry" class="phone-country-select" :aria-label="t('auth.country')">
+              <option v-for="c in countries" :key="c.code" :value="c.code">
+                {{ c.dialCode }} {{ c.flag }} - {{ locale === 'ar' ? c.nameAr : c.nameEn }}
+              </option>
+            </select>
             <span class="phone-divider"></span>
           </div>
           <input 
             type="tel" 
             v-model="addressForm.phone" 
             class="phone-number-input" 
-            placeholder="5XXXXXXXX" 
+            :placeholder="phoneCountryObj.placeholder" 
             dir="ltr"
             required 
           />
@@ -128,6 +135,8 @@
 <script setup>
 import { computed, reactive, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { countries, findCountryByCode } from '../data/countries'
+import { DEFAULT_PHONE_COUNTRY, joinPhone, splitPhone } from '../utils/phone'
 import { defaultCityOptions, regionsForCity, joinCityRegion, regionFromCityPart } from '../data/jordanPlaces'
 import { placeLabel as placeLabelFor } from '../utils/placeLabels'
 
@@ -143,19 +152,21 @@ const props = defineProps({
 const emit = defineEmits(['close', 'save'])
 
 const { t, locale } = useI18n()
+const phoneCountryObj = computed(() => findCountryByCode(addressForm.phoneCountry))
 const placeLabel = (name) => placeLabelFor(name, locale.value)
 const isEdit = computed(() => Boolean(props.address?.id))
 
-const addressForm = reactive({ name: '', full_name: '', phone: '', city: '', region: '', address: '', notes: '', is_default: false })
+const addressForm = reactive({ name: '', full_name: '', phone: '', phoneCountry: DEFAULT_PHONE_COUNTRY, city: '', region: '', address: '', notes: '', is_default: false })
 
 const fillFrom = (addr) => {
   if (!addr) {
-    Object.assign(addressForm, { name: '', full_name: '', phone: '', city: '', region: '', address: '', notes: '', is_default: props.makeDefault })
+    Object.assign(addressForm, { name: '', full_name: '', phone: '', phoneCountry: DEFAULT_PHONE_COUNTRY, city: '', region: '', address: '', notes: '', is_default: props.makeDefault })
     return
   }
-  let phoneVal = addr.phone || ''
-  phoneVal = phoneVal.replace(/^\+966/, '').replace(/^966/, '')
-  if (phoneVal.startsWith('05')) phoneVal = phoneVal.substring(1)
+  // Older saved addresses hold a Saudi local number ("05…"): read those as Saudi, everything else by its dial code.
+  const stored = String(addr.phone || '').trim()
+  const legacySaudi = /^05\d{8}$/.test(stored)
+  const { country: phoneCountry, national: phoneVal } = splitPhone(stored, legacySaudi ? 'SA' : DEFAULT_PHONE_COUNTRY)
 
   const parts = (addr.city || '').split('،').map((p) => p.trim())
   const cityVal = parts[0] || addr.city || ''
@@ -165,6 +176,7 @@ const fillFrom = (addr) => {
     name: addr.name || addr.full_name || '',
     full_name: addr.full_name || addr.name || '',
     phone: phoneVal,
+    phoneCountry,
     city: cityVal,
     region: regionVal,
     address: addr.address || '',
@@ -199,11 +211,7 @@ const onCityChange = () => {
 const close = () => emit('close')
 
 const submit = () => {
-  let formattedPhone = (addressForm.phone || '').trim()
-  if (formattedPhone.startsWith('0')) formattedPhone = formattedPhone.substring(1)
-  if (!formattedPhone.startsWith('05') && formattedPhone.startsWith('5')) {
-    formattedPhone = '0' + formattedPhone
-  }
+  const formattedPhone = joinPhone(addressForm.phoneCountry, addressForm.phone)
   emit('save', {
     name: addressForm.full_name,
     full_name: addressForm.full_name,
@@ -613,5 +621,17 @@ const submit = () => {
     opacity: 1;
     transform: scale(1) translateY(0);
   }
+}
+
+.phone-country-code { position: relative; cursor: pointer; }
+.phone-flag { font-size: 16px; line-height: 1; }
+.phone-chevron { color: #64748B; flex-shrink: 0; }
+.phone-country-select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 </style>

@@ -1411,6 +1411,7 @@ import { cartState } from '../../../store/cart'
 import SelectedOptionsChips from '../../../components/SelectedOptionsChips.vue'
 import { orderItemChoices, parseCancelReason, parseOrderOptions } from '../../../domain/order/orderOptions'
 import { summaryRows } from '../../../domain/cart/summaryRows.js'
+import { localizeApiMessage } from '../../../utils/apiMessages.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -1527,7 +1528,7 @@ const viewOrderDetails = (order) => {
 }
 
 // Form State
-const form = reactive({ name: '', email: '', phone: '', country: 'SA', rawCountryCode: 'SA' })
+const form = reactive({ name: '', email: '', phone: '', country: 'JO', rawCountryCode: 'JO' })
 const showPasswordForm = ref(false)
 const showChangePasswordModal = ref(false)
 const isEditingProfile = ref(false)
@@ -1542,7 +1543,7 @@ const displayUserEmail = computed(() => form.email || authState.user?.email || '
 const displayUserPhone = computed(() => form.phone || authState.user?.phone || authState.user?.phone_number || '')
 
 // Phone edit state: country selector (flag + dial code) and the national number
-const phoneCountry = ref('SA')
+const phoneCountry = ref('JO')
 const phoneLocal = ref('')
 const phoneError = ref('')
 
@@ -1659,7 +1660,7 @@ const handleUpdateProfile = async () => {
 
 // Country Localization
 const userCountryObj = computed(() => {
-  const code = form.rawCountryCode || authState.user?.country || 'SA';
+  const code = form.rawCountryCode || authState.user?.country || 'JO';
   return findCountryByCode(code);
 });
 
@@ -1812,9 +1813,12 @@ const trackingSteps = [
   { key: 'delivered', rank: 6, get label() { return t('profile.ts_delivered') }, icon: 'fas fa-house', dateField: 'deliveredAt' },
 ]
 
+const LAST_TRACKING_RANK = trackingSteps[trackingSteps.length - 1].rank
+
 const getTrackingStepState = (order, step) => {
   const rank = getTrackingRank(order)
-  if (rank >= step) return rank === step ? 'active' : 'completed'
+  // The last step has nothing after it: once reached it is done (green), not "in progress" (orange).
+  if (rank >= step) return rank === step && step < LAST_TRACKING_RANK ? 'active' : 'completed'
   return 'pending'
 }
 
@@ -2671,7 +2675,7 @@ const submitRatingForAll = async () => {
       showRatingModal.value = false
     } else {
       // Keep the modal open: the products that failed are still listed as unrated.
-      dialog.alert(firstError.response?.data?.message || t('profile.rating_failed'), { type: 'error', title: t('profile.your_rating') })
+      dialog.alert(localizeApiMessage(firstError.response?.data?.message, locale.value) || t('profile.rating_failed'), { type: 'error', title: t('profile.your_rating') })
       if (!ratingAllItems.value.length) showRatingModal.value = false
     }
   } finally {
@@ -2707,7 +2711,7 @@ const submitRating = async () => {
     dialog.alert(t('profile.thanks_for_rating'), { type: 'success', title: t('profile.your_rating') })
     showRatingModal.value = false
   } catch (err) {
-    dialog.alert(err.response?.data?.message || t('profile.rating_failed'), { type: 'error', title: t('profile.your_rating') })
+    dialog.alert(localizeApiMessage(err.response?.data?.message, locale.value) || t('profile.rating_failed'), { type: 'error', title: t('profile.your_rating') })
   } finally {
     loadingData.value = false
   }

@@ -1,5 +1,5 @@
 // Privacy policy and Terms & Conditions text. It is edited in the dashboard and stored in the site settings
-// API under the key "legal_pages" ({ privacy: {...}, terms: {...} }), the same place as every other site setting.
+// API under the key "legal_pages" ({ privacy, terms, returns, faq }), the same place as every other site setting.
 import settingsService from './settingsService';
 import { settingsToObject } from '../utils/siteSettings';
 
@@ -47,7 +47,7 @@ const asObject = (value) => {
   return value && typeof value === 'object' ? value : {};
 };
 
-// The page `id` ("privacy" | "terms") out of the site settings object.
+// The page `id` ("privacy" | "terms" | "returns" | "faq") out of the site settings object.
 const legalPageFrom = (settings, id) => {
   const data = asObject(asObject(settings.legal_pages)[id]);
   const sections = (Array.isArray(data.sections) ? data.sections : [])
@@ -58,12 +58,12 @@ const legalPageFrom = (settings, id) => {
     updated_at: /^\d{4}-\d{2}$/.test(str(data.updated_at)) ? data.updated_at : '',
     tagline_ar: str(data.tagline_ar),
     tagline_en: str(data.tagline_en),
-    banner: data.banner === undefined ? { ...DEFAULT_BANNERS[id] } : cleanBanner(asObject(data.banner)),
+    banner: data.banner === undefined ? { ...(DEFAULT_BANNERS[id] || {}) } : cleanBanner(asObject(data.banner)),
     sections,
   };
 };
 
-/** The page `id` ("privacy" | "terms") from the site settings; empty while the API has none. */
+/** The page `id` ("privacy" | "terms" | "returns" | "faq") from the site settings; empty while the API has none. */
 export const loadLegalPage = async (id) => legalPageFrom(settingsToObject(await settingsService.getSettings()), id);
 
 /** The page from fresh cached settings (renders at once, no skeleton), or null. */

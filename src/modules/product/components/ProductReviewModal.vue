@@ -5,8 +5,8 @@
         <div v-if="visible" class="share-modal-overlay" @click.self="emit('close')">
           <div class="share-modal-content review-modal-card">
             <div class="share-header">
-              <button class="share-close" @click="emit('close')"><i class="fas fa-times"></i></button>
               <h3 class="share-title">{{ locale === 'ar' ? 'إضافة تقييم' : 'Add Review' }}</h3>
+              <button class="share-close" @click="emit('close')"><i class="fas fa-times"></i></button>
             </div>
             
             <div v-if="!user" class="login-prompt">

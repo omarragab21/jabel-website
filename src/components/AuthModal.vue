@@ -237,7 +237,7 @@ const showLoginPassword = ref(false)
 const showRegisterPassword = ref(false)
 const rememberMe = ref(typeof localStorage !== 'undefined' && localStorage.getItem('c_remember') === 'true')
 
-const selectedCountry = ref('SA')
+const selectedCountry = ref('JO')
 
 
 const loginForm = reactive({

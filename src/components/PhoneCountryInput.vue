@@ -40,7 +40,7 @@ import { countries, findCountryByCode } from '../data/countries';
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
-  country: { type: String, default: 'SA' },
+  country: { type: String, default: 'JO' },
   error: { type: Boolean, default: false },
   dir: { type: String, default: 'rtl' },
   countryLabel: { type: String, default: '' },

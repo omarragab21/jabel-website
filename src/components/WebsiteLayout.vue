@@ -24,12 +24,13 @@
             <DeliveryAddressDropdown class="desktop-only" />
 
             <!-- Search field (desktop) -->
-            <button type="button" class="search-field desktop-only" @click="showSearchModal = true">
-              <span class="search-field-placeholder">{{ currentLang === 'ar' ? 'ابحث في المنتجات...' : 'Search products...' }}</span>
-            </button>
+            <HeaderSearch class="desktop-only" />
 
             <!-- Icons & language (desktop) -->
             <div class="header-left desktop-only">
+              <button class="lang-toggle-btn" @click="toggleLanguage" :title="currentLang === 'ar' ? 'English' : 'العربية'">
+                <span>{{ currentLang === 'ar' ? 'English' : 'العربية' }}</span>
+              </button>
               <div class="header-nav-icons">
                 <router-link to="/wishlist" class="header-icon-link wishlist-link" :title="currentLang === 'ar' ? 'المفضلة' : 'Wishlist'">
                   <img :src="heartAddIcon" alt="" class="nav-heart-icon" />
@@ -70,9 +71,6 @@
                 </a>
               </div>
 
-              <button class="lang-toggle-btn" @click="toggleLanguage" :title="currentLang === 'ar' ? 'English' : 'العربية'">
-                <span>{{ currentLang === 'ar' ? 'English' : 'العربية' }}</span>
-              </button>
             </div>
 
         <!-- Mobile Side Actions (Left in RTL Mobile) -->
@@ -260,6 +258,8 @@
               <li><router-link to="/contact">{{ currentLang === 'ar' ? 'الدعم الفني' : 'Technical Support' }}</router-link></li>
               <li><router-link to="/page/privacy">{{ currentLang === 'ar' ? 'سياسة الخصوصية والاستخدام' : 'Privacy & Terms' }}</router-link></li>
               <li><router-link to="/page/terms">{{ currentLang === 'ar' ? 'الشروط والأحكام' : 'Terms & Conditions' }}</router-link></li>
+              <li><router-link to="/returns-policy">{{ currentLang === 'ar' ? 'سياسة الإرجاع والاستبدال' : 'Returns & Exchange Policy' }}</router-link></li>
+              <li><router-link to="/faq">{{ currentLang === 'ar' ? 'الأسئلة الشائعة' : 'FAQ' }}</router-link></li>
             </ul>
           </div>
 
@@ -342,6 +342,7 @@ import PushPrompt from './PushPrompt.vue';
 import CouponDialog from './CouponDialog.vue';
 import AppDialog from './AppDialog.vue';
 import WebsiteSearchModal from './WebsiteSearchModal.vue';
+import HeaderSearch from './HeaderSearch.vue';
 import { isOfferActive } from '../modules/product/composables/useOffers';
 import footerFacebookIcon from '../assets/footer-facebook.svg';
 import footerYoutubeIcon from '../assets/footer-youtube.svg';
@@ -550,7 +551,8 @@ const applySiteSettings = (rawSettings) => {
 
 // News bar under the navbar: the items saved in Settings > News bar, in the language being shown.
 const newsBarSetting = ref(null);
-const newsItems = computed(() => newsBarTexts(newsBarSetting.value, currentLang.value));
+// The news bar is shown on the home page only.
+const newsItems = computed(() => (route.path === '/' ? newsBarTexts(newsBarSetting.value, currentLang.value) : []));
 
 // The bar stands still while every item fits; as soon as they do not (many or long items, a narrow screen)
 // it scrolls without a break, at the same speed whatever the length.
@@ -1374,6 +1376,15 @@ onUnmounted(() => {
   gap: 16px;
   height: 22px;
 }
+
+/* English only: the language button goes to the far right, after the icons: [Wishlist] [Profile] [Cart] [العربية]. */
+html:not([dir="rtl"]) .header-left .header-nav-icons { order: 1; }
+html:not([dir="rtl"]) .header-left .lang-toggle-btn { order: 2; }
+
+/* Arabic only: [English] [Cart] [Profile] [Wishlist] (English keeps [Language] [Wishlist] [Profile] [Cart]). */
+html[dir="rtl"] .header-nav-icons .cart-link { order: 1; }
+html[dir="rtl"] .header-nav-icons .user-dropdown-container { order: 2; }
+html[dir="rtl"] .header-nav-icons .wishlist-link { order: 3; }
 
 .header-icon-link,
 /* Profile icon from Figma: the 24px "user" icon's drawing, inset the same way inside a 22px box. */

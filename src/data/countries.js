@@ -1,8 +1,8 @@
 // Comprehensive dataset of world countries with flags, dial codes, Arabic/English names, placeholders and validation rules
 export const countries = [
-  // Saudi Arabia comes first (the store's home market), then the rest of the Arab world
-  { code: 'SA', dialCode: '+966', flag: '🇸🇦', nameAr: 'السعودية', nameEn: 'Saudi Arabia', placeholder: '05 1234 5678', minLength: 9, maxLength: 14 },
+  // Jordan comes first (the store's home market), then the rest of the Arab world
   { code: 'JO', dialCode: '+962', flag: '🇯🇴', nameAr: 'الأردن', nameEn: 'Jordan', placeholder: '07 9123 4567', minLength: 9, maxLength: 14 },
+  { code: 'SA', dialCode: '+966', flag: '🇸🇦', nameAr: 'السعودية', nameEn: 'Saudi Arabia', placeholder: '05 1234 5678', minLength: 9, maxLength: 14 },
   { code: 'AE', dialCode: '+971', flag: '🇦🇪', nameAr: 'الإمارات', nameEn: 'United Arab Emirates', placeholder: '050 123 4567', minLength: 9, maxLength: 13 },
   { code: 'KW', dialCode: '+965', flag: '🇰🇼', nameAr: 'الكويت', nameEn: 'Kuwait', placeholder: '9123 4567', minLength: 8, maxLength: 13 },
   { code: 'QA', dialCode: '+974', flag: '🇶🇦', nameAr: 'قطر', nameEn: 'Qatar', placeholder: '3312 3456', minLength: 8, maxLength: 12 },
@@ -76,7 +76,7 @@ export const countries = [
 
 // Helper to find a country by code
 export function findCountryByCode(code) {
-  if (!code) return countries[0]; // Default to Saudi Arabia
+  if (!code) return countries[0]; // Default to Jordan
   return countries.find(c => c.code.toUpperCase() === code.toUpperCase()) || countries[0];
 }
 
