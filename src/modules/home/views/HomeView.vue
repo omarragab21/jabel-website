@@ -473,7 +473,7 @@ const stopHeroAutoplay = () => {
 const trustFeatures = computed(() => {
   if (currentLang.value === 'en') {
     return [
-      { id: 'quality', title: 'Quality Guaranteed' },
+      // { id: 'quality', title: 'Quality Guaranteed' }, // hidden (commented out)
       { id: 'authentic', title: 'Genuine Products' },
       { id: 'payment', title: 'Secure Payment' },
       { id: 'delivery', title: 'Fast Delivery' },
@@ -481,7 +481,7 @@ const trustFeatures = computed(() => {
     ];
   }
   return [
-    { id: 'quality', title: 'ضمان الجودة' },
+    // { id: 'quality', title: 'ضمان الجودة' }, // hidden (commented out)
     { id: 'authentic', title: 'منتجات أصلية' },
     { id: 'payment', title: 'دفع آمن' },
     { id: 'delivery', title: 'توصيل سريع' },
