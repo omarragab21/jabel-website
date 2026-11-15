@@ -2,8 +2,12 @@
   <div class="jabel-legal-info" :class="{ 'is-en': !isRtl }" :dir="isRtl ? 'rtl' : 'ltr'">
     
     <!-- 1. Hero Banner matching Figma hero-banner -->
-    <section class="hero-banner">
-      <div class="hero-content">
+    <section class="hero-banner" :class="{ 'is-loading sk-shimmer': !heroReady }" :style="heroReady ? heroStyle : {}" :aria-busy="!heroReady">
+      <div v-if="!heroReady" class="hero-content" aria-hidden="true">
+        <span class="sk-shimmer hero-sk hero-sk-title"></span>
+        <span class="sk-shimmer hero-sk hero-sk-sub"></span>
+      </div>
+      <div v-else class="hero-content">
         <!-- الشروط والأحكام / Terms & Conditions -->
         <h1 class="hero-title">
           {{ isRtl ? meta.titleAr : meta.titleEn }}
@@ -106,6 +110,29 @@ useSEO({
     };
   },
 });
+// Header photo chosen in the dashboard; without one the stylesheet's default photo stays.
+const heroUrl = computed(() => {
+  const value = String(page.value.hero_image || '').trim();
+  if (!value) return '';
+  if (/^(https?:\/\/|\/(?![/\\]))/i.test(value)) return value;
+  if (/^[/\\]{2}|^(?:javascript|vbscript|file|data):/i.test(value)) return '';
+  return `/storage/${value.replace(/^\/?storage\//i, '')}`;
+});
+const heroStyle = computed(() => (heroUrl.value
+  ? { backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("${heroUrl.value.replace(/["\\\n]/g, '')}")` }
+  : {}));
+// The header shows a shimmer until the settings arrived AND the chosen photo has finished loading, so no
+// placeholder photo ever flashes before the real one.
+const heroImageLoaded = ref(false);
+watch([pageReady, heroUrl], ([ready, url]) => {
+  heroImageLoaded.value = false;
+  if (!ready) return;
+  if (!url) { heroImageLoaded.value = true; return; }
+  const img = new Image();
+  img.onload = img.onerror = () => { if (heroUrl.value === url) heroImageLoaded.value = true; };
+  img.src = url;
+}, { immediate: true });
+const heroReady = computed(() => pageReady.value && heroImageLoaded.value);
 const subtitle = computed(() => {
   const updated = formatLegalMonth(page.value.updated_at, currentLang.value);
   const tagline = isRtl.value ? page.value.tagline_ar : page.value.tagline_en;
@@ -174,11 +201,17 @@ watch(pageId, () => {
   min-height: 240px;
   
   /* Photorealistic luxury kitchen background with dark overlay */
-  background: 
-    linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url('/images/about/hero_banner.jpg') center / cover no-repeat;
+  /* No built-in photo: the header image comes only from the dashboard; plain dark until/unless one is set. */
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)) center / cover no-repeat;
   background-color: #0F172A;
 }
+.hero-banner.is-loading {
+  background: linear-gradient(90deg, #e3e7ee 25%, #f4f6fa 50%, #e3e7ee 75%);
+  background-size: 200% 100%;
+}
+.hero-sk { border-radius: 10px; background: linear-gradient(90deg, #d5dae3 25%, #e9edf3 50%, #d5dae3 75%); background-size: 200% 100%; }
+.hero-sk-title { width: min(360px, 70%); height: 44px; }
+.hero-sk-sub { width: min(240px, 50%); height: 18px; }
 
 .hero-content {
   display: flex;

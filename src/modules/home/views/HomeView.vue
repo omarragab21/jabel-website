@@ -105,7 +105,7 @@
       </section>
     </div>
 
-    <!-- 2. Trust Bar (Features directly below Hero) -->
+    <!-- 2. Trust Bar (Features directly below Hero) - hidden (commented out)
     <section class="trust-bar-section">
       <div class="container trust-bar-container">
         <div class="trust-item" v-for="(feat, idx) in trustFeatures" :key="idx">
@@ -135,6 +135,7 @@
         </div>
       </div>
     </section>
+    -->
 
     <!-- 3. Shop by Category (تسوق حسب التصنيف) -->
     <CategoryCarousel :categories="homeCategories" :loading="categoriesLoading" :title="homeCategoryTitle" />

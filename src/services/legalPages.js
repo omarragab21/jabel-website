@@ -38,7 +38,7 @@ const DEFAULT_BANNERS = {
   },
 };
 
-export const emptyLegalPage = () => ({ updated_at: '', tagline_ar: '', tagline_en: '', banner: cleanBanner(), sections: [] });
+export const emptyLegalPage = () => ({ hero_image: '', updated_at: '', tagline_ar: '', tagline_en: '', banner: cleanBanner(), sections: [] });
 
 const asObject = (value) => {
   if (typeof value === 'string') {
@@ -55,6 +55,7 @@ const legalPageFrom = (settings, id) => {
     .sort((a, b) => a.position - b.position)
     .filter((s) => s.title_ar || s.title_en || s.text_ar || s.text_en);
   return {
+    hero_image: str(data.hero_image).trim(),
     updated_at: /^\d{4}-\d{2}$/.test(str(data.updated_at)) ? data.updated_at : '',
     tagline_ar: str(data.tagline_ar),
     tagline_en: str(data.tagline_en),
