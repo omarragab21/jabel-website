@@ -228,7 +228,7 @@ defineProps({
 })
 
 const isOpen = ref(false)
-const currentTab = ref('login')
+const currentTab = ref('register')
 const loading = computed(() => authState.loading)
 const globalError = ref('')
 const globalSuccess = ref('')
@@ -359,6 +359,7 @@ const validateForgotPasswordForm = () => {
 
 const openModal = () => {
   isOpen.value = true
+  currentTab.value = 'register'
   resetSuccess.value = false
   rememberMe.value = typeof localStorage !== 'undefined' && localStorage.getItem('c_remember') === 'true'
   document.body.style.overflow = 'hidden' 
@@ -367,7 +368,7 @@ const openModal = () => {
 
 const closeModal = () => {
   isOpen.value = false
-  currentTab.value = 'login'
+  currentTab.value = 'register'
   resetSuccess.value = false
   document.body.style.overflow = ''
   emit('close')
@@ -655,7 +656,7 @@ defineExpose({
   border-radius: 0;
   padding: 0;
   margin-bottom: 16px;
-  direction: rtl;
+  direction: ltr; /* sign in on the left, new account on the right, in both languages */
 }
 
 .tab-btn {

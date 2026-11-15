@@ -6,7 +6,7 @@
           <span v-if="title === null" class="sk-shimmer sk-line category-title-skeleton" aria-hidden="true"></span>
           <h2 v-else-if="title" class="section-title">{{ title }}</h2>
         </div>
-        <div class="section-nav-actions">
+        <div v-if="!loading && categories.length > 4" class="section-nav-actions">
           <button class="nav-circle-btn" :class="{ 'is-hidden': !canPrev, 'is-active': activeDirection === 'prev' }" :disabled="!canPrev" @click="scrollCategoriesSlider('prev')" :aria-label="currentLang === 'ar' ? 'السابق' : 'Previous'">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline :points="currentLang === 'ar' ? '9 18 15 12 9 6' : '15 18 9 12 15 6'"/>

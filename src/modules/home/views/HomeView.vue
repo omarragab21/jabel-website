@@ -163,7 +163,7 @@
         <div class="section-title-wrap">
           <h2 v-if="sectionTitle(section)" class="section-title">{{ sectionTitle(section) }}</h2>
         </div>
-        <router-link :to="sectionViewAllLink(section)" class="view-all-link">
+        <router-link v-if="!productsLoading && sectionHasMore(section)" :to="sectionViewAllLink(section)" class="view-all-link">
           <span>{{ t('home.view_all') }}</span>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline :points="currentLang === 'ar' ? '15 18 9 12 15 6' : '9 18 15 12 9 6'"/>
@@ -195,7 +195,7 @@
           <h2 v-if="homeOffersTitle" class="section-title">{{ homeOffersTitle }}</h2>
           <span v-else-if="!homeSettingsReady" class="sk-shimmer sk-line section-title-skeleton" aria-hidden="true"></span>
         </div>
-        <div class="section-nav-actions">
+        <div v-if="!offersLoading && displayOffers.length > 4" class="section-nav-actions">
           <button class="nav-circle-btn" :class="{ 'is-hidden': !offersCanPrev, 'is-active': offersActiveDirection === 'prev' }" :disabled="!offersCanPrev" @click="scrollOffersSlider('prev')" :aria-label="currentLang === 'ar' ? 'السابق' : 'Previous'">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline :points="currentLang === 'ar' ? '9 18 15 12 9 6' : '15 18 9 12 15 6'"/>
@@ -239,7 +239,7 @@
         <div class="section-title-wrap">
           <h2 v-if="sectionTitle(section)" class="section-title">{{ sectionTitle(section) }}</h2>
         </div>
-        <router-link :to="sectionViewAllLink(section)" class="view-all-link">
+        <router-link v-if="!productsLoading && sectionHasMore(section)" :to="sectionViewAllLink(section)" class="view-all-link">
           <span>{{ t('home.view_all') }}</span>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline :points="currentLang === 'ar' ? '15 18 9 12 15 6' : '9 18 15 12 9 6'"/>
@@ -334,6 +334,8 @@ const leadSections = computed(() => homeSections.value.slice(0, 1));
 const trailingSections = computed(() => homeSections.value.slice(1));
 const sectionProductsById = ref({});
 const sectionProducts = (section) => (sectionProductsById.value[section.id] || []).slice(0, section.limit);
+// «عرض الكل» only when the list has more than 4 products (counted before the display limit is applied).
+const sectionHasMore = (section) => (sectionProductsById.value[section.id] || []).length > 4;
 // The list's own title as written in the dashboard (Settings > Homepage); no title, no heading.
 const sectionTitle = (section) => {
   const own = currentLang.value === 'ar' ? section.title_ar || section.title_en : section.title_en || section.title_ar;
@@ -772,20 +774,91 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 
-/* Slide Right & Left transitions */
+/* ============================================================
+   Hero slide transition: "cinematic reveal"
+   - the new slide is revealed by a clip-path wipe from the side the arrow points to
+   - its photo zooms out from 1.45x while de-blurring (a camera pull-back)
+   - the old slide slides away in parallax, darkens and blurs
+   - a light streak sweeps across the screen on the wipe edge
+   - title, text and button rise in one after another (staggered, with blur)
+   Direction-independent: slide-right brings the new slide in from the right edge, slide-left from the left.
+   ============================================================ */
 .slide-right-enter-active,
+.slide-left-enter-active {
+  z-index: 3;
+  transition: clip-path 1.15s cubic-bezier(0.77, 0, 0.18, 1);
+}
 .slide-right-leave-active,
-.slide-left-enter-active,
 .slide-left-leave-active {
-  transition: opacity 0.65s cubic-bezier(0.25, 1, 0.5, 1), transform 0.65s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 2;
+  transition: transform 1.15s cubic-bezier(0.77, 0, 0.18, 1), filter 1.15s cubic-bezier(0.77, 0, 0.18, 1);
+}
+.slide-right-enter-from { clip-path: inset(0 0 0 100%); }
+.slide-left-enter-from { clip-path: inset(0 100% 0 0); }
+.slide-right-enter-to,
+.slide-left-enter-to { clip-path: inset(0 0 0 0); }
+.slide-right-leave-to { transform: translateX(-24%) scale(0.9); filter: brightness(0.25) blur(6px); }
+.slide-left-leave-to { transform: translateX(24%) scale(0.9); filter: brightness(0.25) blur(6px); }
+
+/* Photo: camera pull-back */
+.slide-right-enter-active .hero-bg,
+.slide-left-enter-active .hero-bg {
+  transition: transform 1.9s cubic-bezier(0.16, 1, 0.3, 1), filter 1.3s ease-out;
+}
+.slide-right-enter-from .hero-bg,
+.slide-left-enter-from .hero-bg {
+  transform: scale(1.45);
+  filter: brightness(1.5) blur(14px);
 }
 
-/* Direction-independent: the right arrow brings the new slide in from the
-   right, the left arrow brings it in from the left (same in RTL and LTR). */
-.slide-right-enter-from { opacity: 0; transform: translateX(48px); }
-.slide-right-leave-to { opacity: 0; transform: translateX(-48px); }
-.slide-left-enter-from { opacity: 0; transform: translateX(-48px); }
-.slide-left-leave-to { opacity: 0; transform: translateX(48px); }
+/* Text: staggered rise */
+.slide-right-enter-active .hero-title,
+.slide-left-enter-active .hero-title,
+.slide-right-enter-active .hero-desc,
+.slide-left-enter-active .hero-desc,
+.slide-right-enter-active .hero-actions,
+.slide-left-enter-active .hero-actions {
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease-out;
+}
+.slide-right-enter-active .hero-title, .slide-left-enter-active .hero-title { transition-delay: 0.5s; }
+.slide-right-enter-active .hero-desc, .slide-left-enter-active .hero-desc { transition-delay: 0.68s; }
+.slide-right-enter-active .hero-actions, .slide-left-enter-active .hero-actions { transition-delay: 0.86s; }
+.slide-right-enter-from .hero-title,
+.slide-left-enter-from .hero-title,
+.slide-right-enter-from .hero-desc,
+.slide-left-enter-from .hero-desc,
+.slide-right-enter-from .hero-actions,
+.slide-left-enter-from .hero-actions {
+  opacity: 0;
+  transform: translateY(70px) scale(0.96);
+  filter: blur(10px);
+}
+.slide-right-enter-from .hero-actions,
+.slide-left-enter-from .hero-actions { transform: translateY(40px) scale(0.8); }
+
+/* Light streak riding the wipe edge */
+.slide-right-enter-active::after,
+.slide-left-enter-active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.45) 50%, transparent 62%);
+  mix-blend-mode: overlay;
+}
+.slide-right-enter-active::after { animation: hero-streak-from-right 1.15s cubic-bezier(0.77, 0, 0.18, 1) both; }
+.slide-left-enter-active::after { animation: hero-streak-from-left 1.15s cubic-bezier(0.77, 0, 0.18, 1) both; }
+@keyframes hero-streak-from-right { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+@keyframes hero-streak-from-left { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .slide-right-enter-active, .slide-left-enter-active { transition: opacity 0.3s linear; }
+  .slide-right-leave-active, .slide-left-leave-active { transition: opacity 0.3s linear; }
+  .slide-right-enter-from, .slide-left-enter-from { clip-path: none; opacity: 0; }
+  .slide-right-leave-to, .slide-left-leave-to { transform: none; filter: none; opacity: 0; }
+  .slide-right-enter-active::after, .slide-left-enter-active::after { display: none; }
+}
 
 /* Navigation arrows */
 .hero-nav-arrow {

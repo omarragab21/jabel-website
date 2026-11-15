@@ -2050,16 +2050,23 @@ html[dir="rtl"] .whatsapp-float {
   text-decoration: none;
   font-size: 14px;
   font-weight: 400;
-  transition: opacity 0.2s ease;
   display: block;
   line-height: normal;
   white-space: nowrap;
+  /* Hover turns the word bold without changing its width (so nothing around it jumps):
+     a stroke in the text colour thickens the letters, animated together with the colour and a small nudge. */
+  -webkit-text-stroke: 0.9px transparent;
+  transition: opacity 0.25s ease, color 0.25s ease, -webkit-text-stroke-color 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.footer-links a:hover {
+.footer-links a:hover,
+.footer-links a:focus-visible {
   color: #ffffff;
   opacity: 1;
+  -webkit-text-stroke-color: #ffffff;
+  transform: translateX(4px);
 }
+.footer-links a:dir(rtl):hover { transform: translateX(-4px); }
 
 /* Col 4: Brand Column */
 .footer-col-brand {
@@ -2121,8 +2128,17 @@ html[dir="rtl"] .whatsapp-float {
   text-align: start;
 }
 
+a.footer-contact-link {
+  -webkit-text-stroke: 0.9px transparent;
+  transition: opacity 0.25s ease, -webkit-text-stroke-color 0.25s ease;
+}
 a.footer-contact-link:hover {
   opacity: 1;
+  -webkit-text-stroke-color: #ffffff;
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-links a, a.footer-contact-link { transition: none; }
+  .footer-links a:hover { transform: none !important; }
 }
 
 /* Opening hours: a small heading, then one line per schedule */
