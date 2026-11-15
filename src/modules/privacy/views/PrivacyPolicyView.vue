@@ -2,8 +2,12 @@
   <div class="jabel-privacy-policy" :class="{ 'is-en': !isRtl }" :dir="isRtl ? 'rtl' : 'ltr'">
     
     <!-- 1. Hero Banner matching Figma hero-banner -->
-    <section class="hero-banner">
-      <div class="hero-content">
+    <section class="hero-banner" :class="{ 'legal-hero-loading sk-shimmer': !heroReady }" :style="heroReady ? heroStyle : {}" :aria-busy="!heroReady">
+      <div v-if="!heroReady" class="hero-content" aria-hidden="true">
+        <span class="sk-shimmer legal-hero-sk legal-hero-sk-title"></span>
+        <span class="sk-shimmer legal-hero-sk legal-hero-sk-sub"></span>
+      </div>
+      <div v-else class="hero-content">
         <!-- سياسة الخصوصية / Privacy Policy -->
         <h1 class="hero-title">
           {{ isRtl ? 'سياسة الخصوصية' : 'Privacy Policy' }}
@@ -83,6 +87,7 @@ import cookieIcon from '../../../assets/legal/cookie.svg';
 import { isAnalyticsAllowed, setCookiesAllowed } from '../../../utils/cookieConsent';
 import { useLocalized } from '../../../composables/useLocalized';
 import { useSEO } from '../../../composables/useSEO';
+import { useLegalHero } from '../../../composables/useLegalHero';
 import { emptyLegalPage, formatLegalMonth, formatSectionNumber, loadLegalPage, peekLegalPage } from '../../../services/legalPages';
 
 const { currentLang } = useLocalized();
@@ -104,6 +109,8 @@ const cachedPage = peekLegalPage('privacy');
 const page = ref(cachedPage || emptyLegalPage());
 const pageReady = ref(Boolean(cachedPage));
 const sections = computed(() => page.value.sections);
+// Header photo from the dashboard; shimmer until settings and photo are loaded.
+const { heroStyle, heroReady } = useLegalHero(page, pageReady);
 const subtitle = computed(() => {
   const updated = formatLegalMonth(page.value.updated_at, currentLang.value);
   const tagline = isRtl.value ? page.value.tagline_ar : page.value.tagline_en;
@@ -191,10 +198,8 @@ onMounted(async () => {
   width: 100%;
   min-height: 240px;
   
-  /* Photorealistic luxury kitchen background with dark overlay */
-  background: 
-    linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url('/images/about/hero_banner.jpg') center / cover no-repeat;
+  /* No built-in photo: the header image comes only from the dashboard; plain dark until/unless one is set. */
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)) center / cover no-repeat;
   background-color: #0F172A;
 }
 
