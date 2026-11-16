@@ -207,7 +207,6 @@
       </div>
     </div>
   </transition>
-    <SocialLoginPreview v-if="socialPreview" :data="socialPreview" @close="socialPreview = null" />
 </template>
 
 <script setup>
@@ -217,7 +216,6 @@ import { useRoute } from 'vue-router'
 import PasswordEyeIcon from './PasswordEyeIcon.vue'
 import PhoneCountryInput from './PhoneCountryInput.vue'
 import SocialLoginButtons from './SocialLoginButtons.vue'
-import SocialLoginPreview from './SocialLoginPreview.vue'
 import { authActions, authState } from '../store/auth'
 import api from '../config/axios'
 import { validatePhoneByCountry } from '../data/countries'
@@ -493,7 +491,6 @@ const handleRegister = async () => {
 
 // Google / Apple through Firebase: the window gives a Firebase token, the server turns it into a normal session.
 const socialBusy = ref(false)
-const socialPreview = ref(null) // TEMPORARY: data shown instead of calling the server (see SOCIAL_LOGIN_PREVIEW)
 const handleSocial = async (provider) => {
   if (socialBusy.value) return
   clearMessages()
@@ -506,13 +503,8 @@ const handleSocial = async (provider) => {
       globalError.value = t('auth.social_unavailable')
       return
     }
-    const result = await social.signInWithProvider(provider)
-    if (social.SOCIAL_LOGIN_PREVIEW) {
-      // TEMPORARY: no server call, no session. Just show what came back.
-      socialPreview.value = result
-      return
-    }
-    const res = await authActions.socialLogin(result.idToken, { remember: true })
+    const { idToken } = await social.signInWithProvider(provider)
+    const res = await authActions.socialLogin(idToken, { remember: true })
     globalSuccess.value = res.message || t('auth.login_success')
     setTimeout(() => {
       finishAuthentication()

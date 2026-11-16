@@ -4,11 +4,6 @@
 import { getApps, initializeApp } from 'firebase/app';
 import { GoogleAuthProvider, OAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 
-// TEMPORARY: while true, Google/Apple sign-in does NOT call the site's server. After the Firebase window it only shows a
-// dialog with the data that came back (name, email, photo, token claims) so the server route can be built against it.
-// To remove: set this to false and delete components/SocialLoginPreview.vue and its use in AuthModal.vue.
-export const SOCIAL_LOGIN_PREVIEW = true;
-
 const config = () => ({
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
