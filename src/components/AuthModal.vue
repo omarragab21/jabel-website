@@ -111,6 +111,8 @@
             <span v-else>{{ t('auth.submit_login') }}</span>
           </button>
 
+          <SocialLoginButtons :disabled="loading || socialBusy" :dir="currentDir" @select="handleSocial" />
+
           <div class="continue-browsing">
             <a href="#" @click.prevent="closeModal">{{ t('auth.continue_browsing') }}</a>
           </div>
@@ -171,6 +173,8 @@
             <span v-else>{{ t('auth.submit_register') }}</span>
           </button>
 
+          <SocialLoginButtons :disabled="loading || socialBusy" :dir="currentDir" @select="handleSocial" />
+
           <div class="continue-browsing">
             <a href="#" @click.prevent="closeModal">{{ t('auth.continue_browsing') }}</a>
           </div>
@@ -211,6 +215,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import PasswordEyeIcon from './PasswordEyeIcon.vue'
 import PhoneCountryInput from './PhoneCountryInput.vue'
+import SocialLoginButtons from './SocialLoginButtons.vue'
 import { authActions, authState } from '../store/auth'
 import api from '../config/axios'
 import { validatePhoneByCountry } from '../data/countries'
@@ -481,6 +486,38 @@ const handleRegister = async () => {
   } catch (error) {
     logUnexpectedAuthError(error)
     globalError.value = getServerErrorMessage(error, t('auth.register_error'))
+  }
+}
+
+// Google / Apple through Firebase: the window gives a Firebase token, the server turns it into a normal session.
+const socialBusy = ref(false)
+const handleSocial = async (provider) => {
+  if (socialBusy.value) return
+  clearMessages()
+  socialBusy.value = true
+  let social = null
+  try {
+    // Firebase is loaded only when a visitor actually taps Google or Apple (keeps the first page load light).
+    social = await import('../firebase/socialAuth')
+    if (!social.isSocialAuthConfigured()) {
+      globalError.value = t('auth.social_unavailable')
+      return
+    }
+    const { idToken } = await social.signInWithProvider(provider)
+    const res = await authActions.socialLogin(idToken, { remember: true })
+    globalSuccess.value = res.message || t('auth.login_success')
+    setTimeout(() => {
+      finishAuthentication()
+    }, 1000)
+  } catch (error) {
+    if (social?.isSocialAuthCancelled(error)) return
+    logUnexpectedAuthError(error)
+    // 404 = the server has no Google/Apple sign-in route yet
+    globalError.value = error?.response?.status === 404
+      ? t('auth.social_unavailable')
+      : getServerErrorMessage(error, t('auth.social_error'))
+  } finally {
+    socialBusy.value = false
   }
 }
 

@@ -10,6 +10,14 @@ export const authService = {
   },
 
   /**
+   * Google / Apple sign-in: swaps a Firebase ID token for the site's own session (same answer as login)
+   */
+  async firebaseLogin(idToken) {
+    const response = await api.post('/v1/auth/firebase', { id_token: idToken });
+    return response.data;
+  },
+
+  /**
    * Customer registration
    */
   async register(userData) {

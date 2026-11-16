@@ -62,6 +62,20 @@ export const authActions = {
   },
 
   /**
+   * Login with Google / Apple (a Firebase ID token the server turns into a normal session)
+   */
+  async socialLogin(idToken, options = {}) {
+    authState.loading = true;
+    try {
+      const res = await api.post('/v1/auth/firebase', { id_token: idToken });
+      this._setSession(res.data.token, getResponseUser(res.data), options.remember ?? true);
+      return res.data;
+    } finally {
+      authState.loading = false;
+    }
+  },
+
+  /**
    * Register a new customer
    */
   async register(data) {
