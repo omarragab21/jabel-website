@@ -13,7 +13,7 @@
           <span class="slp-provider">{{ data.provider === 'apple.com' ? 'Apple' : 'Google' }}</span>
         </div>
       </div>
-      <p class="slp-hint">دي البيانات اللي رجعت بعد الدخول. الموقع حالياً مابيبعتهاش للسيرفر، والـ JSON تحت هو اللي هيتبعت ومعاه محتوى التوكن.</p>
+      <p class="slp-hint">دي بيانات المستخدم اللي رجعت بعد الدخول. الموقع حالياً مابيبعتهاش للسيرفر.</p>
       <pre class="slp-json" dir="ltr" data-testid="social-preview-json">{{ json }}</pre>
       <div class="slp-actions">
         <button type="button" class="slp-btn slp-btn-main" @click="copy">{{ copied ? 'تم النسخ ✓' : 'نسخ JSON' }}</button>
@@ -29,9 +29,8 @@ import { computed, ref } from 'vue';
 const props = defineProps({ data: { type: Object, required: true } });
 defineEmits(['close']);
 
-// What this sign-in gives the server: the request body, and (for reading only) the token's content.
+// Only the user's data (name, email, photo ...).
 const json = computed(() => JSON.stringify({
-  provider: props.data.provider,
   user: {
     uid: props.data.uid,
     name: props.data.name,
@@ -40,9 +39,6 @@ const json = computed(() => JSON.stringify({
     photo: props.data.photo,
     phone: props.data.phone,
   },
-  provider_data: props.data.providerData,
-  request_to_server: { method: 'POST', path: '/v1/auth/firebase', body: { id_token: props.data.idToken } },
-  id_token_claims: props.data.claims,
 }, null, 2));
 
 const copied = ref(false);
