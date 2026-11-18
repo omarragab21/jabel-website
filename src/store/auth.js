@@ -62,12 +62,20 @@ export const authActions = {
   },
 
   /**
-   * Login with Google / Apple (a Firebase ID token the server turns into a normal session)
+   * Login with Google / Apple (a Firebase ID token the server turns into a normal session).
+   * POST /v1/auth/social-login with { id_token, provider: 'google' | 'apple' }, as in the version live on Vercel.
+   * A server that only has the older /v1/auth/firebase route (404 here) is still served.
    */
   async socialLogin(idToken, options = {}) {
     authState.loading = true;
     try {
-      const res = await api.post('/v1/auth/firebase', { id_token: idToken });
+      let res;
+      try {
+        res = await api.post('/v1/auth/social-login', { id_token: idToken, provider: options.provider });
+      } catch (error) {
+        if (error?.response?.status !== 404) throw error;
+        res = await api.post('/v1/auth/firebase', { id_token: idToken });
+      }
       this._setSession(res.data.token, getResponseUser(res.data), options.remember ?? true);
       return res.data;
     } finally {

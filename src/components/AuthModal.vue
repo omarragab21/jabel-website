@@ -504,7 +504,7 @@ const handleSocial = async (provider) => {
       return
     }
     const { idToken } = await social.signInWithProvider(provider)
-    const res = await authActions.socialLogin(idToken, { remember: true })
+    const res = await authActions.socialLogin(idToken, { remember: true, provider })
     globalSuccess.value = res.message || t('auth.login_success')
     setTimeout(() => {
       finishAuthentication()
