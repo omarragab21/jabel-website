@@ -68,7 +68,14 @@ export const authActions = {
   async socialLogin(idToken, provider, options = {}) {
     authState.loading = true;
     try {
-      const res = await api.post('/v1/auth/social-login', { id_token: idToken, provider });
+      let res;
+      try {
+        res = await api.post('/v1/auth/social-login', { id_token: idToken, provider });
+      } catch (error) {
+        // A server that only has the older /v1/auth/firebase route answers 404; serve it too.
+        if (error?.response?.status !== 404) throw error;
+        res = await api.post('/v1/auth/firebase', { id_token: idToken });
+      }
       this._setSession(res.data.token, getResponseUser(res.data), options.remember ?? true);
       return res.data;
     } finally {
