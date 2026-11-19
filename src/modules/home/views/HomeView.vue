@@ -23,7 +23,8 @@
     >
       <section class="hero-section">
         <!-- Background Slides Carousel -->
-        <transition-group :name="heroTransitionName" tag="div" class="hero-slides-wrapper">
+        <!-- keyed by the animation: a change of animation (setting refreshed while the page is open) starts clean, with no classes left from the old one -->
+        <transition-group :key="heroAnimation" :name="heroTransitionName" tag="div" class="hero-slides-wrapper" :class="`hero-anim-${heroAnimation}`">
           <div 
             v-for="(slide, idx) in displayHeroSlides" 
             :key="slide.id"
@@ -308,6 +309,7 @@ import CategoryCarousel from '../../category/components/CategoryCarousel.vue';
 import PortraitCard from '../../../components/PortraitCard.vue';
 import { productService } from '../../product/services/productService';
 import { settingsService } from '../../../services/settingsService';
+import { BANNER_ANIMATION_KEY, bannerTransitionName, resolveBannerAnimation } from '../../../domain/home/bannerAnimation';
 import { settingsToObject } from '../../../utils/siteSettings';
 import { useCategories } from '../../category/composables/useCategories';
 import { HOME_REFRESH_INTERVAL_MS } from '../../../config/cache';
@@ -368,7 +370,11 @@ const offersLoading = ref(true);
 const productsLoading = ref(true);
 const currentHeroIndex = ref(0);
 const heroAutoplayTimer = ref(null);
-const heroTransitionName = ref('slide-right');
+// Direction of the last move ('right' / 'left') and the animation chosen in the dashboard (Homepage Banners).
+const heroDirection = ref('right');
+const reducedMotion = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+const heroAnimation = computed(() => (reducedMotion ? 'none' : resolveBannerAnimation(homepageSettings.value[BANNER_ANIMATION_KEY])));
+const heroTransitionName = computed(() => bannerTransitionName(heroAnimation.value, heroDirection.value));
 
 const backendOrigin = (import.meta.env.VITE_API_BASE_URL || 'https://backend-jabal.be-kite.com/api')
   .replace(/\/api\/?$/, '');
@@ -432,7 +438,7 @@ const displayHeroSlides = computed(() => {
 
 // Visual direction: in RTL the dots run right-to-left, so "next" moves left.
 const nextHeroSlide = () => {
-  heroTransitionName.value = currentLang.value === 'ar' ? 'slide-left' : 'slide-right';
+  heroDirection.value = currentLang.value === 'ar' ? 'left' : 'right';
   if (currentHeroIndex.value >= displayHeroSlides.value.length - 1) {
     currentHeroIndex.value = 0;
   } else {
@@ -441,7 +447,7 @@ const nextHeroSlide = () => {
 };
 
 const prevHeroSlide = () => {
-  heroTransitionName.value = currentLang.value === 'ar' ? 'slide-right' : 'slide-left';
+  heroDirection.value = currentLang.value === 'ar' ? 'right' : 'left';
   if (currentHeroIndex.value <= 0) {
     currentHeroIndex.value = displayHeroSlides.value.length - 1;
   } else {
@@ -451,7 +457,7 @@ const prevHeroSlide = () => {
 
 const goToHeroSlide = (idx) => {
   const forward = idx > currentHeroIndex.value;
-  heroTransitionName.value = (forward === (currentLang.value !== 'ar')) ? 'slide-right' : 'slide-left';
+  heroDirection.value = (forward === (currentLang.value !== 'ar')) ? 'right' : 'left';
   currentHeroIndex.value = idx;
 };
 
@@ -773,6 +779,72 @@ onUnmounted(() => {
   padding: 0;
   box-sizing: border-box;
 }
+
+/* ============================================================
+   Other banner animations (chosen in the dashboard: Homepage Banners > Animation).
+   Classes: hero-<id>-right (new slide comes from the right / "next") and hero-<id>-left.
+   The original "cinematic" animation above is the default; "none" has no transition at all.
+   Keep the ids in step with domain/home/bannerAnimation.js and the dashboard list.
+   ============================================================ */
+.hero-anim-slide, .hero-anim-vertical, .hero-anim-flip { overflow: hidden; }
+.hero-anim-flip { perspective: 1800px; }
+
+/* fade: cross-fade */
+.hero-fade-right-enter-active, .hero-fade-left-enter-active { z-index: 3; transition: opacity 0.9s ease; }
+.hero-fade-right-leave-active, .hero-fade-left-leave-active { z-index: 2; transition: opacity 0.9s ease; }
+.hero-fade-right-enter-from, .hero-fade-left-enter-from,
+.hero-fade-right-leave-to, .hero-fade-left-leave-to { opacity: 0; }
+
+/* slide: the slides push each other sideways */
+.hero-slide-right-enter-active, .hero-slide-left-enter-active,
+.hero-slide-right-leave-active, .hero-slide-left-leave-active { transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1); }
+.hero-slide-right-enter-active, .hero-slide-left-enter-active { z-index: 3; }
+.hero-slide-right-enter-from { transform: translateX(100%); }
+.hero-slide-left-enter-from { transform: translateX(-100%); }
+.hero-slide-right-leave-to { transform: translateX(-100%); }
+.hero-slide-left-leave-to { transform: translateX(100%); }
+
+/* vertical: the slides push each other up (next) or down (previous) */
+.hero-vertical-right-enter-active, .hero-vertical-left-enter-active,
+.hero-vertical-right-leave-active, .hero-vertical-left-leave-active { transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1); }
+.hero-vertical-right-enter-active, .hero-vertical-left-enter-active { z-index: 3; }
+.hero-vertical-right-enter-from { transform: translateY(100%); }
+.hero-vertical-left-enter-from { transform: translateY(-100%); }
+.hero-vertical-right-leave-to { transform: translateY(-100%); }
+.hero-vertical-left-leave-to { transform: translateY(100%); }
+
+/* zoom: the new slide grows in, the old one shrinks away */
+.hero-zoom-right-enter-active, .hero-zoom-left-enter-active { z-index: 3; transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease; }
+.hero-zoom-right-leave-active, .hero-zoom-left-leave-active { z-index: 2; transition: transform 1s ease, opacity 0.9s ease; }
+.hero-zoom-right-enter-from, .hero-zoom-left-enter-from { transform: scale(1.3); opacity: 0; }
+.hero-zoom-right-leave-to, .hero-zoom-left-leave-to { transform: scale(0.85); opacity: 0; }
+
+/* flip: the slide turns around its vertical axis */
+.hero-flip-right-enter-active, .hero-flip-left-enter-active,
+.hero-flip-right-leave-active, .hero-flip-left-leave-active { transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.9s ease; backface-visibility: hidden; }
+.hero-flip-right-enter-active, .hero-flip-left-enter-active { z-index: 3; }
+.hero-flip-right-enter-from { transform: rotateY(-85deg); opacity: 0; }
+.hero-flip-left-enter-from { transform: rotateY(85deg); opacity: 0; }
+.hero-flip-right-leave-to { transform: rotateY(85deg); opacity: 0; }
+.hero-flip-left-leave-to { transform: rotateY(-85deg); opacity: 0; }
+
+/* blur: dissolves through a blur */
+.hero-blur-right-enter-active, .hero-blur-left-enter-active { z-index: 3; transition: opacity 1s ease, filter 1s ease, transform 1s ease; }
+.hero-blur-right-leave-active, .hero-blur-left-leave-active { z-index: 2; transition: opacity 1s ease, filter 1s ease, transform 1s ease; }
+.hero-blur-right-enter-from, .hero-blur-left-enter-from,
+.hero-blur-right-leave-to, .hero-blur-left-leave-to { opacity: 0; filter: blur(22px); transform: scale(1.05); }
+
+/* kenburns: a slow cross-fade while the photo drifts and zooms out */
+.hero-kenburns-right-enter-active, .hero-kenburns-left-enter-active { z-index: 3; transition: opacity 1.2s ease; }
+.hero-kenburns-right-leave-active, .hero-kenburns-left-leave-active { z-index: 2; transition: opacity 1.2s ease; }
+.hero-kenburns-right-enter-from, .hero-kenburns-left-enter-from,
+.hero-kenburns-right-leave-to, .hero-kenburns-left-leave-to { opacity: 0; }
+.hero-kenburns-right-enter-active .hero-bg, .hero-kenburns-left-enter-active .hero-bg { animation: hero-kenburns 7s ease-out both; }
+@keyframes hero-kenburns { from { transform: scale(1.2) translate3d(2%, 1%, 0); } to { transform: scale(1) translate3d(0, 0, 0); } }
+
+/* none: the slide simply changes */
+.hero-none-right-enter-active, .hero-none-left-enter-active,
+.hero-none-right-leave-active, .hero-none-left-leave-active { transition: none; }
 
 /* ============================================================
    Hero slide transition: "cinematic reveal"
