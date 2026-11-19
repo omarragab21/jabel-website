@@ -116,7 +116,7 @@ const formattedContent = computed(() => {
 .page-hero {
   background: var(--color-brand-primary, #000000);
   padding: 8rem 0 10rem;
-  color: #fff;
+  color: var(--color-brand-contrast, #ffffff);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -217,17 +217,30 @@ const formattedContent = computed(() => {
 .btn-home {
   padding: 12px 30px;
   background: var(--color-brand-primary, #000000);
-  color: #fff;
+  color: var(--color-brand-contrast, #ffffff);
   text-decoration: none;
   border-radius: 10px;
   font-weight: 700;
   transition: 0.3s;
 }
 
+.btn-home:disabled,
+.btn-home:disabled:hover,
+.btn-home:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .btn-home:hover {
   background: var(--color-button-hover);
 transform: translateY(-2px);
 }
+
+.btn-home:active { background: var(--color-button-active); }
 
 .ltr-text { direction: ltr; }
 

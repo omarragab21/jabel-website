@@ -419,15 +419,28 @@ const onMouseLeave = () => {
   font-weight: 600;
   font-size: 14px;
   line-height: 21px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   box-sizing: border-box;
   transition: background-color 0.2s, opacity 0.2s;
   white-space: nowrap;
 }
 
+.view-cart-btn:disabled,
+.view-cart-btn:disabled:hover,
+.view-cart-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .view-cart-btn:hover {
   background: var(--color-button-hover);
 }
+
+.view-cart-btn:active { background: var(--color-button-active); }
 
 .view-cart-btn:active {
   opacity: 0.9;

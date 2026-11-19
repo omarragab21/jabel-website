@@ -205,7 +205,7 @@ watch(pageId, () => {
   font-size: 48px;
   line-height: 72px;
   text-align: center;
-  color: #FFFFFF;
+  color: var(--legal-hero-fg, #FFFFFF);
   margin: 0;
   letter-spacing: -0.5px;
 }
@@ -217,7 +217,7 @@ watch(pageId, () => {
   font-size: 16px;
   line-height: 24px;
   text-align: center;
-  color: #FFFFFF;
+  color: var(--legal-hero-fg, #FFFFFF);
   opacity: 0.8;
   margin: 0;
 }

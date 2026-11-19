@@ -1321,7 +1321,7 @@ onUnmounted(() => {
   box-sizing: border-box;
   border-radius: 9999px;
   background: var(--color-brand-primary, #000000);
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   font-family: 'IBM Plex Sans Arabic', sans-serif;
   font-weight: 700;
   font-size: 10px;
@@ -1444,7 +1444,7 @@ html[dir="rtl"] .header-nav-icons .wishlist-link { order: 3; }
   height: 16px;
   background: var(--color-brand-primary, #000000);
   border-radius: 9999px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   font-family: 'IBM Plex Sans Arabic', sans-serif;
   font-style: normal;
   font-weight: 700;
@@ -1815,7 +1815,7 @@ html[dir="rtl"] .header-nav-icons .wishlist-link { order: 3; }
   border: none;
   border-radius: 10px;
   background: var(--color-brand-primary, #000000);
-  color: #fff;
+  color: var(--color-brand-contrast, #ffffff);
   cursor: pointer;
   transition: 0.2s;
   display: flex;
@@ -1823,9 +1823,22 @@ html[dir="rtl"] .header-nav-icons .wishlist-link { order: 3; }
   justify-content: center;
 }
 
+.search-submit-btn:disabled,
+.search-submit-btn:disabled:hover,
+.search-submit-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .search-submit-btn:hover {
   background: var(--color-button-hover);
 }
+
+.search-submit-btn:active { background: var(--color-button-active); }
 
 .search-results {
   padding: 1rem;
@@ -1967,7 +1980,7 @@ html[dir="rtl"] .whatsapp-float {
 /* Main Footer Styles - Figma footer (node 2:473) */
 .main-footer {
   background: var(--color-brand-primary, #000000);
-  color: #ffffff;
+  color: var(--color-brand-contrast, #ffffff);
   padding: 40px 0;
   margin-top: auto;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
@@ -2409,7 +2422,7 @@ a.footer-contact-link:hover {
 
   .mobile-link.active {
     background: var(--color-brand-primary, #000000);
-    color: #fff;
+    color: var(--color-brand-contrast, #ffffff);
   }
 
   .mobile-menu-footer {

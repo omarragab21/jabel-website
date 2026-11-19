@@ -31,7 +31,7 @@ const { t } = useI18n();
 .mobile-tab-btn { flex: 0 0 auto; display: inline-flex; flex-direction: row; align-items: center; justify-content: center; gap: 6px; padding: 6px 12px; height: 36px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; color: #4b5563; text-decoration: none; font-size: 12px; font-weight: 700; white-space: nowrap; box-sizing: border-box; box-shadow: 0 1px 4px rgba(0,0,0,0.03); }
 .mobile-tab-btn i { font-size: 13px; color: #6b7280; flex-shrink: 0; }
 .mobile-tab-btn span { font-size: 12px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.mobile-tab-btn.active { background: var(--color-brand-primary, #000); border-color: #000; color: #fff; box-shadow: 0 3px 10px rgba(135, 50, 96, 0.2); }
+.mobile-tab-btn.active { background: var(--color-brand-primary, #000); border-color: var(--color-brand-primary); color: var(--color-brand-contrast, #ffffff); box-shadow: 0 3px 10px rgba(135, 50, 96, 0.2); }
 .mobile-tab-btn.active i { color: #fff; }
 .mobile-tab-badge { font-size: 10px; padding: 1px 5px; border-radius: 10px; font-weight: 800; background: #f1f5f9; color: #64748b; margin-left: 2px; }
 .mobile-tab-btn.active .mobile-tab-badge { background: rgba(255, 255, 255, 0.25); color: #fff; }

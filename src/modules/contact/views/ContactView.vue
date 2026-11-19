@@ -847,7 +847,7 @@ const handleSubmit = async () => {
   width: 100%;
   height: 56px;
   background: var(--color-brand-primary, #000000);
-  color: #ffffff;
+  color: var(--color-brand-contrast, #ffffff);
   border: none;
   border-radius: 6px;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
@@ -862,9 +862,22 @@ const handleSubmit = async () => {
   margin-top: 4px;
 }
 
+.submit-action-btn:disabled,
+.submit-action-btn:disabled:hover,
+.submit-action-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .submit-action-btn:hover:not(:disabled) {
   background: var(--color-button-hover);
 }
+
+.submit-action-btn:active:not(:disabled) { background: var(--color-button-active); }
 
 .submit-action-btn:disabled {
   opacity: 0.6;

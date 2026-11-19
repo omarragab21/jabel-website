@@ -17,4 +17,4 @@ Disallow: /profile
 Disallow: /payment/
 
 # Sitemap Location
-Sitemap: https://jabel-website.vercel.app/sitemap.xml
+Sitemap: https://demo-tijara.be-kite.com/sitemap.xml

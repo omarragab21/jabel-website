@@ -714,9 +714,9 @@
 }
 
 .attribute-btn.active {
-  border-color: #000000;
+  border-color: var(--color-brand-primary);
   background: var(--color-brand-primary, #000000);
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   font-weight: 700;
 }
 
@@ -741,7 +741,7 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   font-family: 'IBM Plex Sans Arabic', sans-serif;
   font-style: normal;
   font-weight: 700;
@@ -756,6 +756,8 @@
   background: var(--color-button-hover);
   transform: translateY(-1px);
 }
+
+.btn-add-to-cart:active:not(:disabled) { background: var(--color-button-active); }
 
 .btn-add-to-cart:disabled {
   background: #94A3B8;

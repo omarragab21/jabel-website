@@ -205,6 +205,21 @@
         </form>
         </template>
       </div>
+
+      <!-- TEMPORARY (remove): shows the Firebase ID token + provider after Google/Apple sign-in. -->
+      <div v-if="tempTokenDialog" class="temp-token-overlay" role="dialog" aria-modal="true" @click.stop>
+        <div class="temp-token-dialog" dir="ltr">
+          <h3>Social login result</h3>
+          <p class="temp-token-label">Provider</p>
+          <code class="temp-token-value" data-testid="temp-token-provider">{{ tempTokenDialog.provider }} ({{ tempTokenDialog.firebaseProvider }})</code>
+          <p class="temp-token-label">ID token</p>
+          <textarea class="temp-token-value temp-token-area" readonly rows="8" data-testid="temp-token-id-token" :value="tempTokenDialog.idToken" @focus="$event.target.select()"></textarea>
+          <div class="temp-token-actions">
+            <button type="button" class="temp-token-btn" @click="copyTempToken">{{ tempTokenCopied ? 'Copied' : 'Copy token' }}</button>
+            <button type="button" class="temp-token-btn temp-token-primary" data-testid="temp-token-continue" @click="closeTempTokenDialog">Continue</button>
+          </div>
+        </div>
+      </div>
     </div>
   </transition>
 </template>
@@ -491,6 +506,30 @@ const handleRegister = async () => {
 
 // Google / Apple through Firebase: the window gives a Firebase token, the server turns it into a normal session.
 const socialBusy = ref(false)
+
+// TEMPORARY (remove): dialog with the Firebase ID token + provider; sign-in continues once it is closed.
+const tempTokenDialog = ref(null)
+const tempTokenCopied = ref(false)
+let tempTokenResolve = null
+const showTempTokenDialog = (info) => new Promise((resolve) => {
+  tempTokenCopied.value = false
+  tempTokenResolve = resolve
+  tempTokenDialog.value = info
+})
+const closeTempTokenDialog = () => {
+  tempTokenDialog.value = null
+  tempTokenResolve?.()
+  tempTokenResolve = null
+}
+const copyTempToken = async () => {
+  try {
+    await navigator.clipboard.writeText(tempTokenDialog.value?.idToken || '')
+    tempTokenCopied.value = true
+  } catch {
+    // clipboard blocked: the token is selectable in the box
+  }
+}
+
 const handleSocial = async (provider) => {
   if (socialBusy.value) return
   clearMessages()
@@ -503,8 +542,9 @@ const handleSocial = async (provider) => {
       globalError.value = t('auth.social_unavailable')
       return
     }
-    const { idToken } = await social.signInWithProvider(provider)
-    const res = await authActions.socialLogin(idToken, { remember: true })
+    const { idToken, provider: firebaseProvider } = await social.signInWithProvider(provider)
+    await showTempTokenDialog({ provider, firebaseProvider, idToken }) // TEMPORARY (remove)
+    const res = await authActions.socialLogin(idToken, provider, { remember: true })
     globalSuccess.value = res.message || t('auth.login_success')
     setTimeout(() => {
       finishAuthentication()
@@ -528,6 +568,17 @@ defineExpose({
 </script>
 
 <style scoped>
+/* TEMPORARY (remove): token dialog */
+.temp-token-overlay { position: fixed; inset: 0; z-index: 1000000; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(0, 0, 0, 0.6); }
+.temp-token-dialog { width: 100%; max-width: 520px; max-height: 90vh; overflow: auto; padding: 20px; border-radius: 12px; background: #fff; color: #111; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
+.temp-token-dialog h3 { margin: 0 0 12px; font-size: 18px; }
+.temp-token-label { margin: 12px 0 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #555; }
+.temp-token-value { display: block; width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; background: #f6f6f6; font-family: ui-monospace, Menlo, monospace; font-size: 12px; word-break: break-all; }
+.temp-token-area { resize: vertical; }
+.temp-token-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+.temp-token-btn { padding: 8px 16px; border: 1px solid #ccc; border-radius: 8px; background: #fff; color: #111; cursor: pointer; font-size: 14px; }
+.temp-token-primary { background: #111; border-color: #111; color: #fff; }
+
 .auth-modal-overlay {
   position: fixed;
   top: 0;
@@ -621,7 +672,7 @@ defineExpose({
   border: 0;
   border-radius: 6px;
   background: var(--color-brand-primary, #000000);
-  color: #ffffff;
+  color: var(--color-brand-contrast, #ffffff);
   font: inherit;
   font-size: 16px;
   line-height: 24px;
@@ -630,9 +681,22 @@ defineExpose({
   transition: background 0.2s ease;
 }
 
+.reset-success-btn:disabled,
+.reset-success-btn:disabled:hover,
+.reset-success-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .reset-success-btn:hover {
   background: var(--color-button-hover);
 }
+
+.reset-success-btn:active { background: var(--color-button-active); }
 
 .modal-header {
   display: flex;
@@ -711,7 +775,7 @@ defineExpose({
 
 .tab-btn.active {
   background: var(--color-brand-primary, #000000);
-  color: #ffffff;
+  color: var(--color-brand-contrast, #ffffff);
   box-shadow: none;
 }
 
@@ -996,7 +1060,7 @@ defineExpose({
 .submit-btn {
   width: 100%;
   background: var(--color-brand-primary, #000000);
-  color: #fff;
+  color: var(--color-brand-contrast, #ffffff);
   border: none;
   padding: 12px 16px;
   min-height: 48px;
@@ -1010,6 +1074,8 @@ defineExpose({
 .submit-btn:hover {
   background: var(--color-button-hover);
 }
+
+.submit-btn:active { background: var(--color-button-active); }
 
 .submit-btn:disabled {
   background: #9ca3af;

@@ -75,8 +75,16 @@
   --color-product-rating: #f59e1f;
   --color-product-whatsapp: #25d366;
 
-  /* Button hover */
-  --color-button-hover: #206106;
+  /* Button states: derived from the one brand colour by utils/brandPalette.js (the values here are the
+     palette of the built-in black). Disabled / stuck buttons are a fixed grey, not brand coloured. */
+  --color-brand-hover: #333333;
+  --color-brand-active: #525252;
+  --color-brand-ring: rgba(0, 0, 0, 0.35);
+  --color-button-hover: var(--color-brand-hover);
+  --color-button-active: var(--color-brand-active);
+  /* Disabled / stuck buttons: a fixed grey, whatever the brand colour is */
+  --color-disabled-bg: #94a3b8;
+  --color-disabled-text: #ffffff;
 }
 
 .dark {
@@ -327,4 +335,10 @@ html, body {
 .dark ::-webkit-scrollbar-thumb {
   background: #334155;
   border: 1px solid #1e293b;
+}
+
+/* Keyboard focus on any button or link: a ring in the brand colour (zero specificity, so a component can still restyle it) */
+:where(button, a, [role="button"], summary):focus-visible {
+  outline: 3px solid var(--color-brand-ring);
+  outline-offset: 2px;
 }

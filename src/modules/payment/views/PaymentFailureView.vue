@@ -95,15 +95,28 @@ const goHome = () => {
   border-radius: 10px;
   border: 0;
   background: var(--color-brand-primary, #000000);
-  color: #fff;
+  color: var(--color-brand-contrast, #ffffff);
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
 }
 
+.retry-btn:disabled,
+.retry-btn:disabled:hover,
+.retry-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .retry-btn:hover {
   background: var(--color-button-hover);
 }
+
+.retry-btn:active { background: var(--color-button-active); }
 
 .home-btn {
   padding: 12px 28px;
@@ -118,8 +131,10 @@ const goHome = () => {
 .home-btn:hover {
   background: var(--color-button-hover);
   border-color: var(--color-button-hover);
-  color: #fff;
+  color: var(--color-brand-contrast, #ffffff);
 }
+
+.home-btn:active { background: var(--color-button-active); border-color: var(--color-button-active); }
 
 @media (max-width: 640px) {
   .payment-failure-page { padding: 24px 12px; }

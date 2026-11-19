@@ -335,8 +335,8 @@
 
 .custom-checkbox.checked {
   background: var(--color-brand-primary, #000000);
-  border-color: #000000;
-  color: #ffffff;
+  border-color: var(--color-brand-primary);
+  color: var(--color-brand-contrast, #ffffff);
 }
 
 .checkbox-text {
@@ -449,8 +449,8 @@
 
 .pag-btn.active {
   background: var(--color-brand-primary, #000000);
-  color: #ffffff;
-  border-color: #000000;
+  color: var(--color-brand-contrast, #ffffff);
+  border-color: var(--color-brand-primary);
   font-weight: 700;
 }
 

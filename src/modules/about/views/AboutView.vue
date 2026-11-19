@@ -629,7 +629,7 @@ useSEO({
 .stats-dark-section {
   width: 100%;
   background-color: var(--color-brand-primary, #000000);
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   padding: 88px 0 96px;
 }
 
@@ -719,7 +719,7 @@ useSEO({
   justify-content: center;
   padding: 12px 40px;
   background-color: var(--color-brand-primary, #000000);
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   font-size: 15px;
   font-weight: 700;
   border-radius: 8px;
@@ -728,11 +728,24 @@ useSEO({
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
+.cta-black-btn:disabled,
+.cta-black-btn:disabled:hover,
+.cta-black-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .cta-black-btn:hover {
   background: var(--color-button-hover);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
+
+.cta-black-btn:active { background: var(--color-button-active); }
 
 /* Responsive Media Queries */
 @media (max-width: 1024px) {

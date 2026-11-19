@@ -1,6 +1,6 @@
 // Google and Apple sign-in through Firebase Authentication (project jabal-3e49e).
 // Firebase talks to Google/Apple and hands back a Firebase ID token; the site then swaps it for its own session
-// (POST /v1/auth/firebase), so the rest of the app (cart, orders, profile) is unchanged.
+// (POST /v1/auth/social-login with { id_token, provider: 'google' | 'apple' }), so the rest of the app (cart, orders, profile) is unchanged.
 import { getApps, initializeApp } from 'firebase/app';
 import { GoogleAuthProvider, OAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 

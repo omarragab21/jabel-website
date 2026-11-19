@@ -575,14 +575,27 @@ onMounted(async () => {
   font-weight: 700;
   font-size: 14px;
   line-height: 21px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   cursor: pointer;
   transition: opacity 0.2s;
   flex-shrink: 0;
 }
+
+.btn-apply:disabled,
+.btn-apply:disabled:hover,
+.btn-apply:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 .btn-apply:hover:not(:disabled) {
   background: var(--color-button-hover);
 }
+
+.btn-apply:active:not(:disabled) { background: var(--color-button-active); }
 .btn-apply:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -802,7 +815,7 @@ onMounted(async () => {
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   text-decoration: none;
   cursor: pointer;
   transition: opacity 0.2s, background 0.2s;
@@ -810,6 +823,8 @@ onMounted(async () => {
 .primary-button:hover {
   background: var(--color-button-hover);
 }
+
+.primary-button:active { background: var(--color-button-active); }
 
 .primary-button:disabled {
   background: #CBD5E1;
@@ -1263,7 +1278,7 @@ onMounted(async () => {
   font-weight: 700;
   font-size: 14px;
   line-height: 21px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   text-align: center;
   transition: opacity 0.2s ease, transform 0.2s ease;
   flex: none;
@@ -1271,10 +1286,23 @@ onMounted(async () => {
   flex-grow: 0;
 }
 
+.empty-btn-primary:disabled,
+.empty-btn-primary:disabled:hover,
+.empty-btn-primary:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .empty-btn-primary:hover {
   background: var(--color-button-hover);
   transform: translateY(-1px);
 }
+
+.empty-btn-primary:active { background: var(--color-button-active); }
 
 /* LTR Support for English */
 .cart-page.is-ltr {

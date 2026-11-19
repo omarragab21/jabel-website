@@ -622,7 +622,7 @@
   flex-direction: row;
   align-items: center;
   cursor: pointer;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   font-family: 'IBM Plex Sans Arabic', sans-serif;
   font-style: normal;
   font-weight: 700;
@@ -631,10 +631,23 @@
   transition: all 0.2s;
 }
 
+.btn-add-review-cta:disabled,
+.btn-add-review-cta:disabled:hover,
+.btn-add-review-cta:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .btn-add-review-cta:hover {
   background: var(--color-button-hover);
   transform: translateY(-1px);
 }
+
+.btn-add-review-cta:active { background: var(--color-button-active); }
 
 /* 4. Related Products Section */
 .related-products-section {

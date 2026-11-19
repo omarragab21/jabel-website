@@ -563,7 +563,7 @@ const submit = () => {
 
 .custom-checkbox.checked {
   background: var(--color-brand-primary, #000000);
-  border-color: #000000;
+  border-color: var(--color-brand-primary);
 }
 
 .btn-save-address {
@@ -584,14 +584,27 @@ const submit = () => {
   font-weight: 700;
   font-size: 14px;
   line-height: 21px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   transition: background-color 0.2s ease;
   margin-top: 8px;
+}
+
+.btn-save-address:disabled,
+.btn-save-address:disabled:hover,
+.btn-save-address:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-save-address:hover {
   background: var(--color-button-hover);
 }
+
+.btn-save-address:active { background: var(--color-button-active); }
 
 .btn-save-address:disabled {
   opacity: 0.6;

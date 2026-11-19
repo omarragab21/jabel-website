@@ -162,10 +162,23 @@ const trapTab = (event) => {
 .app-dialog-btn:focus-visible { outline: 2px solid #000000; outline-offset: 2px; }
 .app-dialog-btn:active { transform: translateY(1px); }
 
-.app-dialog-btn.primary { background: var(--color-brand-primary, #000000); color: #ffffff; border: none; }
+.app-dialog-btn.primary { background: var(--color-brand-primary, #000000); color: var(--color-brand-contrast, #ffffff); border: none; }
+
+.app-dialog-btn.primary:disabled,
+.app-dialog-btn.primary:disabled:hover,
+.app-dialog-btn.primary:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 .app-dialog-btn.primary:hover {
   background: var(--color-button-hover);
 }
+
+.app-dialog-btn.primary:active { background: var(--color-button-active); }
 .app-dialog-btn.primary.danger { background: #e53333; }
 .app-dialog-btn.secondary { background: #ffffff; color: #000000; border: 1.5px solid #000000; }
 .app-dialog-btn.secondary:hover { background: #f8fafc; }

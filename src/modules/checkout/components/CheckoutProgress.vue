@@ -34,9 +34,9 @@ defineProps({
 .step-item { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 80px; }
 .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #fff; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #94a3b8; transition: all 0.3s; }
 .step-label { font-size: 14px; font-weight: 400; color: #94a3b8; }
-.step-item.active .step-circle { background: var(--color-brand-primary, #000); border-color: #000; color: #fff; }
+.step-item.active .step-circle { background: var(--color-brand-primary, #000); border-color: var(--color-brand-primary); color: var(--color-brand-contrast, #ffffff); }
 .step-item.active .step-label { color: #000; font-weight: 500; }
-.step-item.completed .step-circle { background: var(--color-brand-primary, #000); border-color: #000; color: #fff; }
+.step-item.completed .step-circle { background: var(--color-brand-primary, #000); border-color: var(--color-brand-primary); color: var(--color-brand-contrast, #ffffff); }
 .step-item.completed .step-label { color: #000; }
 @media (max-width: 768px) { .checkout-progress-wrapper { margin-bottom: 24px; } }
 </style>

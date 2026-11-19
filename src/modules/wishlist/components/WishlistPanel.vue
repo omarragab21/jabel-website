@@ -334,8 +334,10 @@ onMounted(async () => {
 
 .action-btns .cart-btn:hover:not(:disabled) {
   background: var(--color-button-hover);
-  color: #fff;
+  color: var(--color-brand-contrast, #ffffff);
 }
+
+.action-btns .cart-btn:active:not(:disabled) { background: var(--color-button-active); }
 
 .action-btns .remove-btn {
   background: #fff;
@@ -418,14 +420,27 @@ onMounted(async () => {
   font-weight: 700;
   font-size: 14px;
   line-height: 21px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.empty-btn-primary:disabled,
+.empty-btn-primary:disabled:hover,
+.empty-btn-primary:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .empty-btn-primary:hover {
   background: var(--color-button-hover);
   transform: translateY(-1px);
 }
+
+.empty-btn-primary:active { background: var(--color-button-active); }
 
 .wishlist-item--skeleton { pointer-events: none; }
 .wishlist-item--skeleton .item-visual { border-radius: 12px; }

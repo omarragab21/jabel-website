@@ -111,13 +111,26 @@
 
 .home-btn {
   background: var(--color-brand-primary, #000000);
-  color: #fff;
+  color: var(--color-brand-contrast, #ffffff);
+}
+
+.home-btn:disabled,
+.home-btn:disabled:hover,
+.home-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .home-btn:hover {
   background: var(--color-button-hover);
   transform: translateY(-1px);
 }
+
+.home-btn:active { background: var(--color-button-active); }
 
 .orders-btn {
   background: #fff;
@@ -138,6 +151,8 @@
 .retry-btn:hover {
   background: var(--color-button-hover);
 }
+
+.retry-btn:active { background: var(--color-button-active); }
 
 @media (max-width: 640px) {
   .payment-success-page { padding: 30px 16px; }

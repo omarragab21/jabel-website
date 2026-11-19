@@ -268,9 +268,9 @@ watch(() => optionPicker.open, async (open) => {
 }
 .option-picker-btn:hover { border-color: #000000; }
 .option-picker-btn.active {
-  border-color: #000000;
+  border-color: var(--color-brand-primary);
   background: var(--color-brand-primary, #000000);
-  color: #ffffff;
+  color: var(--color-brand-contrast, #ffffff);
   font-weight: 700;
 }
 
@@ -294,8 +294,21 @@ watch(() => optionPicker.open, async (open) => {
 .option-picker-action:focus-visible,
 .option-picker-btn:focus-visible,
 .option-picker-swatch:focus-visible { outline: 2px solid #000000; outline-offset: 2px; }
-.option-picker-action.primary { background: var(--color-brand-primary, #000000); color: #ffffff; border: none; }
+.option-picker-action.primary { background: var(--color-brand-primary, #000000); color: var(--color-brand-contrast, #ffffff); border: none; }
+
+.option-picker-action.primary:disabled,
+.option-picker-action.primary:disabled:hover,
+.option-picker-action.primary:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 .option-picker-action.primary:hover { background: var(--color-button-hover); }
+
+.option-picker-action.primary:active { background: var(--color-button-active); }
 .option-picker-action.secondary { background: #ffffff; color: #000000; border: 1.5px solid #000000; }
 .option-picker-action.secondary:hover { background: #f8fafc; }
 

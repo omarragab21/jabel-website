@@ -4,48 +4,48 @@
   
   <!-- Home Page / الصفحة الرئيسية -->
   <url>
-    <loc>https://jabel-website.vercel.app/</loc>
+    <loc>https://demo-tijara.be-kite.com/</loc>
     <lastmod>2026-09-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://jabel-website.vercel.app/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://jabel-website.vercel.app/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://demo-tijara.be-kite.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://demo-tijara.be-kite.com/" />
   </url>
 
   <!-- Products & Categories / المنتجات والأجهزة الإيطالية -->
   <url>
-    <loc>https://jabel-website.vercel.app/products</loc>
+    <loc>https://demo-tijara.be-kite.com/products</loc>
     <lastmod>2026-09-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://jabel-website.vercel.app/products" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://demo-tijara.be-kite.com/products" />
   </url>
 
   <!-- Special Offers / العروض المميزة -->
   <url>
-    <loc>https://jabel-website.vercel.app/bundles</loc>
+    <loc>https://demo-tijara.be-kite.com/bundles</loc>
     <lastmod>2026-09-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://jabel-website.vercel.app/bundles" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://demo-tijara.be-kite.com/bundles" />
   </url>
 
   <!-- About Us / من نحن -->
   <url>
-    <loc>https://jabel-website.vercel.app/about</loc>
+    <loc>https://demo-tijara.be-kite.com/about</loc>
     <lastmod>2026-09-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://jabel-website.vercel.app/about" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://demo-tijara.be-kite.com/about" />
   </url>
 
   <!-- Contact Us / اتصل بنا -->
   <url>
-    <loc>https://jabel-website.vercel.app/contact</loc>
+    <loc>https://demo-tijara.be-kite.com/contact</loc>
     <lastmod>2026-09-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://jabel-website.vercel.app/contact" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://demo-tijara.be-kite.com/contact" />
   </url>
 
 </urlset>

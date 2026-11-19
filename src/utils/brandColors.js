@@ -5,6 +5,8 @@
 // The last colours received are remembered, and main.js puts them back before
 // the app renders, so a visit never shows the built-in colours first and then
 // switches to the brand ones when the settings arrive.
+import { derivePalette } from './brandPalette';
+
 const STORAGE_KEY = 'jb:brand-colors';
 const HEX_COLOR = /^#[0-9a-f]{6}$/i;
 
@@ -15,9 +17,15 @@ const setVars = (names, value) => {
   names.forEach((name) => (value ? style.setProperty(name, value) : style.removeProperty(name)));
 };
 
+// Only the primary colour is chosen; its hover, pressed, focus and text colours are derived
+// from it (see brandPalette.js), so every button state follows the brand colour by itself.
 const paint = (primary, secondary) => {
+  const palette = derivePalette(primary);
   setVars(['--primary', '--primary-dark', '--color-brand-primary'], primary);
-  setVars(['--primary-hover'], primary && `color-mix(in srgb, ${primary} 85%, black)`);
+  setVars(['--primary-hover', '--color-brand-hover'], palette?.hover);
+  setVars(['--color-brand-active'], palette?.active);
+  setVars(['--color-brand-ring'], palette?.ring);
+  setVars(['--color-brand-contrast'], palette?.contrast);
   setVars(['--secondary', '--color-brand-secondary'], secondary);
 };
 

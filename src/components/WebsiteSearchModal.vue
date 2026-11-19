@@ -108,11 +108,24 @@ watch(() => props.modelValue, (isOpen) => {
 .search-input-wrapper { display: flex; gap: 0.5rem; padding: 1.5rem; border-bottom: 1px solid #f3f4f6; }
 .search-input-wrapper input { flex: 1; padding: 0.75rem 1rem; border: 1px solid #e5e7eb; border-radius: 10px; font-size: 1rem; }
 .search-input-wrapper input:focus { outline: none; border-color: #000; box-shadow: 0 0 0 3px rgba(135, 50, 96, 0.1); }
-.search-submit-btn { width: 48px; border: none; border-radius: 10px; background: var(--color-brand-primary, #000); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.search-submit-btn { width: 48px; border: none; border-radius: 10px; background: var(--color-brand-primary, #000); color: var(--color-brand-contrast, #ffffff); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+.search-submit-btn:disabled,
+.search-submit-btn:disabled:hover,
+.search-submit-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 
 .search-submit-btn:hover:not(:disabled) {
   background: var(--color-button-hover);
 }
+
+.search-submit-btn:active:not(:disabled) { background: var(--color-button-active); }
 .search-results { padding: 1rem; max-height: 400px; overflow-y: auto; }
 .search-result-item { display: flex; gap: 1rem; padding: 1rem; border-radius: 10px; cursor: pointer; border: 1px solid transparent; }
 .search-result-item:hover { background: #f9fafb; border-color: #f3f4f6; }

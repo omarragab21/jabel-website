@@ -87,7 +87,18 @@ const { t, locale } = useI18n();
 
 .btn-primary {
   background: var(--color-brand-primary, #000);
-  color: #fff;
+  color: var(--color-brand-contrast, #ffffff);
+}
+
+.btn-primary:disabled,
+.btn-primary:disabled:hover,
+.btn-primary:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-secondary {

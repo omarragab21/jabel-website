@@ -421,14 +421,27 @@ defineExpose({
   font-weight: 700;
   font-size: 14px;
   line-height: 21px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   transition: background-color 0.2s;
   white-space: nowrap;
+}
+
+.btn-accept-all:disabled,
+.btn-accept-all:disabled:hover,
+.btn-accept-all:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-accept-all:hover {
   background: var(--color-button-hover);
 }
+
+.btn-accept-all:active { background: var(--color-button-active); }
 
 /* consent-text-side */
 .consent-text-side {
@@ -744,14 +757,27 @@ defineExpose({
   font-weight: 700;
   font-size: 14px;
   line-height: 21px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   transition: background-color 0.2s;
   white-space: nowrap;
+}
+
+.btn-save-preferences:disabled,
+.btn-save-preferences:disabled:hover,
+.btn-save-preferences:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-save-preferences:hover {
   background: var(--color-button-hover);
 }
+
+.btn-save-preferences:active { background: var(--color-button-active); }
 
 /* ============================================================
    Mobile Responsiveness

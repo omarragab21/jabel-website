@@ -273,7 +273,7 @@ export default {
           <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { font-family: 'IBM Plex Sans Arabic', Arial, sans-serif; direction: ${dir}; text-align: ${textAlign}; padding: 30px; background: #ffffff; color: #111827; }
-            .badge-tax { display: inline-block; padding: 4px 10px; background: var(--color-brand-primary, #000000); color: #ffffff; font-size: 11px; font-weight: 700; border-radius: 4px; margin-bottom: 8px; }
+            .badge-tax { display: inline-block; padding: 4px 10px; background: var(--color-brand-primary, #000000); color: var(--color-brand-contrast, #ffffff); font-size: 11px; font-weight: 700; border-radius: 4px; margin-bottom: 8px; }
             .header { display: flex; justify-content: space-between; border-bottom: 2px solid #000000; padding-bottom: 20px; margin-bottom: 24px; }
             .title { font-size: 24px; font-weight: 900; margin-bottom: 4px; }
             .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 12px; }
@@ -289,7 +289,7 @@ export default {
             td { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; font-size: 13px; }
             .totals { width: 340px; ${totalsMargin} margin-bottom: 30px; }
             .total-row { display: flex; justify-content: space-between; padding: 8px 12px; background: #f9fafb; font-size: 13px; margin-bottom: 4px; border-radius: 4px; }
-            .total-row.grand { background: var(--color-brand-primary, #000000); color: #ffffff; font-size: 15px; font-weight: 800; }
+            .total-row.grand { background: var(--color-brand-primary, #000000); color: var(--color-brand-contrast, #ffffff); font-size: 15px; font-weight: 800; }
             .footer { text-align: center; border-top: 1px solid #e5e7eb; padding-top: 20px; font-size: 12px; color: #6b7280; }
             @media print { body { padding: 15px; } }
           </style>
@@ -431,7 +431,7 @@ export default {
   display: inline-block;
   padding: 4px 12px;
   background: var(--color-brand-primary, #000000);
-  color: #ffffff;
+  color: var(--color-brand-contrast, #ffffff);
   font-size: 12px;
   font-weight: 700;
   border-radius: 4px;
@@ -583,7 +583,7 @@ export default {
 
 .invoice-table th {
   background: var(--color-brand-primary, #000000);
-  color: #ffffff;
+  color: var(--color-brand-contrast, #ffffff);
   padding: 12px 14px;
   font-size: 13.5px;
   font-weight: 700;
@@ -650,7 +650,7 @@ export default {
 
 .total-row.grand-total {
   background: var(--color-brand-primary, #000000);
-  color: #ffffff;
+  color: var(--color-brand-contrast, #ffffff);
   font-size: 16px;
   font-weight: 800;
 }
@@ -687,7 +687,7 @@ export default {
   gap: 10px;
   padding: 12px 28px;
   background: var(--color-brand-primary, #000000);
-  color: #ffffff;
+  color: var(--color-brand-contrast, #ffffff);
   border: none;
   border-radius: 8px;
   font-size: 15px;
@@ -696,10 +696,23 @@ export default {
   transition: all 0.2s ease;
 }
 
+.print-btn:disabled,
+.print-btn:disabled:hover,
+.print-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .print-btn:hover {
   background: var(--color-button-hover);
   transform: translateY(-1px);
 }
+
+.print-btn:active { background: var(--color-button-active); }
 
 .back-btn {
   padding: 12px 24px;

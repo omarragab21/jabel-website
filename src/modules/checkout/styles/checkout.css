@@ -115,8 +115,8 @@
 
 .step-item.completed .step-circle {
   background: var(--color-brand-primary, #000000);
-  border-color: #000000;
-  color: #fff;
+  border-color: var(--color-brand-primary);
+  color: var(--color-brand-contrast, #ffffff);
 }
 
 .step-item.completed .step-label {
@@ -488,17 +488,28 @@
   gap: 8px;
   height: 48px;
   background: var(--color-brand-primary, #000000);
-  border: 1.5px solid #000000;
+  border: 1.5px solid var(--color-brand-primary);
   border-radius: 6px;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+}
+
+.btn-primary-tab:disabled,
+.btn-primary-tab:disabled:hover,
+.btn-primary-tab:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-tab-my-addr {
@@ -955,14 +966,27 @@
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   cursor: pointer;
   transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.submit-continue-btn:disabled,
+.submit-continue-btn:disabled:hover,
+.submit-continue-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .submit-continue-btn:hover {
   background: var(--color-button-hover);
 }
+
+.submit-continue-btn:active { background: var(--color-button-active); }
 
 .submit-continue-btn:active {
   transform: scale(0.99);
@@ -1699,7 +1723,7 @@
 
 .btn-checkout-primary {
   background: var(--color-brand-primary, #000000);
-  color: #fff;
+  color: var(--color-brand-contrast, #ffffff);
   border: none;
   padding: 15px 40px;
   border-radius: 12px;
@@ -1711,11 +1735,24 @@
   transition: 0.3s;
 }
 
+.btn-checkout-primary:disabled,
+.btn-checkout-primary:disabled:hover,
+.btn-checkout-primary:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .btn-checkout-primary:hover {
   background: var(--color-button-hover);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(100, 116, 139, 0.2);
 }
+
+.btn-checkout-primary:active { background: var(--color-button-active); }
 
 .btn-checkout-secondary {
   background: #fff;
@@ -1764,7 +1801,7 @@
 .next-btn {
   padding: 16px 60px;
   background: var(--color-brand-primary, #000000); /* Primary Dark Mauve */
-  color: #fff;
+  color: var(--color-brand-contrast, #ffffff);
   border: none;
   border-radius: 15px;
   font-weight: 700;
@@ -1775,10 +1812,23 @@
   transition: all 0.3s;
 }
 
+.next-btn:disabled,
+.next-btn:disabled:hover,
+.next-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .next-btn:hover {
   background: var(--color-button-hover);
 box-shadow: 0 10px 20px rgba(100, 116, 139, 0.2);
 }
+
+.next-btn:active { background: var(--color-button-active); }
 
 /* summary-card (Figma 1:1 Design) */
 .summary-card {
@@ -1968,14 +2018,27 @@ box-shadow: 0 10px 20px rgba(100, 116, 139, 0.2);
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   cursor: pointer;
   transition: opacity 0.2s, background-color 0.2s;
+}
+
+.summary-card .primary-button:disabled,
+.summary-card .primary-button:disabled:hover,
+.summary-card .primary-button:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .summary-card .primary-button:hover:not(:disabled) {
   background: var(--color-button-hover);
 }
+
+.summary-card .primary-button:active:not(:disabled) { background: var(--color-button-active); }
 
 .summary-card .primary-button:disabled {
   opacity: 0.6;
@@ -2069,7 +2132,7 @@ box-shadow: 0 10px 20px rgba(100, 116, 139, 0.2);
   height: 40px;
   padding: 0 16px;
   background: var(--color-brand-primary, #000000);
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   border: none;
   border-radius: 6px;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
@@ -2077,6 +2140,17 @@ box-shadow: 0 10px 20px rgba(100, 116, 139, 0.2);
   font-weight: 700;
   cursor: pointer;
   transition: opacity 0.2s;
+}
+
+.summary-coupon-apply:disabled,
+.summary-coupon-apply:disabled:hover,
+.summary-coupon-apply:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .summary-coupon-apply:disabled {
@@ -2447,7 +2521,7 @@ box-shadow: 0 10px 20px rgba(100, 116, 139, 0.2);
   justify-content: center;
   padding: 0 28px;
   background: var(--color-brand-primary, #000000);
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   border-radius: 8px;
   text-decoration: none;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
@@ -2457,10 +2531,23 @@ box-shadow: 0 10px 20px rgba(100, 116, 139, 0.2);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+.receipt-btn-primary:disabled,
+.receipt-btn-primary:disabled:hover,
+.receipt-btn-primary:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .receipt-btn-primary:hover {
   background: var(--color-button-hover);
   transform: translateY(-1px);
 }
+
+.receipt-btn-primary:active { background: var(--color-button-active); }
 
 .receipt-btn-secondary {
   min-width: 180px;
@@ -2588,11 +2675,24 @@ box-shadow: 0 10px 20px rgba(100, 116, 139, 0.2);
   transition: all 0.3s;
 }
 
-.apply-btn { background: var(--color-brand-primary, #000000); color: #fff; }
+.apply-btn { background: var(--color-brand-primary, #000000); color: var(--color-brand-contrast, #ffffff); }
+
+.apply-btn:disabled,
+.apply-btn:disabled:hover,
+.apply-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 
 .apply-btn:hover:not(:disabled) {
   background: var(--color-button-hover);
 }
+
+.apply-btn:active:not(:disabled) { background: var(--color-button-active); }
 .remove-btn { background: #fee2e2; color: #ef4444; }
 
 .coupon-msg { font-size: 12px; margin-top: 8px; font-weight: 600; }
@@ -2738,7 +2838,7 @@ box-shadow: 0 10px 20px rgba(100, 116, 139, 0.2);
 
 .gift-toggle-card.active .gift-icon-box {
   background: var(--color-brand-primary, #000000);
-  color: #fff;
+  color: var(--color-brand-contrast, #ffffff);
   transform: rotate(-10deg) scale(1.1);
 }
 
@@ -2910,6 +3010,8 @@ box-shadow: 0 10px 20px rgba(100, 116, 139, 0.2);
 .save-addr-v3-btn:hover:not(:disabled) {
   background: var(--color-button-hover);
 }
+
+.save-addr-v3-btn:active:not(:disabled) { background: var(--color-button-active); }
 
 .save-addr-v3-btn:disabled {
   opacity: 0.7;
@@ -3084,14 +3186,27 @@ box-shadow: 0 10px 20px rgba(100, 116, 139, 0.2);
   font-weight: 700;
   font-size: 14px;
   line-height: 21px;
-  color: #FFFFFF;
+  color: var(--color-brand-contrast, #ffffff);
   cursor: pointer;
   transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.address-empty-btn:disabled,
+.address-empty-btn:disabled:hover,
+.address-empty-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 .address-empty-btn:hover {
   background: var(--color-button-hover, #1f2937);
   transform: translateY(-1px);
 }
+
+.address-empty-btn:active { background: var(--color-button-active); }
 
 /* Shimmer placeholder for a saved address while the list loads (same box as .address-card) */
 .address-card-skeleton { cursor: default; pointer-events: none; }

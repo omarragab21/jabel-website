@@ -1215,7 +1215,7 @@ onUnmounted(() => {
 
 .nav-circle-btn.is-active {
   background: var(--color-brand-primary, #000000);
-  color: #ffffff;
+  color: var(--color-brand-contrast, #ffffff);
 }
 
 .nav-circle-btn:hover {

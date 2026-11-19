@@ -10,8 +10,8 @@ const DEFAULT_SEO = {
     'أفران بلت إن', 'موقد غاز أمان كامل', 'شفاطات مطابخ', 'أجهزة غاز إيطالية',
     'توصيل أفران الرياض', 'أجهزة مطابخ جدة', 'مواقد غاز الدمام', 'وكيل جبل السعودية'
   ].join(', '),
-  image: 'https://jabel-website.vercel.app/og-image.png',
-  url: 'https://jabel-website.vercel.app'
+  image: 'https://demo-tijara.be-kite.com/og-image.png',
+  url: 'https://demo-tijara.be-kite.com'
 };
 
 export function useSEO(options = {}) {
@@ -20,7 +20,7 @@ export function useSEO(options = {}) {
     const description = options.description || DEFAULT_SEO.description;
     const keywords = options.keywords || DEFAULT_SEO.keywords;
     const rawImage = options.image || DEFAULT_SEO.image;
-    const image = rawImage.startsWith('http') ? rawImage : `https://jabel-website.vercel.app${rawImage.startsWith('/') ? '' : '/'}${rawImage}`;
+    const image = rawImage.startsWith('http') ? rawImage : `https://demo-tijara.be-kite.com${rawImage.startsWith('/') ? '' : '/'}${rawImage}`;
     const url = options.url || DEFAULT_SEO.url;
 
     // Browser tab title: the site name from the dashboard, in the language being shown
@@ -104,9 +104,9 @@ export function getStoreSchema() {
     '@context': 'https://schema.org',
     '@type': 'HomeGoodsStore',
     'name': 'جبل Jabel - أجهزة وأفران طهي إيطالية',
-    'image': 'https://jabel-website.vercel.app/logo.png',
-    '@id': 'https://jabel-website.vercel.app',
-    'url': 'https://jabel-website.vercel.app',
+    'image': 'https://demo-tijara.be-kite.com/logo.png',
+    '@id': 'https://demo-tijara.be-kite.com',
+    'url': 'https://demo-tijara.be-kite.com',
     'telephone': '+966-920000000',
     'priceRange': '$$$',
     'address': {

@@ -62,12 +62,13 @@ export const authActions = {
   },
 
   /**
-   * Login with Google / Apple (a Firebase ID token the server turns into a normal session)
+   * Login with Google / Apple: POST /v1/auth/social-login with the Firebase ID token and the provider
+   * ('google' | 'apple'); the server answers like a normal login (token + user).
    */
-  async socialLogin(idToken, options = {}) {
+  async socialLogin(idToken, provider, options = {}) {
     authState.loading = true;
     try {
-      const res = await api.post('/v1/auth/firebase', { id_token: idToken });
+      const res = await api.post('/v1/auth/social-login', { id_token: idToken, provider });
       this._setSession(res.data.token, getResponseUser(res.data), options.remember ?? true);
       return res.data;
     } finally {

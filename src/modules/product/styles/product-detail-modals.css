@@ -298,7 +298,7 @@
 
 .submit-review-btn {
   background: var(--color-brand-primary, #000000);
-  color: #ffffff;
+  color: var(--color-brand-contrast, #ffffff);
   border: none;
   border-radius: 8px;
   padding: 12px;
@@ -307,9 +307,22 @@
   transition: background 0.2s;
 }
 
+.submit-review-btn:disabled,
+.submit-review-btn:disabled:hover,
+.submit-review-btn:disabled:active {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .submit-review-btn:hover {
   background: var(--color-button-hover);
 }
+
+.submit-review-btn:active { background: var(--color-button-active); }
 
 .review-msg.success {
   color: #10b981;

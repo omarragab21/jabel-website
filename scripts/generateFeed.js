@@ -56,7 +56,7 @@ async function main() {
     fs.mkdirSync(FEEDS_DIR, { recursive: true });
   }
 
-  const storeUrl = 'https://jabel-website.vercel.app';
+  const storeUrl = 'https://demo-tijara.be-kite.com';
   const currency = 'JOD';
 
   const csvHeaders = [
