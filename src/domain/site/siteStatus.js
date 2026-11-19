@@ -19,11 +19,11 @@ export const isSiteBlocked = (settings) => resolveSiteStatus(settings) !== 'live
 
 const COPY = {
   construction: {
-    ar: { title: 'الموقع تحت الإنشاء', message: 'نعمل على تجهيز الموقع وسيكون متاحاً قريباً.' },
+    ar: { title: 'الموقع تحت الإنشاء', message: 'نعمل حالياً على تجهيز الموقع، وسيكون متاحاً قريباً بإذن الله.' },
     en: { title: 'Website under construction', message: 'We are getting the website ready. It will be available soon.' },
   },
   updating: {
-    ar: { title: 'جاري تحديث الموقع', message: 'نقوم بتحديث الموقع لنقدم لكم تجربة أفضل، وسنعود خلال وقت قصير.' },
+    ar: { title: 'جارٍ تحديث الموقع', message: 'نقوم بتحديث الموقع لنقدّم لكم تجربة أفضل، وسيعود إلى الخدمة خلال وقت قصير. نشكركم على تفهمكم.' },
     en: { title: 'We are updating the website', message: 'We are updating the site to give you a better experience. We will be back shortly.' },
   },
 };
