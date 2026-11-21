@@ -44,7 +44,13 @@
           }}
         </div>
 
-        <!-- Left side (in RTL): Sort Dropdown -->
+        <!-- Left side (in RTL): Filters button (phone) + Sort Dropdown -->
+        <div class="mf-bar">
+        <button type="button" class="mf-only mf-open-btn" :class="{ 'has-active': activeFilterCount }" data-testid="open-filters" @click="filtersOpen = true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+          {{ currentLang === 'ar' ? 'تصفية' : 'Filters' }}
+          <span v-if="activeFilterCount" class="mf-badge">{{ activeFilterCount }}</span>
+        </button>
         <div class="mockup-sort-group">
           <span class="mockup-sort-label">{{ currentLang === 'ar' ? 'ترتيب حسب:' : 'Sort by:' }}</span>
           <div class="mockup-sort-box">
@@ -59,12 +65,27 @@
             </svg>
           </div>
         </div>
+        </div>
       </div>
     </div>
 
     <!-- 3. Content Layout: Sidebar + Grid (Container) -->
     <div class="container">
+      <div v-if="activeChips.length" class="mf-chips" data-testid="active-filters">
+        <button v-for="chip in activeChips" :key="chip.key" type="button" class="mf-chip" @click="removeChip(chip.key)">{{ chip.label }}<i aria-hidden="true">×</i></button>
+        <button type="button" class="mf-chip clear" @click="clearAllFilters">{{ currentLang === 'ar' ? 'مسح الكل' : 'Clear all' }}</button>
+      </div>
       <div class="mockup-content-layout">
+        <FilterSheet
+          :open="filtersOpen"
+          :title="currentLang === 'ar' ? 'تصفية العروض' : 'Filter offers'"
+          :apply-label="currentLang === 'ar' ? `عرض ${filteredProducts.length} منتج` : `Show ${filteredProducts.length} products`"
+          :clear-label="currentLang === 'ar' ? 'مسح الكل' : 'Clear all'"
+          :close-label="currentLang === 'ar' ? 'إغلاق' : 'Close'"
+          :active-count="activeFilterCount"
+          @close="filtersOpen = false"
+          @clear="clearAllFilters"
+        >
         <OfferFiltersSidebar
           :current-lang="currentLang"
           :selected-offer-id="selectedOfferId"
@@ -77,6 +98,7 @@
           :select-offer="selectOffer"
           @toggle-in-stock="inStockOnly = !inStockOnly"
         />
+        </FilterSheet>
         <OfferResultsGrid
           :current-lang="currentLang"
           :localized="localized"
@@ -96,10 +118,11 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useSettings } from '../../../composables/useSettings';
 import { useSEO } from '../../../composables/useSEO';
 import OfferFiltersSidebar from '../components/OfferFiltersSidebar.vue';
+import FilterSheet from '../../../components/FilterSheet.vue';
 import OfferResultsGrid from '../components/OfferResultsGrid.vue';
 import { useOffersCatalog } from '../composables/useOffersCatalog';
 import { addProductToCart } from '../../../store/optionPicker';
@@ -133,6 +156,24 @@ const {
   resolveOfferFromQuery,
   fetchOffers,
 } = useOffersCatalog();
+
+// Phone filters: the sheet, the "N active" badge and the removable chips under the bar.
+const filtersOpen = ref(false);
+const activeFilterCount = computed(() => (selectedOfferId.value !== null ? 1 : 0) + (inStockOnly.value ? 1 : 0));
+const activeChips = computed(() => {
+  const chips = [];
+  if (selectedOfferId.value !== null && currentOffer.value) chips.push({ key: 'offer', label: localized(currentOffer.value, 'name') || currentOffer.value.name });
+  if (inStockOnly.value) chips.push({ key: 'stock', label: currentLang.value === 'ar' ? 'متوفر في المخزون' : 'In stock' });
+  return chips;
+});
+const removeChip = (key) => {
+  if (key === 'offer') selectOffer(null);
+  else if (key === 'stock') inStockOnly.value = false;
+};
+const clearAllFilters = () => {
+  if (selectedOfferId.value !== null) selectOffer(null);
+  inStockOnly.value = false;
+};
 
 // The server already applies the offer to the product's price, so the cart gets the product as it is.
 const addOfferProductToCart = (product) => addProductToCart(product);

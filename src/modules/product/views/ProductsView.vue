@@ -33,7 +33,13 @@
           }}
         </div>
 
-        <!-- Left side (in RTL): Sort Dropdown -->
+        <!-- Left side (in RTL): Filters button (phone) + Sort Dropdown -->
+        <div class="mf-bar">
+        <button type="button" class="mf-only mf-open-btn" :class="{ 'has-active': activeFilterCount }" data-testid="open-filters" @click="filtersOpen = true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+          {{ currentLang === 'ar' ? 'تصفية' : 'Filters' }}
+          <span v-if="activeFilterCount" class="mf-badge">{{ activeFilterCount }}</span>
+        </button>
         <div class="mockup-sort-group">
           <span class="mockup-sort-label">{{ currentLang === 'ar' ? 'ترتيب حسب:' : 'Sort by:' }}</span>
           <div class="mockup-sort-box">
@@ -48,12 +54,27 @@
             </svg>
           </div>
         </div>
+        </div>
       </div>
     </div>
 
     <!-- 3. Content Layout: Sidebar + Grid (Container) -->
     <div class="container">
+      <div v-if="activeChips.length" class="mf-chips" data-testid="active-filters">
+        <button v-for="chip in activeChips" :key="chip.key" type="button" class="mf-chip" @click="removeChip(chip.key)">{{ chip.label }}<i aria-hidden="true">×</i></button>
+        <button type="button" class="mf-chip clear" @click="clearAllFilters">{{ currentLang === 'ar' ? 'مسح الكل' : 'Clear all' }}</button>
+      </div>
       <div class="mockup-content-layout">
+        <FilterSheet
+          :open="filtersOpen"
+          :title="currentLang === 'ar' ? 'تصفية النتائج' : 'Filter results'"
+          :apply-label="currentLang === 'ar' ? `عرض ${totalProductsCount} منتج` : `Show ${totalProductsCount} products`"
+          :clear-label="currentLang === 'ar' ? 'مسح الكل' : 'Clear all'"
+          :close-label="currentLang === 'ar' ? 'إغلاق' : 'Close'"
+          :active-count="activeFilterCount"
+          @close="filtersOpen = false"
+          @clear="clearAllFilters"
+        >
         <ProductFiltersSidebar
           :loading="categoriesLoading"
           :categories="categories"
@@ -67,6 +88,7 @@
           :toggle-in-stock="toggleInStock"
           :toggle-discount="toggleDiscount"
         />
+        </FilterSheet>
         <ProductResultsGrid
           :products="products"
           :loading="loading"
@@ -90,6 +112,7 @@ import { ref, onMounted, computed, watch, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { isCancelledRequest } from '../../../config/axios';
 import ProductFiltersSidebar from '../components/ProductFiltersSidebar.vue';
+import FilterSheet from '../../../components/FilterSheet.vue';
 import ProductResultsGrid from '../components/ProductResultsGrid.vue';
 import { addProductToCart as addToCartWithOptions } from '../../../store/optionPicker';
 import { useOffers } from '../composables/useOffers';
@@ -143,6 +166,28 @@ const currentCategoryTitle = computed(() => {
   }
   return null;
 });
+
+// Phone filters: the sheet, the "N active" badge and the removable chips under the bar.
+const filtersOpen = ref(false);
+const activeFilterCount = computed(() => (selectedCategory.value !== null ? 1 : 0) + (inStockOnly.value ? 1 : 0) + (hasDiscountOnly.value ? 1 : 0));
+const activeChips = computed(() => {
+  const ar = currentLang.value === 'ar';
+  const chips = [];
+  if (selectedCategory.value !== null && currentCategoryTitle.value) chips.push({ key: 'category', label: currentCategoryTitle.value });
+  if (inStockOnly.value) chips.push({ key: 'stock', label: ar ? 'متوفر في المخزون' : 'In stock' });
+  if (hasDiscountOnly.value) chips.push({ key: 'discount', label: ar ? 'ضمن العروض' : 'In offers' });
+  return chips;
+});
+const removeChip = (key) => {
+  if (key === 'category') selectCategory(null);
+  else if (key === 'stock') toggleInStock();
+  else if (key === 'discount') toggleDiscount();
+};
+const clearAllFilters = () => {
+  if (selectedCategory.value !== null) selectCategory(null);
+  if (inStockOnly.value) toggleInStock();
+  if (hasDiscountOnly.value) toggleDiscount();
+};
 
 const selectCategory = (catId) => {
   selectedCategory.value = catId;
