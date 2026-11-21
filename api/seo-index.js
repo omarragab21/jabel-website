@@ -1,7 +1,7 @@
 // Serves the site's index.html with the SEO text from the dashboard (Settings > SEO & link preview) written into
 // <head>, so Google and link previews (Telegram, WhatsApp, Facebook) see it without running JavaScript.
 // vercel.json sends every page request here; static files (assets, images, sitemap...) never reach it.
-// If anything goes wrong the unchanged index.html is served, so the site never depends on this function.
+// If the settings cannot be read the unchanged page shell is served, so the site never depends on this function.
 import { renderSeoHtml } from '../src/domain/site/seoHtml.js';
 
 export const config = { runtime: 'edge' };
@@ -22,11 +22,11 @@ const fetchSettings = async () => {
 };
 
 export default async function handler(request) {
-  // The function fetches index.html from its own origin; this header stops it from ever answering itself.
+  // The function fetches the page shell (app-shell.html, see scripts/renameShell.js) from its own origin; this header stops it from ever answering itself.
   if (request.headers.get(SHELL_HEADER)) return new Response('', { status: 404 });
 
   const url = new URL(request.url);
-  const shellResponse = await fetch(new URL('/index.html', url.origin), { headers: { [SHELL_HEADER]: '1' } });
+  const shellResponse = await fetch(new URL('/app-shell.html', url.origin), { headers: { [SHELL_HEADER]: '1' } });
   if (!shellResponse.ok) return new Response('Site is temporarily unavailable', { status: 502 });
   const shell = await shellResponse.text();
 
