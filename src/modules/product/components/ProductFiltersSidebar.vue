@@ -1,5 +1,14 @@
 <template>
-          <aside class="mockup-sidebar">
+  <FilterSheet
+    :open="open"
+    :title="currentLang === 'ar' ? 'تصفية النتائج' : 'Filter Results'"
+    :lang="currentLang"
+    :active-count="activeCount"
+    :results-count="resultsCount"
+    :loading="resultsLoading"
+    @close="emit('close')"
+    @reset="emit('reset')"
+  >
           <div class="sidebar-card">
             <!-- Sidebar Header -->
             <div class="sidebar-header">
@@ -80,11 +89,12 @@
               </label>
             </div>
           </div>
-        </aside>
-
+  </FilterSheet>
 </template>
 <script setup>
 import { toRefs } from 'vue';
-const props = defineProps({ loading: { type: Boolean, default: false }, categories: { type: Array, default: () => [] }, selectedCategory: { type: [Number, String], default: null }, totalAllCount: { type: Number, default: 0 }, currentLang: { type: String, required: true }, inStockOnly: { type: Boolean, default: false }, hasDiscountOnly: { type: Boolean, default: false }, localized: { type: Function, required: true }, selectCategory: { type: Function, required: true }, toggleInStock: { type: Function, required: true }, toggleDiscount: { type: Function, required: true } });
+import FilterSheet from '../../../components/FilterSheet.vue';
+const props = defineProps({ open: { type: Boolean, default: false }, activeCount: { type: Number, default: 0 }, resultsCount: { type: Number, default: 0 }, resultsLoading: { type: Boolean, default: false }, loading: { type: Boolean, default: false }, categories: { type: Array, default: () => [] }, selectedCategory: { type: [Number, String], default: null }, totalAllCount: { type: Number, default: 0 }, currentLang: { type: String, required: true }, inStockOnly: { type: Boolean, default: false }, hasDiscountOnly: { type: Boolean, default: false }, localized: { type: Function, required: true }, selectCategory: { type: Function, required: true }, toggleInStock: { type: Function, required: true }, toggleDiscount: { type: Function, required: true } });
+const emit = defineEmits(['close', 'reset']);
 const { loading, categories, selectedCategory, totalAllCount, currentLang, inStockOnly, hasDiscountOnly, localized, selectCategory, toggleInStock, toggleDiscount } = toRefs(props);
 </script>

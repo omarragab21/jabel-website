@@ -81,12 +81,12 @@ const isRtl = computed(() => currentLang.value === 'ar');
 // Dynamic SEO tags
 useSEO({
   title: isRtl.value
-    ? 'الشروط والأحكام | Jabel الأجهزة الإيطالية الفاخرة'
-    : 'Terms & Conditions | Jabel Luxury Italian Appliances',
+    ? 'الشروط والأحكام'
+    : 'Terms & Conditions',
   description: isRtl.value
-    ? 'تعرف على الشروط والأحكام التنظيمية لمتجر Jabel للأجهزة المنزلية الإيطالية الفاخرة في المملكة العربية السعودية.'
-    : 'Read the regulatory terms and conditions for Jabel luxury Italian home appliances in Saudi Arabia.',
-  keywords: 'الشروط والأحكام, شروط الاستخدام, جبل, Jabel terms and conditions, سياسة المتجر'
+    ? 'تعرّفوا على شروط وأحكام استخدام متجر صيدليات الجبل وطلب المنتجات والتوصيل والاسترجاع.'
+    : 'Read the terms and conditions for using the Al-Jabal Pharmacies store: ordering, delivery and returns.',
+  keywords: 'الشروط والأحكام, شروط الاستخدام, صيدليات الجبل, Al-Jabal Pharmacies terms and conditions'
 });
 
 // Fresh cached settings render the text at once; otherwise skeleton lines show until it arrives.

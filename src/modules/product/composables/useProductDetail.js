@@ -340,8 +340,8 @@ const fetchProduct = async (id) => {
 
       useSEO({
         title: localized(product.value, 'name'),
-        description: localized(product.value, 'description') || (locale.value === 'ar' ? `اشتري ${localized(product.value, 'name')} الإيطالي الفاخر من جبل.` : `Buy the premium Italian ${localized(product.value, 'name')} from Jabel.`),
-        keywords: locale.value === 'ar' ? `${localized(product.value, 'name')}, جبل, أجهزة غاز إيطالية, Jabel` : `${localized(product.value, 'name')}, Jabel, Italian gas appliances`,
+        description: localized(product.value, 'description') || (locale.value === 'ar' ? `اشتري ${localized(product.value, 'name')} من صيدليات الجبل، منتج أصلي ومرخص مع توصيل سريع.` : `Buy ${localized(product.value, 'name')} from Al-Jabal Pharmacies: a genuine, licensed product with fast delivery.`),
+        keywords: locale.value === 'ar' ? `${localized(product.value, 'name')}, صيدليات الجبل, Dr. Jable, Jabel` : `${localized(product.value, 'name')}, Al-Jabal Pharmacies, Dr. Jable, Jabel`,
         image: getImageUrl(product.value.image, product.value.id)
       });
 

@@ -1,27 +1,32 @@
 import { watchEffect } from 'vue';
-import { siteNameText } from '../store/siteIdentity.js';
+import { siteIdentity, siteNameText, siteSeo } from '../store/siteIdentity.js';
+import { absoluteImageUrl } from '../domain/site/seoMeta.js';
+import { JABEL_SEO } from '../domain/site/seoDefaults.js';
 
-const DEFAULT_SEO = {
-  title: 'جبل | Jabel - أجهزة وأفران غاز إيطالية فاخرة في السعودية',
-  description: 'المتجر الرسمي لأجهزة وأفران ومواقد الغاز الإيطالية جبل في المملكة العربية السعودية. صناعة إيطالية فاخرة 100%، أمان تام، ضمان سنتين شامل، وتوصيل لكافة مدن المملكة.',
-  keywords: [
-    'جبل', 'Jabel', 'أفران غاز إيطالية', 'مواقد غاز بلت إن', 'سطح غاز إيطالي',
-    'أجهزة مطابخ إيطالية', 'مواقد بلت إن', 'جبل السعودية', 'Jabel Saudi',
-    'أفران بلت إن', 'موقد غاز أمان كامل', 'شفاطات مطابخ', 'أجهزة غاز إيطالية',
-    'توصيل أفران الرياض', 'أجهزة مطابخ جدة', 'مواقد غاز الدمام', 'وكيل جبل السعودية'
-  ].join(', '),
-  image: 'https://demo-tijara.be-kite.com/og-image.png',
-  url: 'https://demo-tijara.be-kite.com'
-};
+// Jabel's own text (domain/site/seoDefaults.js), in the language being shown; the logo is the share image.
+const defaultSeo = (lang) => ({ ...JABEL_SEO[lang === 'en' ? 'en' : 'ar'], image: '/brand/jabel-logo.png' });
+
+// The first filled value. `siteWide` pages (the home page) let the dashboard's SEO text win over the page's own text;
+// every other page keeps its own text and uses the dashboard's only where it has none.
+const firstFilled = (...values) => values.find((value) => typeof value === 'string' && value.trim() !== '');
 
 export function useSEO(options = {}) {
   watchEffect(() => {
-    const seoTitle = options.seoTitle || (options.title ? `${options.title} | جبل Jabel` : DEFAULT_SEO.title);
-    const description = options.description || DEFAULT_SEO.description;
-    const keywords = options.keywords || DEFAULT_SEO.keywords;
-    const rawImage = options.image || DEFAULT_SEO.image;
-    const image = rawImage.startsWith('http') ? rawImage : `https://demo-tijara.be-kite.com${rawImage.startsWith('/') ? '' : '/'}${rawImage}`;
-    const url = options.url || DEFAULT_SEO.url;
+    const origin = window.location.origin;
+    const seo = siteSeo.value;
+    const DEFAULT_SEO = defaultSeo(siteIdentity.lang);
+    // The main logo from the dashboard is the share image until a dedicated one is uploaded.
+    const logo = typeof siteIdentity.settings?.logo === 'string' ? siteIdentity.settings.logo : '';
+    const own = options.siteWide ? [seo, options] : [options, seo];
+    const brand = siteNameText.value || 'جبل Jabel';
+    const seoTitle = options.siteWide
+      ? firstFilled(seo.title, options.seoTitle, options.title && `${options.title} | ${brand}`, DEFAULT_SEO.title)
+      : firstFilled(options.seoTitle, options.title && `${options.title} | ${brand}`, seo.title, DEFAULT_SEO.title);
+    const description = firstFilled(...own.map((source) => source.description), DEFAULT_SEO.description);
+    const keywords = firstFilled(...own.map((source) => source.keywords), DEFAULT_SEO.keywords);
+    const rawImage = firstFilled(...own.map((source) => source.image), logo) || DEFAULT_SEO.image;
+    const image = absoluteImageUrl(rawImage, origin) || absoluteImageUrl(DEFAULT_SEO.image, origin);
+    const url = options.url || origin;
 
     // Browser tab title: the site name from the dashboard, in the language being shown
     document.title = options.tabTitle || siteNameText.value;
@@ -60,6 +65,10 @@ export function useSEO(options = {}) {
     updateMetaProperty('og:url', url);
     updateMetaProperty('og:site_name', siteNameText.value);
     updateMetaProperty('og:type', options.type || 'website');
+    updateMetaName('twitter:card', 'summary_large_image');
+    updateMetaName('twitter:title', seoTitle);
+    updateMetaName('twitter:description', description);
+    updateMetaName('twitter:image', image);
 
     // Canonical
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -74,9 +83,19 @@ export function useSEO(options = {}) {
     if (options.schema) {
       injectJSONLD(options.schema);
     } else {
-      injectJSONLD(getStoreSchema());
+      injectJSONLD(getStoreSchema(siteIdentity.settings, origin));
     }
   });
+}
+
+function updateMetaName(name, content) {
+  let element = document.querySelector(`meta[name="${name}"]`);
+  if (!element) {
+    element = document.createElement('meta');
+    element.setAttribute('name', name);
+    document.head.appendChild(element);
+  }
+  element.setAttribute('content', content);
 }
 
 function updateMetaProperty(property, content) {
@@ -99,36 +118,25 @@ function injectJSONLD(schemaData) {
   script.textContent = JSON.stringify(schemaData);
 }
 
-export function getStoreSchema() {
-  return {
+// The shop for Google (schema.org Pharmacy). Contact details come from the dashboard; nothing is made up.
+export function getStoreSchema(settings = {}, origin = '') {
+  const text = (value) => (typeof value === 'string' ? value.trim() : '');
+  const logo = absoluteImageUrl(text(settings?.logo), origin) || absoluteImageUrl('/brand/jabel-logo.png', origin);
+  const address = text(settings?.address_en) || text(settings?.address_ar);
+  const schema = {
     '@context': 'https://schema.org',
-    '@type': 'HomeGoodsStore',
-    'name': 'جبل Jabel - أجهزة وأفران طهي إيطالية',
-    'image': 'https://demo-tijara.be-kite.com/logo.png',
-    '@id': 'https://demo-tijara.be-kite.com',
-    'url': 'https://demo-tijara.be-kite.com',
-    'telephone': '+966-920000000',
-    'priceRange': '$$$',
-    'address': {
-      '@type': 'PostalAddress',
-      'addressLocality': 'Riyadh',
-      'addressRegion': 'Riyadh',
-      'addressCountry': 'SA'
-    },
-    'geo': {
-      '@type': 'GeoCoordinates',
-      'latitude': 24.7136,
-      'longitude': 46.6753
-    },
-    'openingHoursSpecification': {
-      '@type': 'OpeningHoursSpecification',
-      'dayOfWeek': [
-        'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'
-      ],
-      'opens': '09:00',
-      'closes': '22:00'
-    },
-    'sameAs': [],
-    'description': 'المتجر الرسمي لأجهزة وأفران ومواقد الغاز الإيطالية جبل في المملكة العربية السعودية. جودة إيطالية، أمان كامل، وضمان شامل سنتين.'
+    '@type': 'Pharmacy',
+    'name': 'صيدليات الجبل | Al-Jabal Pharmacies',
+    'alternateName': 'Dr. Jable',
+    'image': logo,
+    'logo': logo,
+    'url': origin,
+    'description': JABEL_SEO.ar.description,
   };
+  const phone = text(settings?.support_phone) || text(settings?.site_contact_phone);
+  const email = text(settings?.support_email) || text(settings?.email);
+  if (phone) schema.telephone = phone;
+  if (email) schema.email = email;
+  if (address) schema.address = { '@type': 'PostalAddress', 'streetAddress': address, 'addressCountry': 'JO' };
+  return schema;
 }

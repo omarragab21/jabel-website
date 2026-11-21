@@ -33,6 +33,22 @@
           }}
         </div>
 
+        <!-- Mobile / tablet: opens the filters bottom sheet -->
+        <button
+          type="button"
+          class="mobile-filter-btn"
+          :class="{ 'has-active': activeFiltersCount > 0 }"
+          aria-haspopup="dialog"
+          :aria-expanded="filtersOpen ? 'true' : 'false'"
+          @click="filtersOpen = true"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+          </svg>
+          <span>{{ currentLang === 'ar' ? 'تصفية' : 'Filter' }}</span>
+          <span v-if="activeFiltersCount" class="mobile-filter-badge">{{ activeFiltersCount }}</span>
+        </button>
+
         <!-- Left side (in RTL): Sort Dropdown -->
         <div class="mockup-sort-group">
           <span class="mockup-sort-label">{{ currentLang === 'ar' ? 'ترتيب حسب:' : 'Sort by:' }}</span>
@@ -51,10 +67,39 @@
       </div>
     </div>
 
+    <!-- Active filters (mobile / tablet only) -->
+    <div v-if="activeFilterChips.length" class="container">
+      <div class="active-filter-chips" role="list">
+        <button
+          v-for="chip in activeFilterChips"
+          :key="chip.key"
+          type="button"
+          class="filter-chip"
+          role="listitem"
+          :aria-label="(currentLang === 'ar' ? 'إزالة الفلتر: ' : 'Remove filter: ') + chip.label"
+          @click="chip.remove()"
+        >
+          <span>{{ chip.label }}</span>
+          <span class="filter-chip-x" aria-hidden="true">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </span>
+        </button>
+        <button type="button" class="filter-chips-clear" @click="resetFilters">
+          {{ currentLang === 'ar' ? 'مسح الكل' : 'Clear all' }}
+        </button>
+      </div>
+    </div>
+
     <!-- 3. Content Layout: Sidebar + Grid (Container) -->
     <div class="container">
       <div class="mockup-content-layout">
         <ProductFiltersSidebar
+          :open="filtersOpen"
+          :active-count="activeFiltersCount"
+          :results-count="totalProductsCount"
+          :results-loading="loading"
+          @close="filtersOpen = false"
+          @reset="resetFilters"
           :loading="categoriesLoading"
           :categories="categories"
           :selected-category="selectedCategory"
@@ -105,9 +150,9 @@ const { localized, currentLang } = useLocalized();
 const { fetchOffers } = useOffers();
 
 useSEO({
-  title: 'كافة المنتجات والأجهزة الإيطالية - متجر جبل Jabel',
-  description: 'تصفح تشكيلة فاخرة من أفران ومواقد الغاز والمسطحات والشفاطات الإيطالية الأصلية 100% مع ضمان سنتين وتوصيل لكافة مدن المملكة العربية السعودية.',
-  keywords: 'أفران غاز إيطالية, مواقد بلت إن, مسطح غاز, شفاط مطبخ, جبل السعودية'
+  title: 'جميع المنتجات',
+  description: 'تسوقوا الفيتامينات والمكملات الغذائية ومنتجات العناية بالبشرة والشعر والأم والطفل من صيدليات الجبل. منتجات أصلية ومرخصة وتوصيل سريع لجميع المحافظات.',
+  keywords: 'صيدليات الجبل, منتجات صيدلية, فيتامينات, مكملات غذائية, العناية بالبشرة, العناية بالشعر, الأم والطفل, Dr. Jable'
 });
 
 // State
@@ -127,6 +172,11 @@ const sortBy = ref('relevant');
 const selectedCategory = ref(null);
 const inStockOnly = ref(false);
 const hasDiscountOnly = ref(false);
+const filtersOpen = ref(false);
+
+const activeFiltersCount = computed(
+  () => (selectedCategory.value ? 1 : 0) + (inStockOnly.value ? 1 : 0) + (hasDiscountOnly.value ? 1 : 0),
+);
 
 const totalAllCount = computed(() => {
   return allProductsCount.value || totalCount.value || 0;
@@ -143,6 +193,25 @@ const currentCategoryTitle = computed(() => {
   }
   return null;
 });
+
+const activeFilterChips = computed(() => {
+  const ar = currentLang.value === 'ar';
+  const chips = [];
+  if (selectedCategory.value && currentCategoryTitle.value) {
+    chips.push({ key: 'category', label: currentCategoryTitle.value, remove: () => selectCategory(null) });
+  }
+  if (inStockOnly.value) chips.push({ key: 'stock', label: ar ? 'متوفر في المخزون' : 'In Stock', remove: toggleInStock });
+  if (hasDiscountOnly.value) chips.push({ key: 'offers', label: ar ? 'ضمن العروض' : 'In offers', remove: toggleDiscount });
+  return chips;
+});
+
+const resetFilters = () => {
+  selectedCategory.value = null;
+  inStockOnly.value = false;
+  hasDiscountOnly.value = false;
+  currentPage.value = 1;
+  fetchProducts();
+};
 
 const selectCategory = (catId) => {
   selectedCategory.value = catId;
@@ -286,3 +355,4 @@ onUnmounted(() => {
 </script>
 
 <style src="../styles/products.css"></style>
+<style src="../../../styles/mobile-filter.css"></style>

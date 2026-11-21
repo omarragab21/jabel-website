@@ -353,6 +353,8 @@ const homeOffersTitle = computed(() => (!homeSettingsReady.value ? '' : currentL
   : homepageSettings.value.home_section_offers_title_en || ''));
 
 useSEO({
+  // The dashboard's SEO text (Settings > SEO & link preview) wins here; the text below is used until one is set.
+  siteWide: true,
   title: 'جبل (Jabel) - أجهزة مطبخ بمعايير إيطالية فاخرة',
   description: 'تسوق أفضل مواقد الغاز الإيطالية، أفران البلت إن، وشفاطات المطابخ الفاخرة بأعلى معايير الأمان والجودة وضمان شامل معتمد.',
   keywords: 'جبل, أجهزة مطبخ, مواقد غاز, أفران بلت إن, شفاطات إيطالية, ميكروويف بلت إن, Jabel, أجهزة إيطالية'

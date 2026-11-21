@@ -1,6 +1,13 @@
 <template>
-        <!-- Sidebar Filters Card (Right in RTL) -->
-        <aside class="mockup-sidebar">
+  <FilterSheet
+    :open="open"
+    :title="currentLang === 'ar' ? 'تصفية العروض' : 'Filter Offers'"
+    :lang="currentLang"
+    :active-count="activeCount"
+    :results-count="resultsCount"
+    @close="emit('close')"
+    @reset="emit('reset')"
+  >
           <div class="sidebar-card">
             <!-- Sidebar Header -->
             <div class="sidebar-header">
@@ -62,13 +69,16 @@
               </label>
             </div>
           </div>
-        </aside>
-
+  </FilterSheet>
 </template>
 <script setup>
 import { toRefs } from 'vue';
+import FilterSheet from '../../../components/FilterSheet.vue';
 
 const props = defineProps({
+  open: { type: Boolean, default: false },
+  activeCount: { type: Number, default: 0 },
+  resultsCount: { type: Number, default: 0 },
   currentLang: { type: String, required: true },
   selectedOfferId: { type: [Number, String], default: null },
   offers: { type: Array, default: () => [] },
@@ -80,7 +90,7 @@ const props = defineProps({
   getOfferCount: { type: Function, required: true },
   selectOffer: { type: Function, required: true },
 });
-const emit = defineEmits(['toggle-in-stock']);
+const emit = defineEmits(['toggle-in-stock', 'close', 'reset']);
 const { currentLang, selectedOfferId, offers, inStockOnly, localized, getOfferCount, selectOffer } = toRefs(props);
 </script>
 

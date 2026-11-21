@@ -96,12 +96,12 @@ const isRtl = computed(() => currentLang.value === 'ar');
 // Dynamic SEO tags
 useSEO({
   title: isRtl.value
-    ? 'سياسة الخصوصية | Jabel الأجهزة الإيطالية الفاخرة'
-    : 'Privacy Policy | Jabel Luxury Italian Appliances',
+    ? 'سياسة الخصوصية'
+    : 'Privacy Policy',
   description: isRtl.value
-    ? 'تعرف على سياسة الخصوصية وحماية البيانات الشخصية في متجر Jabel للأجهزة المنزلية الإيطالية الفاخرة في المملكة العربية السعودية.'
-    : 'Learn about the privacy policy and personal data protection at Jabel luxury Italian home appliances in Saudi Arabia.',
-  keywords: 'سياسة الخصوصية, حماية البيانات, جبل, Jabel privacy policy, شروط الاستخدام'
+    ? 'تعرّفوا على سياسة الخصوصية وكيف تحمي صيدليات الجبل بياناتكم الشخصية.'
+    : 'Learn about the privacy policy and how Al-Jabal Pharmacies protects your personal data.',
+  keywords: 'سياسة الخصوصية, حماية البيانات, صيدليات الجبل, Al-Jabal Pharmacies privacy policy'
 });
 
 // Fresh cached settings render the text at once; otherwise skeleton lines show until it arrives.

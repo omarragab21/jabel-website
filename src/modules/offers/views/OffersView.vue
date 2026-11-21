@@ -44,6 +44,22 @@
           }}
         </div>
 
+        <!-- Mobile / tablet: opens the filters bottom sheet -->
+        <button
+          type="button"
+          class="mobile-filter-btn"
+          :class="{ 'has-active': activeFiltersCount > 0 }"
+          aria-haspopup="dialog"
+          :aria-expanded="filtersOpen ? 'true' : 'false'"
+          @click="filtersOpen = true"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+          </svg>
+          <span>{{ currentLang === 'ar' ? 'تصفية' : 'Filter' }}</span>
+          <span v-if="activeFiltersCount" class="mobile-filter-badge">{{ activeFiltersCount }}</span>
+        </button>
+
         <!-- Left side (in RTL): Sort Dropdown -->
         <div class="mockup-sort-group">
           <span class="mockup-sort-label">{{ currentLang === 'ar' ? 'ترتيب حسب:' : 'Sort by:' }}</span>
@@ -62,10 +78,38 @@
       </div>
     </div>
 
+    <!-- Active filters (mobile / tablet only) -->
+    <div v-if="activeFilterChips.length" class="container">
+      <div class="active-filter-chips" role="list">
+        <button
+          v-for="chip in activeFilterChips"
+          :key="chip.key"
+          type="button"
+          class="filter-chip"
+          role="listitem"
+          :aria-label="(currentLang === 'ar' ? 'إزالة الفلتر: ' : 'Remove filter: ') + chip.label"
+          @click="chip.remove()"
+        >
+          <span>{{ chip.label }}</span>
+          <span class="filter-chip-x" aria-hidden="true">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </span>
+        </button>
+        <button type="button" class="filter-chips-clear" @click="resetFilters">
+          {{ currentLang === 'ar' ? 'مسح الكل' : 'Clear all' }}
+        </button>
+      </div>
+    </div>
+
     <!-- 3. Content Layout: Sidebar + Grid (Container) -->
     <div class="container">
       <div class="mockup-content-layout">
         <OfferFiltersSidebar
+          :open="filtersOpen"
+          :active-count="activeFiltersCount"
+          :results-count="filteredProducts.length"
+          @close="filtersOpen = false"
+          @reset="resetFilters"
           :current-lang="currentLang"
           :selected-offer-id="selectedOfferId"
           :offers="offers"
@@ -96,7 +140,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useSettings } from '../../../composables/useSettings';
 import { useSEO } from '../../../composables/useSEO';
 import OfferFiltersSidebar from '../components/OfferFiltersSidebar.vue';
@@ -106,9 +150,9 @@ import { addProductToCart } from '../../../store/optionPicker';
 
 const { fetchSettings } = useSettings();
 useSEO({
-  title: 'العروض - متجر جبل Jabel',
-  description: 'عروض جبل: خصومات على أفران الغاز والمسطحات والشفاطات الإيطالية لفترة محدودة مع ضمان شامل.',
-  keywords: 'عروض جبل, خصومات أفران غاز, عروض بلت ان, عروض مطابخ'
+  title: 'العروض',
+  description: 'عروض صيدليات الجبل: خصومات على الفيتامينات والمكملات ومنتجات العناية بالبشرة والشعر والأم والطفل لفترة محدودة.',
+  keywords: 'عروض صيدليات الجبل, خصومات فيتامينات, عروض العناية بالبشرة, عروض الأم والطفل, Dr. Jable'
 });
 
 const {
@@ -134,6 +178,31 @@ const {
   fetchOffers,
 } = useOffersCatalog();
 
+const filtersOpen = ref(false);
+
+const activeFiltersCount = computed(() => (currentOffer.value ? 1 : 0) + (inStockOnly.value ? 1 : 0));
+
+const activeFilterChips = computed(() => {
+  const ar = currentLang.value === 'ar';
+  const chips = [];
+  if (currentOffer.value) {
+    chips.push({
+      key: 'offer',
+      label: localized(currentOffer.value, 'name') || currentOffer.value.name,
+      remove: () => selectOffer(null),
+    });
+  }
+  if (inStockOnly.value) {
+    chips.push({ key: 'stock', label: ar ? 'متوفر في المخزون' : 'In Stock', remove: () => { inStockOnly.value = false; } });
+  }
+  return chips;
+});
+
+const resetFilters = () => {
+  selectOffer(null);
+  inStockOnly.value = false;
+};
+
 // The server already applies the offer to the product's price, so the cart gets the product as it is.
 const addOfferProductToCart = (product) => addProductToCart(product);
 
@@ -150,3 +219,4 @@ onMounted(async () => {
 </script>
 
 <style src="../styles/offers.css"></style>
+<style src="../../../styles/mobile-filter.css"></style>
